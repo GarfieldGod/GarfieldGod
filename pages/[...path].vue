@@ -9,24 +9,39 @@ const raw = route.params.path
 const slug = Array.isArray(raw) ? raw.join('/') : String(raw ?? '')
 if (!slug) throw createError({ statusCode: 404, message: '页面不存在', fatal: true })
 
-const { data, error } = await useNavPage(slug)
-if (error.value || !data.value?.page) {
+const res = useNavPage(slug)
+// 服务端要等数据到齐才输出完整 HTML（SEO 与 404 判定）；
+// 客户端导航不等接口，立刻切页——数据由空闲预热提前备好，命中缓存时同步就有内容。
+if (import.meta.server) await res
+const { data, error } = res
+
+if (import.meta.server && (error.value || !data.value?.page)) {
   throw createError({ statusCode: 404, message: '页面不存在', fatal: true })
 }
+// 客户端导航时数据后到：确实不存在再落到错误页
+watch(error, (e) => {
+  if (e) showError(createError({ statusCode: 404, message: '页面不存在', fatal: true }))
+})
 
-const page = computed(() => data.value!.page)
+const page = computed(() => data.value?.page)
 
 // 标签页标题：页面名 — 站名（站名独立于导航栏「名称」，来自「站点信息」，后台可改）
 const { data: meta } = await useSiteMeta()
-useHead({ title: () => `${page.value.title} — ${tabName(meta.value)}` })
+useHead({
+  title: () => (page.value ? `${page.value.title} — ${tabName(meta.value)}` : tabName(meta.value)),
+})
 </script>
 
 <template>
-  <PageRenderer
-    :page="page"
-    :posts="data?.posts ?? []"
-    :child-sections="data?.childSections ?? []"
-    :tags="data?.tags ?? []"
-    :page-labels="data?.pageLabels ?? {}"
-  />
+  <!-- 单一根元素：页面过渡是 out-in 模式，根节点为注释会白屏 -->
+  <div class="page-shell">
+    <PageRenderer
+      v-if="page"
+      :page="page"
+      :posts="data?.posts ?? []"
+      :child-sections="data?.childSections ?? []"
+      :tags="data?.tags ?? []"
+      :page-labels="data?.pageLabels ?? {}"
+    />
+  </div>
 </template>

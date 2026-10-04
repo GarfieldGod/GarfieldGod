@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { useSiteMeta, useNavPages, navPagePath } from '~/composables/useSiteData'
+import { useSiteMeta, useNavPages, navPagePath, prefetchNavPage } from '~/composables/useSiteData'
 import type { NavPage } from '~/composables/useSiteData'
 import { coverSrc } from '~/utils/pageFormat'
+import { preloadRouteComponents } from '#app'
 
 const { data: meta } = await useSiteMeta()
 const { data: navData } = await useNavPages()
@@ -53,6 +54,29 @@ onMounted(async () => {
     // 忽略：上报或刷新失败都不该影响页面
   }
 })
+
+// 空闲预热：把其余导航页的数据与路由 chunk 提前备好。
+// 点导航时缓存已就绪，页面同步出内容，不再等一次接口往返（对照 GameRank 的空闲预加载）。
+const nuxtApp = useNuxtApp()
+const router = useRouter()
+onMounted(() => {
+  const run = () => {
+    const slugs = new Set(pages.value.map((p) => p.slug).filter(Boolean))
+    slugs.add('home')
+    for (const slug of slugs) prefetchNavPage(slug, nuxtApp)
+    for (const r of router.getRoutes()) {
+      if (r.path.startsWith('/admin')) continue
+      preloadRouteComponents(r.path, router)
+    }
+  }
+  // 别和首屏渲染抢资源：空闲时再下，兜底 3 秒
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(run, { timeout: 3000 })
+  } else {
+    window.setTimeout(run, 1500)
+  }
+})
+
 // 封面是否展开由页面配置决定（当前只有首页为 true）
 const showCover = computed(() => currentPage.value?.showCover ?? false)
 // 页面封面同样要归一化：老数据是裸文件名，新上传是 /uploads/... 完整路径

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { NavPage, Post } from '~/composables/useSiteData'
-import { aspectRatioCss, resolveDatePosition } from '~/composables/useSiteData'
+import { aspectRatioCss, resolveDatePosition, prefetchPost } from '~/composables/useSiteData'
 import { cleanExcerpt, coverSrc, formatDateCn } from '~/utils/pageFormat'
 
 // 单个条目。卡片外观完全由「条目类型」（page.cardType）决定；
@@ -68,6 +68,13 @@ const itemClasses = computed(() => ({
   'is-nodate': cardType.value === 'editorial' && !dateParts.value,
   'has-ratio': !!ratio.value,
 }))
+
+// 悬停/聚焦即预热详情页：鼠标移上去时正文、阅读数、留言已在路上，
+// 点下去直接命中缓存，不用等接口（对照 GameRank 的卡片悬停预加载）。
+const nuxtApp = useNuxtApp()
+function warmPost() {
+  prefetchPost(props.post.id, nuxtApp)
+}
 </script>
 
 <template>
@@ -76,6 +83,8 @@ const itemClasses = computed(() => ({
     class="gg-item"
     :class="[`gg-item--${cardType}`, itemClasses]"
     :style="cardStyle"
+    @mouseenter="warmPost"
+    @focusin="warmPost"
   >
     <!-- 全图叠加：图片铺满，信息压在底部渐变上 -->
     <template v-if="cardType === 'overlay'">

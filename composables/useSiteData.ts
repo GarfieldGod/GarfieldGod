@@ -1,6 +1,8 @@
 // 内容类型与后端 API 封装。
 // 数据统一来自 Nitro 服务端（SQLite），前端不再直接读取 assets/data/site-content.json。
 
+import type { NuxtApp } from '#app'
+
 export interface PageRef {
   id: number
   title: string
@@ -234,9 +236,51 @@ export function navPagePath(page: NavPage): string {
   return page.isHome ? '/' : `/${page.slug}`
 }
 
+// ===== 导航提速：会话级数据缓存 =====
+// Nuxt 默认只在水合期（payload）和静态产物（static.data）里复用数据，
+// 客户端导航时一律重新请求——于是每次点导航都要等一次接口往返（经 Cloudflare 回源约 1 秒），
+// 页面里的 await 把路由切换一起卡住。这里把「本次会话已取到的数据」也纳入缓存：
+// 水合期带着服务端渲染的那一份，之后每次成功取数都会写回 payload.data，导航时直接命中。
+// 首次访问某页仍会真取一次，其余页面交给空闲 / 悬停预热（见下方 prefetch*）。
+export function sessionCachedData(key: string, app: NuxtApp, ctx: { cause: string }): any {
+  if (app.isHydrating) return app.payload.data[key]
+  // 手动或钩子触发的刷新（如发完留言后刷新列表）必须真正重新取
+  if (ctx.cause.startsWith('refresh:')) return undefined
+  return app.static.data[key] ?? app.payload.data[key]
+}
+
+/** 预热：把数据提前写进同一缓存槽，导航时 getCachedData 直接命中，页面同步出内容 */
+function warm(nuxtApp: NuxtApp, key: string, url: string, query?: Record<string, unknown>) {
+  if (!import.meta.client || nuxtApp.payload.data[key] != null) return
+  $fetch(url, { query })
+    .then((data) => {
+      if (data != null) nuxtApp.payload.data[key] = data
+    })
+    .catch(() => {
+      // 预热失败不影响正常导航：真点进去时还会再取一次
+    })
+}
+
+function navPageUrl(slug: string) {
+  return `/api/nav-pages/${slug.split('/').filter(Boolean).map(encodeURIComponent).join('/')}`
+}
+
+/** 预热某个导航页（含首页 home） */
+export function prefetchNavPage(slug: string, nuxtApp: NuxtApp) {
+  warm(nuxtApp, `nav-page:${slug}`, navPageUrl(slug))
+}
+
+/** 预热文章详情页：正文、阅读数、留言一起备好，点卡片时不用等 */
+export function prefetchPost(id: string | number, nuxtApp: NuxtApp) {
+  warm(nuxtApp, `post:${id}`, `/api/posts/${id}`)
+  warm(nuxtApp, `views:${id}`, `/api/views/${id}`)
+  warm(nuxtApp, `comments:${id}`, '/api/comments', { post: id })
+}
+
 export function useSiteMeta() {
   return useFetch<SiteMeta>('/api/meta', {
     key: 'site-meta',
+    getCachedData: sessionCachedData,
     default: () => ({
       title: 'GarfieldGod',
       tagline: "I'm God.",
@@ -250,17 +294,23 @@ export function useSiteMeta() {
 }
 
 export function usePostDetail(id: string | number) {
-  return useFetch<{ post: Post }>(`/api/posts/${id}`, { key: `post:${id}` })
+  return useFetch<{ post: Post }>(`/api/posts/${id}`, {
+    key: `post:${id}`,
+    getCachedData: sessionCachedData,
+  })
 }
 
 export function useNavPages() {
   return useFetch<{ pages: NavPage[] }>('/api/nav-pages', {
     key: 'nav-pages',
+    getCachedData: sessionCachedData,
     default: () => ({ pages: [] }),
   })
 }
 
 export function useNavPage(slug: string) {
-  const url = `/api/nav-pages/${slug.split('/').filter(Boolean).map(encodeURIComponent).join('/')}`
-  return useFetch<NavPageDetail>(url, { key: `nav-page:${slug}` })
+  return useFetch<NavPageDetail>(navPageUrl(slug), {
+    key: `nav-page:${slug}`,
+    getCachedData: sessionCachedData,
+  })
 }

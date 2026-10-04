@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePostDetail, tabName, displayPages, resolvePostStyleOptions } from '~/composables/useSiteData'
+import { usePostDetail, tabName, displayPages, resolvePostStyleOptions, sessionCachedData } from '~/composables/useSiteData'
 import type { Comment, PostStyleOptions } from '~/composables/useSiteData'
 import {
   resolvePostStyle,
@@ -132,6 +132,7 @@ onBeforeUnmount(() => {
 // SSR 先取当前值渲染，客户端挂载后再 +1，避免服务端渲染触发计数
 const { data: viewData } = await useFetch<{ post: number; views: number }>(`/api/views/${id}`, {
   key: `views:${id}`,
+  getCachedData: sessionCachedData,
 })
 const views = ref(viewData.value?.views ?? 0)
 
@@ -200,7 +201,12 @@ onBeforeUnmount(() => {
 // ===== 留言 =====
 const { data: commentData, refresh: refreshComments } = await useFetch<{ comments: Comment[] }>(
   '/api/comments',
-  { key: `comments:${id}`, query: { post: id }, default: () => ({ comments: [] }) },
+  {
+    key: `comments:${id}`,
+    query: { post: id },
+    default: () => ({ comments: [] }),
+    getCachedData: sessionCachedData,
+  },
 )
 const comments = computed(() => commentData.value.comments)
 
