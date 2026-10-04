@@ -1,0 +1,28 @@
+# ===== 依赖与构建产物（服务器上重新安装 / 构建，不进仓库）=====
+node_modules/
+.nuxt/
+.output/
+dist/
+.static/
+
+# ===== 本地环境配置（含后台口令、部署令牌等敏感信息）=====
+.env
+.env.*
+!.env.example
+
+# ===== 数据库临时文件（数据库本体 .data/garfieldgod.db 需要保留并提交）=====
+.data/*.db-wal
+.data/*.db-shm
+
+# ===== 本地数据库快照备份（仅本地使用，不参与部署）=====
+.data/backups/
+
+# ===== 编辑器 / 操作系统杂项 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.swp
+*.swo
+.vscode/
+.idea/

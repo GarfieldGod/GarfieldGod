@@ -1,0 +1,603 @@
+{
+  "meta": {
+    "title": "GarfieldGod",
+    "tagline": "I'm God.",
+    "url": "https://garfieldgod.cn",
+    "generated": "2026-09-19T15:59:02.160Z",
+    "counts": {
+      "posts": 20,
+      "pages": 6,
+      "categories": 7,
+      "media": 84,
+      "comments": 7
+    }
+  },
+  "categories": [
+    {
+      "id": 9,
+      "name": "事务",
+      "slug": "%e4%ba%8b%e5%8a%a1",
+      "count": 6,
+      "parent": 0
+    },
+    {
+      "id": 11,
+      "name": "动态",
+      "slug": "%e5%8a%a8%e6%80%81",
+      "count": 9,
+      "parent": 0
+    },
+    {
+      "id": 12,
+      "name": "日志",
+      "slug": "%e6%97%a5%e5%bf%97",
+      "count": 9,
+      "parent": 0
+    },
+    {
+      "id": 41,
+      "name": "社区",
+      "slug": "community",
+      "count": 2,
+      "parent": 0
+    },
+    {
+      "id": 16,
+      "name": "绘画作品",
+      "slug": "%e7%bb%98%e7%94%bb%e4%bd%9c%e5%93%81",
+      "count": 3,
+      "parent": 0
+    },
+    {
+      "id": 42,
+      "name": "项目",
+      "slug": "%e9%a1%b9%e7%9b%ae",
+      "count": 5,
+      "parent": 0
+    },
+    {
+      "id": 43,
+      "name": "学习笔记",
+      "slug": "%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0",
+      "count": 0,
+      "parent": 0
+    }
+  ],
+  "posts": [
+    {
+      "id": 762,
+      "slug": "%e5%b1%8f%e5%b9%95%e9%9f%b3%e9%a2%91%e8%b7%af%e7%94%b1%e5%99%a8%ef%bc%88screenaudiorouter%ef%bc%89",
+      "slugFa": "%e5%b1%8f%e5%b9%95%e9%9f%b3%e9%a2%91%e8%b7%af%e7%94%b1%e5%99%a8%ef%bc%88screenaudiorouter%ef%bc%89",
+      "title": "屏幕音频路由器",
+      "date": "2026-01-04T17:59:43",
+      "modified": "2026-01-04T18:05:13",
+      "link": "https://garfieldgod.cn/index.php/762/",
+      "content": "\n<div style=\"height:15px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>一个内置屏幕路由器功能（ScreenAudioRouter）的EarTrumpet版本</strong>。</p>\n\n\n\n<div style=\"height:25px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n\n\n\n<p class=\"wp-block-paragraph\" style=\"border-width:1px;border-top-left-radius:15px;border-top-right-radius:15px;border-bottom-left-radius:15px;border-bottom-right-radius:15px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--40);font-size:1rem\"><code>下载链接: <a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet/releases/download/v1.0.0/EarTrumpet.ScreenAudioRouterEdition.zip\">version 1.0.0</a></code></p>\n\n\n\n<p class=\"wp-block-paragraph\"><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#screen-audio-router-in-eartrumpet\"></a></p>\n\n\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity is-style-wide\"/>\n\n\n\n<h4 class=\"wp-block-heading\"><strong>总览</strong><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#overview\"></a></h4>\n\n\n\n<p class=\"has-text-align-left wp-block-paragraph\">这是<strong> Windows 音频音量控制器 EarTrumpet（音量喇叭）的一款增强修改版</strong>。</p>\n\n\n\n<p class=\"wp-block-paragraph\">其核心新增功能为<strong>显示器音频路由（Screen Audio Router）</strong>，可实现<strong>窗口跨屏移动时的音频设备自动切换</strong>。</p>\n\n\n\n<div style=\"height:25px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n\n\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity is-style-wide\"/>\n\n\n\n<h4 class=\"wp-block-heading\"><strong>核心功能</strong><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#core-features\"></a></h4>\n\n\n\n<h6 class=\"wp-block-heading\">1. <strong>保留 EarTrumpet 原版全部功能</strong><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#1-original-eartrumpet-features-retained\"></a></h6>\n\n\n\n<h6 class=\"wp-block-heading\">2. <strong>新增功能：显示器音频路由</strong><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#2-new-added-feature-screen-audio-router\"></a></h6>\n\n\n\n<p class=\"wp-block-paragraph\"><em>当窗口在多屏间移动时，<strong>自动切换至该显示器预设的对应音频设备</strong>。</em></p>\n\n\n\n<div style=\"height:25px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n\n\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity is-style-wide\"/>\n\n\n\n<h4 class=\"wp-block-heading\"><strong>使用方法</strong><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#usage\"></a></h4>\n\n\n\n<p class=\"wp-block-paragraph\">在<strong>设置面板</strong>的<strong>显示器音频路由设置项</strong>中，为每台显示器配置对应的音频输出设备。</p>\n\n\n\n<figure class=\"wp-block-image\"><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet/blob/main/Resources/ScreenAudioRouter.png\" target=\"_blank\" rel=\"noreferrer noopener\"><img loading=\"lazy\" decoding=\"async\" width=\"1600\" height=\"1200\" src=\"/uploads/771-1767520763-ScreenAudioRouter.png\" alt=\"ScreenAudioRouter\" class=\"wp-image-771\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter.png 1600w, https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter-300x225.png 300w, https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter-1024x768.png 1024w, https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter-768x576.png 768w, https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter-1536x1152.png 1536w\" sizes=\"auto, (max-width: 1600px) 100vw, 1600px\" /></a></figure>\n\n\n\n<div style=\"height:25px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n\n\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity is-style-wide\"/>\n\n\n\n<h4 class=\"wp-block-heading\"><strong>已知问题</strong><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#known-issues\"></a></h4>\n\n\n\n<blockquote class=\"wp-block-quote is-layout-flow wp-block-quote-is-layout-flow\">\n<ul class=\"wp-block-list\">\n<li>切换音频时，<strong>不会单独切换指定的音频流</strong>，而是切换<strong>同一程序名对应的所有进程</strong>。具体来说：若你打开了两个谷歌浏览器窗口（窗口 A 和窗口 B），仅将窗口 B 拖至显示器 2，窗口 A 的音频也会随之切换到显示器 2 的音频设备。</li>\n\n\n\n<li>若<strong>直接在显示器 2 上打开窗口</strong>，音频<strong>不会自动切换</strong>到显示器 2 对应的音频设备。</li>\n</ul>\n</blockquote>\n\n\n\n<div style=\"height:25px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n\n\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity is-style-wide\"/>\n\n\n\n<h4 class=\"wp-block-heading\"><strong>许可证</strong><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#license\"></a></h4>\n\n\n\n<p class=\"wp-block-paragraph\">项目<strong>继承原版 EarTrumpet 项目的 MIT 许可证</strong>。详细信息请参阅&nbsp;<a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet/blob/main/LICENSE\">LICENSE</a>&nbsp;文件。</p>\n\n\n\n<div style=\"height:25px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n\n\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity is-style-wide\"/>\n\n\n\n<h4 class=\"wp-block-heading\"><strong>参考资料</strong><a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet#reference\"></a></h4>\n\n\n\n<ul class=\"wp-block-list\">\n<li>原版 EarTrumpet 说明文档：:&nbsp;<a href=\"https://github.com/GarfieldGod/ScreenAudioRouter-inEarTrumpet/blob/main/EarTrumpet_README.md\">EarTrumpet README.md</a></li>\n</ul>\n",
+      "excerpt": "<p>一个内置屏幕路由器功能（ScreenAudioRouter）的EarTrumpet版本。 下载链接: vers [&hellip;]</p>\n",
+      "featured": "771-1767520763-ScreenAudioRouter.png",
+      "categories": [
+        9,
+        11,
+        42
+      ],
+      "tags": []
+    },
+    {
+      "id": 749,
+      "slug": "from-final-fantasy-7-rebirth",
+      "slugFa": "from-final-fantasy-7-rebirth",
+      "title": "From Final Fantasy 7 Rebirth",
+      "date": "2025-05-21T15:56:11",
+      "modified": "2025-05-21T15:57:23",
+      "link": "https://garfieldgod.cn/index.php/749/",
+      "content": "\n<h1 class=\"wp-block-heading\"><br><strong>FFF7R</strong></h1>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>DownLoad</strong></h2>\n\n\n\n<p class=\"wp-block-paragraph\">GitHub: <a href=\"https://github.com/GarfieldGod/FFF7R\">https://github.com/GarfieldGod/FFF7R</a></p>\n\n\n\n<p class=\"wp-block-paragraph\">Gitee: <a href=\"https://gitee.com/garfieldgod/fff7-r\">https://gitee.com/garfieldgod/fff7-r</a></p>\n\n\n\n<h2 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#introduction\"></a><strong>Introduction</strong></h2>\n\n\n\n<p class=\"wp-block-paragraph\">Algorithmic programs replicate the card game mechanics [ From Final Fantasy 7 Rebirth ].</p>\n\n\n\n<h2 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#attention\"></a><strong>Attention</strong></h2>\n\n\n\n<p class=\"wp-block-paragraph\"><s>The latest update mostly appears in the UnityProject branch.</s></p>\n\n\n\n<p class=\"wp-block-paragraph\">In order to better decouple the logical code from the Unity-specific code, the update of the Unity project has been temporarily suspended.</p>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>Now, the game and test cases can be executed in the console without relying on Unity.</strong></p>\n\n\n\n<h2 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#test-case\"></a><strong>Test Case</strong></h2>\n\n\n\n<h3 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#example\"></a>Example</h3>\n\n\n\n<p class=\"wp-block-paragraph\">For example, refer to&nbsp;<code>Native/Console/TestCases/TestCase1.cs</code>&nbsp;for more information.</p>\n\n\n\n<h3 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#add-new-test-cases\"></a>Add new test cases</h3>\n\n\n\n<p class=\"wp-block-paragraph\">To add a new test case, you need to create a new class under&nbsp;<code>Native/Console/Entry/TestCase</code>&nbsp;and inherit it from&nbsp;<code>TestCase</code>, for example,&nbsp;<code>NewTestCase : TestCase</code>.</p>\n\n\n\n<ol class=\"wp-block-list\">\n<li>Override the <code>ChessPad InitChessPad()</code> method to initialize the chessboard.</li>\n\n\n\n<li>Override the <code>void InitSteps()</code> method to add the steps for the test case.</li>\n</ol>\n\n\n\n<h3 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#init-the-chessboard\"></a>Init the chessboard</h3>\n\n\n\n<p class=\"wp-block-paragraph\">init the test chessboard at the start of the game by override the&nbsp;<code>ChessPad InitChessPad()</code>&nbsp;method.</p>\n\n\n\n<h3 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#add-test-steps\"></a>Add test steps</h3>\n\n\n\n<p class=\"wp-block-paragraph\"><code>AddStep(InputerType inputerType, int index, string cardCode, List&lt;List&lt;int&gt;&gt; expectPad1, List&lt;List&lt;int&gt;&gt; expectPad2)</code></p>\n\n\n\n<p class=\"wp-block-paragraph\">You should use the&nbsp;<code>AddStep</code>&nbsp;method inside the&nbsp;<code>void InitSteps()</code>&nbsp;method to define the steps for your test case.</p>\n\n\n\n<h4 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#parameters-explanation\"></a>Parameters Explanation:</h4>\n\n\n\n<ul class=\"wp-block-list\">\n<li><code>inputerType</code>: Indicates who performed the input on the chessboard. It can be either <code>InputerType.PLAYER</code> or <code>InputerType.RIVAL</code>.</li>\n\n\n\n<li><code>index</code>: Specifies which grid on the chessboard you want to input to. The range is based on the size of the chessboard.</li>\n\n\n\n<li><code>cardCode</code>: Specifies which card you want to input. For more information, see <code>Json/ChessProperties.json</code>.</li>\n\n\n\n<li><code>expectPad1</code>: Represents the expected grid levels on the chessboard. It should have the same meaning as the corresponding effects in FF7Rb.</li>\n\n\n\n<li><code>expectPad2</code>: Represents the expected card levels on the chessboard. It should have the same meaning as the corresponding effects in FF7Rb.</li>\n</ul>\n\n\n\n<h3 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#run\"></a>Run</h3>\n\n\n\n<p class=\"wp-block-paragraph\">Create an instance of your test case class and call the&nbsp;<code>Run()</code>&nbsp;method to execute the test steps you have added, in&nbsp;<code>Native/Console/Entry/Main.cs</code>.</p>\n\n\n\n<h3 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#notes\"></a>Notes</h3>\n\n\n\n<ul class=\"wp-block-list\">\n<li>Ensure that the <code>cardCode</code> matches one of the valid codes defined in <code>Json/ChessProperties.json</code>.</li>\n\n\n\n<li>Ensure that your input is valid. Note that if the <code>InputerType</code> is <code>RIVAL</code>, the <code>GridEffect</code> and <code>CardEffect</code> caused by the input will be reversed.</li>\n</ul>\n\n\n\n<h2 class=\"wp-block-heading\"><a href=\"https://gitee.com/garfieldgod/fff7-r#console-game\"></a><strong>Console Game</strong></h2>\n\n\n\n<p class=\"wp-block-paragraph\">It is not recommended to run the console game, as it is currently not being maintained.</p>\n\n\n\n<p class=\"wp-block-paragraph\">Try it from&nbsp;<code>Native/Console/Entry/Main.cs</code>&nbsp;using the&nbsp;<code>StartConsoleGame()</code>&nbsp;method.</p>\n",
+      "excerpt": "<p>FFF7R DownLoad GitHub: https://github.com/GarfieldGod/F [&hellip;]</p>\n",
+      "featured": "750-1747813994-20250521-155245.jpg",
+      "categories": [
+        9,
+        11,
+        42
+      ],
+      "tags": []
+    },
+    {
+      "id": 668,
+      "slug": "%e3%80%90ibandit%e3%80%91",
+      "slugFa": "%e3%80%90ibandit%e3%80%91",
+      "title": "【I,Bandit】",
+      "date": "2023-09-15T12:27:42",
+      "modified": "2023-10-15T14:46:59",
+      "link": "https://garfieldgod.cn/index.php/668/",
+      "content": "\n<p class=\"wp-block-paragraph\">大一时做的一个2D小游戏小游戏Demo，源码已经弄丢了，但是中间的成果还在，如下</p>\n\n\n\n<figure class=\"wp-block-image size-large\"><img loading=\"lazy\" decoding=\"async\" width=\"925\" height=\"1024\" src=\"/uploads/669-1694752022-Ibandit.jpg\" alt=\"\" class=\"wp-image-669\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694752022-Ibandit-925x1024.jpg 925w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694752022-Ibandit-271x300.jpg 271w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694752022-Ibandit-768x851.jpg 768w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694752022-Ibandit.jpg 1024w\" sizes=\"auto, (max-width: 925px) 100vw, 925px\" /></figure>\n\n\n\n<p class=\"has-text-align-left wp-block-paragraph\">下载链接2：<strong><a href=\"https://pan.baidu.com/s/1GWkG_pBD59qjJQo5N0a3HA?pwd=log7\">百度云（点击这里）</a></strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">提取码：log7</p>\n",
+      "excerpt": "<p>大一时做的一个2D小游戏小游戏Demo，源码已经弄丢了，但是中间的成果还在，如下 下载链接2：百度云（点击这里 [&hellip;]</p>\n",
+      "featured": "669-1694752022-Ibandit.jpg",
+      "categories": [
+        9,
+        11,
+        42
+      ],
+      "tags": []
+    },
+    {
+      "id": 628,
+      "slug": "linux%e4%b8%8b%e7%9a%84%e6%89%ab%e9%9b%b7",
+      "slugFa": "linux%e4%b8%8b%e7%9a%84%e6%89%ab%e9%9b%b7",
+      "title": "Linux下的扫雷",
+      "date": "2023-09-13T13:55:33",
+      "modified": "2023-10-15T14:24:57",
+      "link": "https://garfieldgod.cn/index.php/628/",
+      "content": "\n<p class=\"wp-block-paragraph\">基于：C语言，GTK+2.0，Sqlite3</p>\n\n\n\n<p class=\"wp-block-paragraph\">使用工具：VMware，MobaXterm，Sublime Text3</p>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>一丶下载及运行</strong></h2>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>下载链接：https://pan.baidu.com/s/1L5Z-S6Zy08dUVv6txAhB0g?pwd=qi5h<br>提取码：qi5h</strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">若只进行游玩，只需下载“扫雷”文件，并安装mysql运行库</p>\n\n\n\n<p class=\"wp-block-paragraph\">打开Linux系统，打开终端，输入  <strong>sudo&nbsp;apt-get&nbsp;install&nbsp;libmysqlclient-dev</strong> 回车</p>\n\n\n\n<p class=\"wp-block-paragraph\">然后将下载的“扫雷”文件于Linux内打开即可</p>\n\n\n\n<p class=\"wp-block-paragraph\">若无法将文件从Windows拖入Linux，则输入以下指令</p>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>sudo apt-get autoremove open-vm-tools<br>sudo apt-get install open-vm-tools-desktop</strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">然后重启虚拟机，即可将文件拖入Ubuntu中</p>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>二丶功能说明</strong></h2>\n\n\n\n<h3 class=\"wp-block-heading\"><strong>1.游戏主界面：</strong><strong></strong></h3>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"422\" height=\"665\" src=\"/uploads/629-1694584264-图片1.png\" alt=\"\" class=\"wp-image-629\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584264-图片1.png 422w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584264-图片1-190x300.png 190w\" sizes=\"auto, (max-width: 422px) 100vw, 422px\" /></figure>\n\n\n\n<h3 class=\"wp-block-heading\"><strong>2.登陆/注册模块：</strong><strong></strong></h3>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"426\" height=\"296\" src=\"/uploads/630-1694584264-图片2.png\" alt=\"\" class=\"wp-image-630\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584264-图片2.png 426w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584264-图片2-300x208.png 300w\" sizes=\"auto, (max-width: 426px) 100vw, 426px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>登陆功能：</strong><strong></strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">输入用户名和密码，点击登陆，将于数据库查询用户名是否存在</p>\n\n\n\n<p class=\"wp-block-paragraph\">若不存在，则弹窗消息（该用户不存在！）</p>\n\n\n\n<p class=\"wp-block-paragraph\">若存在，则检查输入框密码与该用户密码是否相同，</p>\n\n\n\n<p class=\"wp-block-paragraph\">若相同则登陆成功</p>\n\n\n\n<p class=\"wp-block-paragraph\">否则，弹窗消息（登陆失败！）</p>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>注册功能：</strong><strong></strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">输入用户名和密码，点击注册，将于数据库查询用户名是否存在</p>\n\n\n\n<p class=\"wp-block-paragraph\">若存在，则弹窗消息（该用户已存在！）</p>\n\n\n\n<p class=\"wp-block-paragraph\">若不在，则将输入框用户名和密码写入数据库</p>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>登陆成功后，主界面：</strong><strong></strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">“登陆”变为“注销”，按下注销后回到未登录状态</p>\n\n\n\n<p class=\"wp-block-paragraph\">“游客模式”更改为“开始游戏”</p>\n\n\n\n<figure class=\"wp-block-image size-full is-resized\"><img loading=\"lazy\" decoding=\"async\" src=\"/uploads/631-1694584265-图片3.png\" alt=\"\" class=\"wp-image-631\" width=\"291\" height=\"459\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584265-图片3.png 422w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584265-图片3-190x300.png 190w\" sizes=\"auto, (max-width: 291px) 100vw, 291px\" /></figure>\n\n\n\n<figure class=\"wp-block-image size-full is-resized\"><img loading=\"lazy\" decoding=\"async\" src=\"/uploads/632-1694584265-图片4.png\" alt=\"\" class=\"wp-image-632\" width=\"292\" height=\"410\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584265-图片4.png 475w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584265-图片4-214x300.png 214w\" sizes=\"auto, (max-width: 292px) 100vw, 292px\" /></figure>\n\n\n\n<h3 class=\"wp-block-heading\"><strong>2.游戏模块：</strong><strong></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">点击“游客模式/开始游戏”，弹出游戏界面</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"467\" height=\"502\" src=\"/uploads/633-1694584265-图片5.png\" alt=\"\" class=\"wp-image-633\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584265-图片5.png 467w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584265-图片5-279x300.png 279w\" sizes=\"auto, (max-width: 467px) 100vw, 467px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">若未点击到地雷，则显示该处3&#215;3包围范围内的地雷数量：</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"481\" height=\"511\" src=\"/uploads/634-1694584266-图片6.png\" alt=\"\" class=\"wp-image-634\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584266-图片6.png 481w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584266-图片6-282x300.png 282w\" sizes=\"auto, (max-width: 481px) 100vw, 481px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">若点击到空白处：向周围扩散触发按钮，直至遇到数字</p>\n\n\n\n<p class=\"wp-block-paragraph\">若所有非地雷单元均被点开，则游戏胜利，弹出胜利消息框</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"482\" height=\"511\" src=\"/uploads/635-1694584266-图片7.png\" alt=\"\" class=\"wp-image-635\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584266-图片7.png 482w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584266-图片7-283x300.png 283w\" sizes=\"auto, (max-width: 482px) 100vw, 482px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">上传按钮：</p>\n\n\n\n<p class=\"wp-block-paragraph\">若未登陆，则为灰，不可触发，</p>\n\n\n\n<p class=\"wp-block-paragraph\">若已登陆，则记录（用户名，本局游戏地雷数，完成游戏所用时间，地图大小，地雷量%）</p>\n\n\n\n<p class=\"wp-block-paragraph\">并上传至数据库，表gamerank</p>\n\n\n\n<p class=\"wp-block-paragraph\">重玩按钮：重新载入游戏界面</p>\n\n\n\n<p class=\"wp-block-paragraph\">返回按钮：返回主菜单</p>\n\n\n\n<p class=\"wp-block-paragraph\">若点中地雷，则显示所有地雷位置，并弹窗（游戏结束！）</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"490\" height=\"526\" src=\"/uploads/636-1694584267-图片8.png\" alt=\"\" class=\"wp-image-636\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584267-图片8.png 490w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584267-图片8-279x300.png 279w\" sizes=\"auto, (max-width: 490px) 100vw, 490px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">点击确定退出游戏界面，返回主菜单</p>\n\n\n\n<h3 class=\"wp-block-heading\"><strong>3.游戏设置界面</strong><strong></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">可更改“游戏地图大小”“炸弹数量百分比（非精确）”</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"226\" height=\"264\" src=\"/uploads/637-1694584267-图片9.png\" alt=\"\" class=\"wp-image-637\"/></figure>\n\n\n\n<p class=\"wp-block-paragraph\">原理与登陆注册相同，不过并不写入数据库</p>\n\n\n\n<p class=\"wp-block-paragraph\">而是更改两个加载游戏界面时会读取的全局变量mapsize，boomnumber。</p>\n\n\n\n<p class=\"wp-block-paragraph\">如：10&#215;10：1%（左） &nbsp;50&#215;50：50%（右）</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"266\" height=\"300\" src=\"/uploads/638-1694584267-图片10.png\" alt=\"\" class=\"wp-image-638\"/></figure>\n\n\n\n<figure class=\"wp-block-image size-large\"><img loading=\"lazy\" decoding=\"async\" width=\"1024\" height=\"929\" src=\"/uploads/639-1694584268-图片11.png\" alt=\"\" class=\"wp-image-639\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584268-图片11-1024x929.png 1024w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584268-图片11-300x272.png 300w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584268-图片11-768x697.png 768w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584268-图片11.png 1065w\" sizes=\"auto, (max-width: 1024px) 100vw, 1024px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>4.排行榜：</strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">点击后弹出游戏胜利排行榜</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"634\" height=\"677\" src=\"/uploads/640-1694584269-图片12.png\" alt=\"\" class=\"wp-image-640\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584269-图片12.png 634w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584269-图片12-281x300.png 281w\" sizes=\"auto, (max-width: 634px) 100vw, 634px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">读取数据库中，由已登录的胜利界面上传的游戏数据，按照排雷数量排序</p>\n\n\n\n<p class=\"wp-block-paragraph\">（注：为防止数据过多仅有完成游戏的游戏数据可上传，即仅胜利数据）</p>\n\n\n\n<p class=\"wp-block-paragraph\">（另：图中负数时间与0时间，均为测试数据）</p>\n\n\n\n<h3 class=\"wp-block-heading\"><strong>5.退出游戏</strong><strong></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">点击后结束进程。</p>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>&nbsp;</strong></h2>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>&nbsp;</strong></h2>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>三丶实现思路</strong></h2>\n\n\n\n<h3 class=\"wp-block-heading\"><strong>登陆/注册模块：</strong><strong></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">在登陆按钮的信号函数中调用此函数，参数为两个输入框中的内容</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"709\" height=\"373\" src=\"/uploads/641-1694584270-图片13.png\" alt=\"\" class=\"wp-image-641\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584270-图片13.png 709w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584270-图片13-300x158.png 300w\" sizes=\"auto, (max-width: 709px) 100vw, 709px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">注册同理，注册按钮的信号函数中调用此函数，参数为两个输入框中的内容</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"782\" height=\"597\" src=\"/uploads/642-1694584270-图片14.png\" alt=\"\" class=\"wp-image-642\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584270-图片14.png 782w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584270-图片14-300x229.png 300w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584270-图片14-768x586.png 768w\" sizes=\"auto, (max-width: 782px) 100vw, 782px\" /></figure>\n\n\n\n<h3 class=\"wp-block-heading\"><strong>游戏模块：</strong><strong></strong></h3>\n\n\n\n<h3 class=\"wp-block-heading\"><strong><em>1.地雷数：</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">首先，定义两个整数变量mapsize和gamelevel</p>\n\n\n\n<p class=\"wp-block-paragraph\">其中，mapsize代表地图大小，gamelevel代表游戏难度</p>\n\n\n\n<p class=\"wp-block-paragraph\">再定义一个二维数组A，遍历A并赋值A中的每一个元素一个随机数</p>\n\n\n\n<p class=\"wp-block-paragraph\">该随机数以当前系统时间为种子，并余以100，即被限制在（0~99）中</p>\n\n\n\n<p class=\"wp-block-paragraph\">由于扫雷游戏中，一个非雷方框周围最多有8个雷，即下图（红色代表有雷）</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"214\" height=\"176\" src=\"/uploads/643-1694584271-图片15.png\" alt=\"\" class=\"wp-image-643\"/></figure>\n\n\n\n<p class=\"wp-block-paragraph\">则可能的数字有0（空白），1，2，3，4，5，6，7，8</p>\n\n\n\n<p class=\"wp-block-paragraph\">没有9，则可使用9代表地雷</p>\n\n\n\n<p class=\"wp-block-paragraph\">如果数组A中，元素随机出的数小于gamelevel，则将该元素置为9，否则，置为0</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"472\" height=\"180\" src=\"/uploads/644-1694584271-图片16.png\" alt=\"\" class=\"wp-image-644\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584271-图片16.png 472w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584271-图片16-300x114.png 300w\" sizes=\"auto, (max-width: 472px) 100vw, 472px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">如图，代表gamelevel的数越大，则有越多的元素被置为9（地雷）</p>\n\n\n\n<p class=\"wp-block-paragraph\">即实现了游戏难度等级越大，游戏中的地雷越多</p>\n\n\n\n<p class=\"wp-block-paragraph\">输出该数组A，并适当地排列，即可得到一张仅有0（非雷）和9（地雷）组成的游戏地图</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"973\" height=\"412\" src=\"/uploads/645-1694584271-图片17.png\" alt=\"\" class=\"wp-image-645\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584271-图片17.png 973w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584271-图片17-300x127.png 300w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584271-图片17-768x325.png 768w\" sizes=\"auto, (max-width: 973px) 100vw, 973px\" /></figure>\n\n\n\n<h3 class=\"wp-block-heading\"><em>2.&nbsp;</em><strong><em>显示周围地雷数量：</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">很简单，遍历数组A中的所有元素，判断该元素周围所有元素是否为9</p>\n\n\n\n<p class=\"wp-block-paragraph\">若是，则该元素的值+1</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"351\" height=\"782\" src=\"/uploads/646-1694584272-图片18.png\" alt=\"\" class=\"wp-image-646\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584272-图片18.png 351w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584272-图片18-135x300.png 135w\" sizes=\"auto, (max-width: 351px) 100vw, 351px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">输出数组A：</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"920\" height=\"428\" src=\"/uploads/647-1694584272-图片19.png\" alt=\"\" class=\"wp-image-647\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584272-图片19.png 920w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584272-图片19-300x140.png 300w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584272-图片19-768x357.png 768w\" sizes=\"auto, (max-width: 920px) 100vw, 920px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">则地雷地图的底层功能已经实现</p>\n\n\n\n<h3 class=\"wp-block-heading\"><em>3.&nbsp;</em><strong><em>图形界面的实现：</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>3.1地雷按钮</strong><strong></strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">创建一个GtkWidget的二维数组B</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"326\" height=\"24\" src=\"/uploads/648-1694584273-图片20.png\" alt=\"\" class=\"wp-image-648\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584273-图片20.png 326w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584273-图片20-300x22.png 300w\" sizes=\"auto, (max-width: 326px) 100vw, 326px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">使用gtk_toggle_button控件实现按下按钮后不回弹的效果</p>\n\n\n\n<p class=\"wp-block-paragraph\">遍历数组B，并给每一个元素赋值gtk_toggle_button</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"529\" height=\"127\" src=\"/uploads/649-1694584273-图片21.png\" alt=\"\" class=\"wp-image-649\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584273-图片21.png 529w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584273-图片21-300x72.png 300w\" sizes=\"auto, (max-width: 529px) 100vw, 529px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">使用gtk_widget_set_sensitive防止再次点击回弹按钮</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"469\" height=\"20\" src=\"/uploads/650-1694584273-图片22.png\" alt=\"\" class=\"wp-image-650\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584273-图片22.png 469w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584273-图片22-300x13.png 300w\" sizes=\"auto, (max-width: 469px) 100vw, 469px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">所有非空按钮信号函数赋为onclick，如下</p>\n\n\n\n<p class=\"wp-block-paragraph\">点击按钮，遍历数组B，取得该被点按钮在数组中的坐标（n，m），传入change（）函数中</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"499\" height=\"240\" src=\"/uploads/651-1694584274-图片23.png\" alt=\"\" class=\"wp-image-651\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584274-图片23.png 499w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584274-图片23-300x144.png 300w\" sizes=\"auto, (max-width: 499px) 100vw, 499px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">Change函数的功能为：</p>\n\n\n\n<p class=\"wp-block-paragraph\">当点击按钮时，获取数组A表上坐标为（n，m）元素的值</p>\n\n\n\n<p class=\"wp-block-paragraph\">若该值不为9，则改变数组B中（n，m）位置按钮的文本为该值</p>\n\n\n\n<p class=\"wp-block-paragraph\">其中该值为0时，文本应为空（“”）</p>\n\n\n\n<p class=\"wp-block-paragraph\">若该值为9，则代表点击到地雷，改变该位置按钮文本为“X”，弹出窗口，结束游戏</p>\n\n\n\n<p class=\"wp-block-paragraph\">如此，则可实现数组B与数组A一一对应，用数组A操控数组B。具体代码如下：</p>\n\n\n\n<figure class=\"wp-block-image size-large\"><img loading=\"lazy\" decoding=\"async\" width=\"536\" height=\"1024\" src=\"/uploads/652-1694584274-图片24.png\" alt=\"\" class=\"wp-image-652\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584274-图片24-536x1024.png 536w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584274-图片24-157x300.png 157w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584274-图片24-768x1466.png 768w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584274-图片24-805x1536.png 805w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584274-图片24.png 822w\" sizes=\"auto, (max-width: 536px) 100vw, 536px\" /></figure>\n\n\n\n<h3 class=\"wp-block-heading\"><em>4.&nbsp;</em><strong><em>空白展开功能的实现：</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">当点击空白时，理应将周围的空白一起显露</p>\n\n\n\n<p class=\"wp-block-paragraph\">思路为：当点击空白时，遍历该空白按钮周围上下左右4个位置的值</p>\n\n\n\n<p class=\"wp-block-paragraph\">若为0，则递归那个值为0的位置，如此递归下去，直至所有空白都递归</p>\n\n\n\n<p class=\"wp-block-paragraph\">另外，虽只递归周围的0位，但也要将本0位周围的非0位按钮触发，又0位周围必无地雷</p>\n\n\n\n<p class=\"wp-block-paragraph\">即可实现以数字为空白区域边缘的效果</p>\n\n\n\n<p class=\"wp-block-paragraph\">如下图：</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"493\" height=\"500\" src=\"/uploads/653-1694584276-图片25.png\" alt=\"\" class=\"wp-image-653\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584276-图片25.png 493w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584276-图片25-296x300.png 296w\" sizes=\"auto, (max-width: 493px) 100vw, 493px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">函数名为void blank（int n，int m），（n，m）由按键的信号函数提供，同上change（）</p>\n\n\n\n<p class=\"wp-block-paragraph\">若周围有值为0，则再次调用函数</p>\n\n\n\n<p class=\"wp-block-paragraph\">如点击位为（n，m），传入blank（n，m），判断出（n+1，m）位为0</p>\n\n\n\n<p class=\"wp-block-paragraph\">则再次调用blank（n+1，m），以此类推，即可实现空白展开</p>\n\n\n\n<p class=\"wp-block-paragraph\">代码如下：</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"897\" height=\"886\" src=\"/uploads/654-1694584276-图片26.png\" alt=\"\" class=\"wp-image-654\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584276-图片26.png 897w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584276-图片26-300x296.png 300w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584276-图片26-768x759.png 768w\" sizes=\"auto, (max-width: 897px) 100vw, 897px\" /></figure>\n\n\n\n<h3 class=\"wp-block-heading\"><em>5.&nbsp;</em><strong><em>判断胜利：</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">当场上所有非地雷按钮均被触发时，则为胜利</p>\n\n\n\n<p class=\"wp-block-paragraph\">思路：标记每一个被点击或被递归的按钮，以其值置为10标记为已点击，如上图blank中</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"172\" height=\"31\" src=\"/uploads/655-1694584277-图片27.png\" alt=\"\" class=\"wp-image-655\"/></figure>\n\n\n\n<p class=\"wp-block-paragraph\">其中，mapboom即为本文中的数组A</p>\n\n\n\n<p class=\"wp-block-paragraph\">然后，每次点击或递归时，执行update（）函数</p>\n\n\n\n<p class=\"wp-block-paragraph\">效果为，遍历当前数组A中的值，若数组A中不存在小于9的数（0-8）</p>\n\n\n\n<p class=\"wp-block-paragraph\">则代表所有非地雷按钮均已触发，则弹出“胜利窗口”</p>\n\n\n\n<h3 class=\"wp-block-heading\"><em>6.&nbsp;</em><strong><em>规避递归错误</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">需要注意，当递归到数组A的边缘时，如（0，0）位，明显（0-1，0）位不存在</p>\n\n\n\n<p class=\"wp-block-paragraph\">此时无法判断，程序会崩溃，则需要在数组外围预置一组数据，将该数据置为10</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"310\" height=\"131\" src=\"/uploads/656-1694584277-图片28.png\" alt=\"\" class=\"wp-image-656\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584277-图片28.png 310w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584277-图片28-300x127.png 300w\" sizes=\"auto, (max-width: 310px) 100vw, 310px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">此时输出如图：</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"731\" height=\"359\" src=\"/uploads/657-1694584277-图片29.png\" alt=\"\" class=\"wp-image-657\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584277-图片29.png 731w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584277-图片29-300x147.png 300w\" sizes=\"auto, (max-width: 731px) 100vw, 731px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">不规则是因为10位两位，与个位无法对齐</p>\n\n\n\n<p class=\"wp-block-paragraph\">大于10是因为该位置参与地雷数的判断，加上了周围的地雷数，不影响判剩条件</p>\n\n\n\n<h3 class=\"wp-block-heading\"><em>7.&nbsp;</em><strong><em>游戏选项的实现</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">在最开始定义了两个整型参数mapsize和gamelevel；</p>\n\n\n\n<p class=\"wp-block-paragraph\">每次生成游戏界面会调用这两个参数，只需将其设置为全局变量</p>\n\n\n\n<p class=\"wp-block-paragraph\">再通过游戏界面和交互按钮，更改这两个参数</p>\n\n\n\n<p class=\"wp-block-paragraph\">即可实现自定义“地图大小”和“难度等级”</p>\n\n\n\n<p class=\"wp-block-paragraph\">由于在规避递归错误时，预留了2行和2列</p>\n\n\n\n<p class=\"wp-block-paragraph\">则用户更改的mapsize和实际的mapsize须有2的差值，来实现图形上的游戏地图大小控制</p>\n\n\n\n<h3 class=\"wp-block-heading\"><em>8.&nbsp;</em><strong><em>胜利界面/游戏结束界面</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">游戏胜利时，弹出胜利界面</p>\n\n\n\n<p class=\"wp-block-paragraph\">若已登录，即iflogin ==1时，则上传按钮为可用，否则不可用，原理同游戏按钮</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"469\" height=\"20\" src=\"/uploads/658-1694584278-图片30.png\" alt=\"\" class=\"wp-image-658\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584278-图片30.png 469w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584278-图片30-300x13.png 300w\" sizes=\"auto, (max-width: 469px) 100vw, 469px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">重新游玩则是销毁游戏界面并重新初始化并显示游戏界面，略</p>\n\n\n\n<p class=\"wp-block-paragraph\">返回主菜单，略</p>\n\n\n\n<p class=\"wp-block-paragraph\">游戏结束界面，略</p>\n\n\n\n<h3 class=\"wp-block-heading\"><em>9.&nbsp;</em><strong><em>游戏地图按钮的排列</em></strong><strong><em></em></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">说完基本逻辑，说说图形的实现：</p>\n\n\n\n<p class=\"wp-block-paragraph\">首先，游戏界面窗口随地图大小改变而改变</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"504\" height=\"19\" src=\"/uploads/659-1694584278-图片31.png\" alt=\"\" class=\"wp-image-659\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584278-图片31.png 504w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584278-图片31-300x11.png 300w\" sizes=\"auto, (max-width: 504px) 100vw, 504px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">同时，表格布局与按钮数相同</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"576\" height=\"23\" src=\"/uploads/660-1694584279-图片32.png\" alt=\"\" class=\"wp-image-660\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584279-图片32.png 576w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584279-图片32-300x12.png 300w\" sizes=\"auto, (max-width: 576px) 100vw, 576px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">批量对按钮进行布局和信号函数的赋值</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"917\" height=\"258\" src=\"/uploads/661-1694584279-图片33.png\" alt=\"\" class=\"wp-image-661\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584279-图片33.png 917w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584279-图片33-300x84.png 300w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584279-图片33-768x216.png 768w\" sizes=\"auto, (max-width: 917px) 100vw, 917px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">如此，即可实现按钮的自动排列</p>\n\n\n\n<h3 class=\"wp-block-heading\"><strong>排行榜的实现：</strong><strong></strong></h3>\n\n\n\n<p class=\"wp-block-paragraph\">胜利界面的上传有</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"950\" height=\"165\" src=\"/uploads/662-1694584279-图片34.png\" alt=\"\" class=\"wp-image-662\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584279-图片34.png 950w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584279-图片34-300x52.png 300w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584279-图片34-768x133.png 768w\" sizes=\"auto, (max-width: 950px) 100vw, 950px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">其中，</p>\n\n\n\n<p class=\"wp-block-paragraph\">时间为：“弹出胜利界面时的系统时间”减去“打开游戏界面时系统时间”</p>\n\n\n\n<p class=\"wp-block-paragraph\">即为所消耗的时间</p>\n\n\n\n<p class=\"wp-block-paragraph\">gamepoint为排雷数量，在弹出胜利界面时，遍历数组A中值为9的元素个数即可得到</p>\n\n\n\n<p class=\"wp-block-paragraph\">Name，mapsize，gamelevel等前文已有说明，不再赘述</p>\n\n\n\n<p class=\"wp-block-paragraph\"><strong>排行榜：</strong><strong></strong></p>\n\n\n\n<p class=\"wp-block-paragraph\">数据库中所有数据按照排雷数降序排列，则有</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"574\" height=\"130\" src=\"/uploads/663-1694584280-图片35.png\" alt=\"\" class=\"wp-image-663\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584280-图片35.png 574w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584280-图片35-300x68.png 300w\" sizes=\"auto, (max-width: 574px) 100vw, 574px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">将读取的RankList赋给一个字符指针数组P，其长度为行r乘以列c</p>\n\n\n\n<p class=\"wp-block-paragraph\">排除无效第一行无效数据，则i从5开始依次赋给P</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"314\" height=\"142\" src=\"/uploads/664-1694584280-图片36.png\" alt=\"\" class=\"wp-image-664\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584280-图片36.png 314w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584280-图片36-300x136.png 300w\" sizes=\"auto, (max-width: 314px) 100vw, 314px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">列出数据：</p>\n\n\n\n<p class=\"wp-block-paragraph\">每一次gtk_clist_append，只能赋p[0]-p[5]的数据</p>\n\n\n\n<p class=\"wp-block-paragraph\">则每一次赋值后，p内数据前移5，如下图，即可实现数据更新</p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"353\" height=\"150\" src=\"/uploads/665-1694584281-图片37.png\" alt=\"\" class=\"wp-image-665\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584281-图片37.png 353w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584281-图片37-300x127.png 300w\" sizes=\"auto, (max-width: 353px) 100vw, 353px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\">需注意，需在数组尾部预留5个有数据的空间，否则将超出数组空间，程序将崩溃</p>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>四丶待优化</strong></h2>\n\n\n\n<ol class=\"wp-block-list\" type=\"1\">\n<li>图形界面过于简陋，未美化</li>\n\n\n\n<li>胜利界面信息过少，可添加排雷数，使用时间等信息</li>\n\n\n\n<li>技术原因，暂无法实现右键标记地雷</li>\n\n\n\n<li>代码性能低，算法未优化，许多遍历，应该时可以优化的</li>\n\n\n\n<li>上传数据只能本地，不可云同步，后面有机会我将数据库上传至我的云服务器并连接，实现云同步排行榜</li>\n</ol>\n\n\n\n<p class=\"wp-block-paragraph\"></p>\n\n\n\n<p class=\"wp-block-paragraph\"></p>\n\n\n\n<p class=\"wp-block-paragraph\"></p>\n\n\n\n<p class=\"wp-block-paragraph\"></p>\n\n\n\n<p class=\"wp-block-paragraph\"></p>\n\n\n\n<p class=\"wp-block-paragraph\"></p>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>更新日志：</strong></h2>\n\n\n\n<p class=\"wp-block-paragraph\">2023/9/14 </p>\n\n\n\n<p class=\"wp-block-paragraph\">更换数据库为mysql，重写登陆/注册，上传，排行榜部分，现在可以云同步用户账号和用户游戏数据</p>\n",
+      "excerpt": "<p>基于：C语言，GTK+2.0，Sqlite3 使用工具：VMware，MobaXterm，Sublime Te [&hellip;]</p>\n",
+      "featured": "629-1694584264-图片1.png",
+      "categories": [
+        9,
+        11,
+        42
+      ],
+      "tags": []
+    },
+    {
+      "id": 622,
+      "slug": "%e3%80%90project_3dtest%e3%80%91%e6%9b%b4%e6%96%b0%e6%97%a5%e5%bf%97",
+      "slugFa": "%e3%80%90project_3dtest%e3%80%91%e6%9b%b4%e6%96%b0%e6%97%a5%e5%bf%97",
+      "title": "【Project_3DTest】更新日志",
+      "date": "2023-09-06T21:56:47",
+      "modified": "2023-09-06T21:56:47",
+      "link": "https://garfieldgod.cn/index.php/622/",
+      "content": "\n<h2 class=\"wp-block-heading\"><strong>Version : 0.1</strong><strong></strong></h2>\n\n\n\n<ol class=\"wp-block-list\" type=\"1\">\n<li>制作了第三人称控制器</li>\n\n\n\n<li>制作了第三人称敌人锁定</li>\n\n\n\n<li>制作了第三人称射击要素</li>\n\n\n\n<li>制作了冲刺与升级</li>\n\n\n\n<li>制作了一个防御性技能，抵挡敌人攻击</li>\n\n\n\n<li>制作了一个可攻击可被攻击的简易敌人</li>\n</ol>\n\n\n\n<h2 class=\"wp-block-heading\"><strong>Version : 0.2</strong>(2023.9.6)</h2>\n\n\n\n<ol class=\"wp-block-list\" type=\"1\">\n<li>重做Demo设定</li>\n\n\n\n<li>重做角色本体，删除原角色</li>\n\n\n\n<li>更新角色更换手臂功能</li>\n\n\n\n<li>更新了3把不同的武器</li>\n\n\n\n<li>更新充电桩（类似篝火）与充电桩界面</li>\n\n\n\n<li>优化了第三人称全自动锁定</li>\n\n\n\n<li>武器根据射击目标自动瞄准</li>\n\n\n\n<li>更新自由射击方式</li>\n\n\n\n<li>更新半自动锁定射击方式</li>\n\n\n\n<li>优化全自动锁定方式，从优先最近距离➡优先选择锁定屏幕中央距离最小的敌人</li>\n\n\n\n<li>三种锁定方式可以自由切换</li>\n\n\n\n<li>更新地图1</li>\n</ol>\n\n\n\n<p class=\"wp-block-paragraph\">预计下次更新：</p>\n\n\n\n<ol class=\"wp-block-list\" type=\"1\">\n<li>摄像机穿模问题</li>\n\n\n\n<li>跳跃与飞行功能</li>\n\n\n\n<li>升级与插件功能</li>\n\n\n\n<li>拾取武器与拾取插件</li>\n\n\n\n<li>敌人AI与地图设定</li>\n\n\n\n<li>更新技能与枪械</li>\n\n\n\n<li>优化半自动锁定状态下的冲刺</li>\n\n\n\n<li>其他</li>\n</ol>\n\n\n\n<p class=\"wp-block-paragraph\">下载地址：</p>\n\n\n\n<p class=\"wp-block-paragraph\">链接：https://pan.baidu.com/s/1xJmPzfQNkp-pmDVOizM_vA?pwd=3x2e<br>提取码：3x2e</p>\n",
+      "excerpt": "<p>Version : 0.1 Version : 0.2(2023.9.6) 预计下次更新： 下载地址： 链接： [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        9,
+        11,
+        42
+      ],
+      "tags": []
+    },
+    {
+      "id": 613,
+      "slug": "%e3%80%8a%e4%b8%80%e5%88%87%e9%83%bd%e6%98%af%e5%91%bd%e4%b8%ad%e6%b3%a8%e5%ae%9a%e3%80%8b",
+      "slugFa": "",
+      "title": "《一切都是命中注定》",
+      "date": "2023-06-23T02:46:05",
+      "modified": "2023-09-06T21:50:24",
+      "link": "https://garfieldgod.cn/index.php/613/",
+      "content": "\n<p class=\"wp-block-paragraph\">    我是相信命中注定的</p>\n\n\n\n<p class=\"wp-block-paragraph\">    我相信未来的一切都会走向一个已定的结局，只是这样的结局是“我们”未知的，却已定的。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    一般来说“相信命中注定”这件事代表着消极，即“无论我做什么未来也不会改变”。我确实相信命中注定，但不代表我就会因为“未来已定”而变得消极。正因未来已定，我还是会做我认为正确的事，积极的事。因为我现在所做的事也是过去的未来，也是已定的，那“知道未来已定”这件事就不会影响我现在的未来。也正因我不被这件事消极地影响，我的未来恰恰是那样已定的未来，即“我不会被消极地影响”也是过去已定的未来。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    我说的有点绕有点乱，有些不好解释我的感觉，可能也有一些逻辑的错误。我想举个更形象的例子。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    你可能会说:“如果真的未来已定，那不论我现在做什么，成功与否不早定了，然而事实是，我消极生活，我未来就一定会失败，我积极生活，未来就一定会成功。我根据自己的选择，可以选择自己的未来，那怎么能说未来已定呢”</p>\n\n\n\n<p class=\"wp-block-paragraph\">    我想要反驳的就是这个。但不是消极地去反驳“积极生活”或“努力”这种事，我所说的和这些都没有关系。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    我认为其实你并没有“选择”。这牵扯到我以前所说的另一篇《人类没有思维》的猜想。即你所认为你做出的“选择”，就已经是已定未来的唯一过去罢了。你会做出这样的“选择”，也是过去已定的未来。你会“做出”那样的“选择”也是已定的。你有且仅有这一个“选择”，你没得选。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    这也涉及我相信的另一个猜想《果因论》，但这一篇还没来得及写，以后有空详说。用简单的语言粗略抽象地说，就是我认为世事是先有结果再有原因的。并非“之所以会有这样的结果是因为”，而是“正是有这样的结果才会”。在你想知道原因时就已经有结果了，而你后来认为你知道的原因，也仅仅是你主观认为的，此处的原因不是抽象概念性的而是实际过程性的。比如问“人为什么是如今这样”时，不如说恰恰人就是这样，而“原因”根本没有，就只是“就这样”而已。以上是有些错误却粗略通俗解说了《果因论》，但用于本篇应该够了。即未来恰恰正是如此，正是已定的那个模样，当你追溯形成这样未来的原因时，只能告知你“没有原因”。你所做出的“选择”并非原因，而只是过程。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    你以为你做出了“选择”，你以为未来因你的选择改变了，未来变成了你所想象的那样，然而并没有改变。在路上遇见一个人，你可能觉得你叫住了他，他会回头，你不叫他，他不会回头。然而他是否回头早已定下。用不那么正确却形象的方式解释就是:你叫住他，已定的未来就是他回头了，你没有叫住他，已定的未来就是他没回头。你可能会说这不是耍赖吗，这还叫未来没有改变？而事实上，你只能做出一个“选择”啊，你做出的这个唯一的“选择”所“造成”的这样的未来就只是唯一的未来。再加上《人类并无思维》所说你并不能“做出选择”，所有的你认为的另一个“选择”及其未来，都是不会发生的，没有一丝可能性的，你会去做出这个唯一“选择”也是已定的。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    这还不是未来已定么？</p>\n\n\n\n<p class=\"wp-block-paragraph\">    未来就如同一个牢笼，一个手掌，一摊黏泥，紧紧包裹住了一切的命运。不论怎么挣扎也逃不出其已定的结局。甚至你的“挣扎”根本不算对命运的挣扎，所谓的“挣扎”也只是已经定下的过去的未来。。。说来也多么可悲，根本不是一个维度却说试图与命运斗争，甚至没有资格斗争吧。如同一个由三次元世界制作的二次元角色在剧情里说要抵抗自己的命运一样，三次元的人们甚至根本。。。不觉得“你”是真的要“抵抗”吧，不会去认为“你”真的有“灵魂”吧。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    当然，如此一来，即便是“未来”本身的未来也是已定，一切都是已定的，并非被谁定下，神也是已定的，高维也是已定的，一切的一切都是已定的且不被一切的一切所知的。这样也没有什么因无法违抗命运而对命运感到不甘。二次元角色不用不甘，因为三次元的“命运”也是已定的。三次元我们不用不甘，命运也是已定的。命运它也很无奈啊，它也被已定了，它还不能违抗咱们呢(拟人手法)。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    说这些有什么用呢。其实没有用，还容易让人觉得你这人很消极，也确实可能让没有好好理解却相信我的话的人感到消极。一定不要认为未来已定现在就放弃了努力，放弃了去做什么。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    这并不是我真正想表达的，如果有人能从我简短的谜语里真正领会我的意思，那他应该感到积极才对。或者说是平静。并且不会再去对未来感到焦虑，依旧做着自己该做的事，自己认为正确的事，做着那些积极的“选择”，依旧乐观积极地度过每一天。不该吗，你的乐观积极也是已定的，你就该如此。这是我认为这些话应有的效果。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    了解了《果因论》以后应该很好理解吧？若你的结果是:你未来一定会成功。那么你现在就在努力，你的因即是现在在努力。这不随你的心态或其他任何一切的变化，因为它是过程，它是“就是这样”而已。你只需继续这个过程就好了。你也注定现在正在注定。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    知晓这些对我来说，也只能影响我的心态，让我感到消极或积极。而我自认为还是非常乐观积极阳光向上的一个人了，所以会让我感到更多的积极意义，多亏了我能相信命中注定。虽然，这样的心态也是注定的。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    未来已经定下了，只能接受了吧。那我还说这些干嘛，会不会有一种对命运有所意图的感觉？然而我说这些也是注定，我对命运有所意图也是注定。结果还不是逃不出命运嘛。也不能说豪无意义，只能说，暂时意义还不是很多～</p>\n\n\n\n<p class=\"wp-block-paragraph\">    我是相信命中注定的，相信我会有命定之事，命定之人，命定之物。我现在错过了什么我认为重大的事情，说明那不是我的命定之事罢了，我不会难过，我还得努力学习自己的事，迎接我真正的命定之事。若我弄丢了我认为珍贵的人，大概也只能说明她不是我的命定之人，我不该悲伤，我只需继续提升自己，等待我真正的命定之人罢。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    这样说可能有些偏颇了，毕竟未来虽已定，却是未知的。我可能注定失败，并且注定没有命定之人。那感觉。。。也很不错，我来到地球，下凡人间，就是来体验人的一生的，未来不管怎样，都可以体验吧。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    说着说着又容易让人误会有些消极，咋说呢，未来也始终是一个过程性的暂时结果，不会有真正结局，那也根本不会有注定失败一说，究竟会不会有命定之人，虽已注定却谁都不知道的，担心也没用，那还担心啥呢。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    并非悟已往之不谏，知来者之可追。只是即使是已往的，如果真是命中注定的，已往也会再次变成来者。真正的未来可期吧！</p>\n",
+      "excerpt": "<p>我是相信命中注定的 我相信未来的一切都会走向一个已定的结局，只是这样的结局是“我们”未知的，却已定的。 一般来 [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 593,
+      "slug": "%e3%80%90%e6%97%b6%e9%97%b4%e7%9a%84%e6%81%92%e5%bf%83%e3%80%91",
+      "slugFa": "",
+      "title": "【时间的恒心】",
+      "date": "2023-05-28T17:22:28",
+      "modified": "2023-09-19T19:36:26",
+      "link": "https://garfieldgod.cn/index.php/593/",
+      "content": "\n<p class=\"wp-block-paragraph\">此贴用以记录永恒的心，却也变化的恒心，志恒之心。</p>\n",
+      "excerpt": "<p>此贴用以记录永恒的心，却也变化的恒心，志恒之心。</p>\n",
+      "featured": null,
+      "categories": [
+        41
+      ],
+      "tags": []
+    },
+    {
+      "id": 541,
+      "slug": "%e3%80%8a%e5%85%b6%e5%ae%9e%e6%88%91%e6%98%af%e5%ae%87%e5%ae%99%e4%ba%ba%e3%80%8b%e5%b9%bb%e6%83%b3",
+      "slugFa": "",
+      "title": "《其实我是宇宙人》幻想",
+      "date": "2023-05-26T15:56:52",
+      "modified": "2023-09-06T21:51:17",
+      "link": "https://garfieldgod.cn/index.php/541/",
+      "content": "\n<p class=\"wp-block-paragraph\">    其实我是宇宙人，一直瞒着大伙。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    我从宇宙中来到地球，潜伏于世间，伪装成人类。 地球是一个美好的地方，我沉溺于这里的许多事，喜欢上许多人，爱上无数事物，我已忘记了我的使命。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    不过无所谓了，恰如我说出我的真实身份，也已无所谓了，我总会不断询问周围的人们一个问题“我看起来是否像一个人类”，答案都是说像的，那我的伪装就已是成功了。那我不就是人类？我的目的或使命，变成体验作为一个人类的一生，也未尝不可。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    但，在人群中还是会感到焦虑，如同身处异乡周围皆是陌生人般恐惧，更何况是深处异星，置身异星人之中，难以拥有归属感。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    偶尔也会想回到宇宙中去。但地球也让我流连，若是离开大概再也无法归来。潜伏过程中我已获得了人类的感情。我一定会思念，思念过去在这里的日子，思念如人类般的体验，忘不掉可爱的人儿。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    这里的人会有思念我吗，在知道了我是宇宙人以后，在我回到宇宙中之后。我来过，但只是经过，作为客人，作为流星划过。好想再体验作为人类的时光，想见尽地球世间万象，与人类打交道，尝遍四海风土人情。只是我的时间不多了，宇宙人最终还是要回到宇宙，再过几十年时光，只是眨眼见，只是待会儿，马上，只是“现在”。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    感到遗憾，也不太遗憾。伪装成人类，与人类相处，我是真心或假意已不清楚。但却庆幸，想继续下去这件伟大的事业，感叹这件事大概做不了多久了。晃晃几近百年，太过短些了。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    终究是要回宇宙的。烟花綻放完便消散了，可是人们看烟花也只会感到美丽而不为其消散而悲伤。生而为美丽，生而为消散。作为人类的一生大概也是如此。</p>\n\n\n\n<p class=\"wp-block-paragraph\">     等再几十年，我回到宇宙中后，会想念大伙的，曾在一个名为地球的地方，与人同乐。</p>\n\n\n\n<p class=\"has-text-align-right wp-block-paragraph\">&#8212;&#8212;写于<a href=\"http://user.qzone.qq.com/1351763110/mood/a6449250109d2f64c9650c00.1\">2023年4月7日</a></p>\n\n\n\n<figure class=\"wp-block-image size-full\"><img loading=\"lazy\" decoding=\"async\" width=\"1155\" height=\"2560\" src=\"/uploads/271-L3-scaled.jpg\" alt=\"\" class=\"wp-image-271\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/05/L3-scaled.jpg 1155w, https://garfieldgod.cn/wp-content/uploads/2023/05/L3-135x300.jpg 135w, https://garfieldgod.cn/wp-content/uploads/2023/05/L3-462x1024.jpg 462w, https://garfieldgod.cn/wp-content/uploads/2023/05/L3-768x1702.jpg 768w, https://garfieldgod.cn/wp-content/uploads/2023/05/L3-693x1536.jpg 693w, https://garfieldgod.cn/wp-content/uploads/2023/05/L3-924x2048.jpg 924w\" sizes=\"auto, (max-width: 1155px) 100vw, 1155px\" /></figure>\n",
+      "excerpt": "<p>其实我是宇宙人，一直瞒着大伙。 我从宇宙中来到地球，潜伏于世间，伪装成人类。 地球是一个美好的地方，我沉溺于这 [&hellip;]</p>\n",
+      "featured": "271-L3-scaled.jpg",
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 539,
+      "slug": "%e3%80%8a%e6%88%91%e6%9d%a5%e8%87%aa%e6%9c%aa%e6%9d%a5%e3%80%8b2",
+      "slugFa": "",
+      "title": "《我来自未来》2",
+      "date": "2023-05-26T15:54:11",
+      "modified": "2023-09-06T21:50:28",
+      "link": "https://garfieldgod.cn/index.php/539/",
+      "content": "\n<p class=\"wp-block-paragraph\">    一些天马行空的乱想幻想：</p>\n\n\n\n<p class=\"wp-block-paragraph\">     昨日还是前日梦见一个和穿越时空有关的事 于是想起多年前的一些想法，但现在又有所改观，有一些其他的幻想 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    多年前的想法是： “ 我感觉我可能是一个时空穿越者 我理解的时空穿越理应是一切复原到以前的某个状态，我自己本身也同样。 因此我从未来穿越时间回到现在，并不会保留我未来的记忆，我也不会意识到我是穿越者。 由此，现在的我产生了‘我有可能是穿越者只是我失去了记忆，没有意识到而已’ ” </p>\n\n\n\n<p class=\"wp-block-paragraph\">    当时的我是认为未来的我费那么大力气非要穿越回来，一定是为了改变什么，做了什么事情而后悔而回来。这样的想法是会让当时的我做出改变的，我当时决心在做一些事的时候一定要试试其他我可能本不可能会试的选择，这样也许能完成”未来的我“的目标。让我去勇敢地尝试。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    现在我感觉也许不是这样，毕竟如果是未来的“我”的话，应该会考虑到穿越途中我自己的记忆也会消失，那对于未来的”我“来说改变过去等于空谈，毕竟现在的我根本不知道未来是怎样的，不管我怎么做，也许都就是原本的”未来”，我的时空是完全没有受到未来的影响的。那我怎么可能改变未来呢。 </p>\n\n\n\n<p class=\"wp-block-paragraph\">    想了许久，还是没有思索出合理的原因。非要说的话，我觉得，可能是我想，重新体验一遍现在的生活吧。 即使现在的生活也许对现在的我并不能感到特别特别的兴奋快乐，但未来的我，肯定也会怀念现在的生活吧，就像现在的我怀念过去一样，过去我是否也并没有发现过去的生活很幸福呢？ “也许我的一生是平淡的，不是那么精彩的，但对于我来说是独一无二的，好事也好，坏事也好，悲伤也好，幸福也好，都是我的经历。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    我喜欢的经历，我喜欢我自己，热爱我的一生”如果未来的我真的考虑到现在我无法意识到自己是穿越者，知道现在的我无法改变什么，那为什么还要回来呢？那一定就是这样吧。我的一生太精彩，太平淡。“我”想再回来看看，我想再好好珍稀现在的时光 想起这样中二的幻想，感觉有些好笑，但又觉得有些启发，也不是毫无意义吧 但这个幻想本身的前提是我是一个穿越者，我不得不考虑我不是穿越者怎么办呢。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    我想到既然是穿越的话，那是世间一切都一起复原的吧，我不是穿越者，也许总有人是，他或她在穿越的过程中，我也复原成现在的状态了。 所以，你也可能是穿越者，也好好珍惜现在的时光吧。</p>\n\n\n\n<p class=\"has-text-align-right wp-block-paragraph\">&#8212;&#8212;&#8212;-写于<a href=\"http://user.qzone.qq.com/1351763110/mood/a6449250f11d876296940d00.1\">2022年5月20日</a></p>\n",
+      "excerpt": "<p>一些天马行空的乱想幻想： 昨日还是前日梦见一个和穿越时空有关的事 于是想起多年前的一些想法，但现在又有所改观， [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 537,
+      "slug": "%e3%80%8a%e6%88%91%e6%9d%a5%e8%87%aa%e6%9c%aa%e6%9d%a5%e3%80%8b%e5%b9%bb%e6%83%b3",
+      "slugFa": "",
+      "title": "《我来自未来》幻想",
+      "date": "2023-05-26T15:51:00",
+      "modified": "2023-09-06T21:50:32",
+      "link": "https://garfieldgod.cn/index.php/537/",
+      "content": "\n<p class=\"wp-block-paragraph\">    对了，微机课时想到什么想说的，后来忘了。然后现在想起了，原来是关于现在和未来以及曾经的事情。起因是我前段时间觉得我的生活需要动力，因为我前不久生活的意义因某些事突然消失了，就想回到过去，挽回一下，如同穿越一般。可我又想，我穿越到过去，所有的一切都回到那个时候，包括自己现在的记忆，情感。也就是说我回到过去是不会记得自己是想要改变什么才回去的，那穿越也就毫无意义。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;&nbsp;于是我联想到未来。</p>\n\n\n\n<p class=\"wp-block-paragraph\">    是否有种可能，未来的我或许因为什么事而后悔，因为什么事而回到过去想改变什么，也就是未来的我回到我现在，去改变未来。可我不知道未来的我回到我现在这个时间，是为了改变什么呢？我未来的所见所闻所感所思都在穿越的途中消失，但我认为未来的我是极力想改变什么才回到现在的吧，于是我不想辜负未来的我，我想完成他所想改变的事，而他所想改变的事我却不知道，唯一能够完成他反悔的方法就是在我自己现在做出选择的时候，选择一个或许更好但自己从未尝试过的选项。比如更爱学习什么的。于是我的生活有了意义。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;&nbsp;最后，我想说，如果旧人们看见我不一样了，我变了，请不要惊讶，因为我如今不是过去的我，也不是现在的我，我来自未来。</p>\n\n\n\n<p class=\"wp-block-paragraph\">                                                                                                                    </p>\n\n\n\n<p class=\"has-text-align-right wp-block-paragraph\">&#8212;&#8212;&#8212;&#8212;&#8211;写于  2017年  9月30日  20:29</p>\n",
+      "excerpt": "<p>    对了，微机课时想到什么想说的，后来忘了。然后现在想起了，原来是关于现在和未来以及曾经的事情。起因是我前 [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 535,
+      "slug": "%e4%ba%ba%e9%81%93%e4%b8%bb%e4%b9%89%e5%8f%91%e5%b1%95%e7%9a%84%e7%9f%9b%e7%9b%be",
+      "slugFa": "",
+      "title": "人道主义发展的矛盾",
+      "date": "2023-05-26T15:49:55",
+      "modified": "2023-09-06T21:50:36",
+      "link": "https://garfieldgod.cn/index.php/535/",
+      "content": "\n<p class=\"wp-block-paragraph\">《城市：天际线》中，我在建设我的城市时，遇到了一些棘手的问题。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp; &nbsp; &nbsp; 1.工业区的工厂没有工人工作，许多工厂最终都被废弃了，新建的工厂不就也出现类似的情况，初级劳动力太少，没有人愿意去工厂工作，然而人口是足够的，甚至溢出的，许多人抱怨没有工作，这是为什么？我苦思许久，最后搜了攻略，才明白－－－居民教育程度太高，都向往更好的生活，没人愿意去工厂当工人，解决方法之一是降低工业生产规模，然而发展需要，并不能这么做。另外一个解决方法则是：教育控制。即教育有限分配，比如我本来是有能力让更多人接受高等教育的，但我此时需要低级劳动力，我就不能让一些人接受教育，即使我有这个能力。这把我震惊了。我挣扎了许久，最终妥协了，将一处居民区周围的一所大学与几所中小学拆除了，最终工业区劳动力问题得到了解决，但我却很愧疚，这一切值得吗？现代社会应该不会出现这样建了又拆的情况，但我想，某个时代，受于某种压力，也许就会发生有能力建造学校却故意不建造的情况。多么可悲。工人型劳动力在未来如果真的能被全部消失并取代，也许社会发展会更人道些吧。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.关于区域的划分，从普通的闹市区，到以上提到的学校等设施很少的“工人区”，再到新建的高新区，我不得不发现这其实像是一种等级制度，工人区距离工业区更近，上班下班更容易，但也因此周围污染更严重，居民身体健康更差，经常发生各种事情，各种资源也因身处工业区而更少，更像是“贫民区”。而新建的高新区因其高度集中的办公楼与居民大厦，商业大厦等，不得不优先建立地铁干线，增多公交线，其带来的经济效益确实更大，为保障其正常运转，所设置的医疗，安保，消防等等资源也更多，居民满意度更高，但这好吗，这似乎被迫形成了区别对待。为了发展，为了进阶，被迫优先优待高新区的人们，从宏观角度上看，这是正确的，高度发展的地区可以带动其他地区，但对于一个时代的某些个体，这并不公平，这不人道，这就是牺牲了他们，来换取社会总体的发展。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;还有一些人道与发展直接的矛盾，就不赘述了。</p>\n\n\n\n<p class=\"wp-block-paragraph\">         我不是文科生，啥也不懂，都是乱说的。</p>\n",
+      "excerpt": "<p>《城市：天际线》中，我在建设我的城市时，遇到了一些棘手的问题。 &nbsp; &nbsp; &nbsp; &#038;n [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 533,
+      "slug": "%e3%80%8a%e5%86%9b%e8%ae%ad%e7%bb%93%e6%9d%9f%e6%9c%89%e6%84%9f%e3%80%8b%e4%b9%8b%e7%a9%ba%e9%97%b4%e5%8f%98%e5%8c%96%e5%b9%bb%e6%83%b3",
+      "slugFa": "",
+      "title": "《军训结束有感》之空间变化幻想",
+      "date": "2023-05-26T15:48:39",
+      "modified": "2023-09-06T21:50:39",
+      "link": "https://garfieldgod.cn/index.php/533/",
+      "content": "\n<p class=\"wp-block-paragraph\">    今日军训结束，教官已离开了。<br>    略有感触，想起了高中时代一直无法理解的    “为什么我会移动”   “为什么我的空间位置会发生变化”   这一百思不得其解的问题。<br>    高中时代时常走在路上时，会惊奇的发现自己居然在移动，从一个地方到另一个地方。又从另一个地方到下一个地方，我非常不解，为什么会有这样的现象，为什么我会进行移动。<br>     今日坐在操场上，我发现，人与人的相遇，如此频繁，但大多数人与人的相遇仅有一次，这代表你一生中遇到的几乎大部分人仅会见面一次，即使相处一段时间也必会分离，像高中毕业，像教官离开。大家都是过客，大家相互碰撞一次便再也不见，彼此分离，彼此离开。各自在不同的地方再次进行移动，进行各自的毫无相关的移动，进行空间的变换。 <br>    这，像极了，像极了 花粉落入水中的无规则运动————布朗运动<br>    我把每个人比作一颗花粉，世界就是一面水。 人们在上面进行移动，最终的结果大概就是，花粉与花粉之间大概率只会相撞一次，即使周旋时间较长，最终也会分开。这像极了。<br>    但我又想，那如何解释人的定向移动呢，比如，我坐飞机从一个地方到另一个地方，然后又从那里回到原地，这似乎是定向的，并非无规则运动。然而，这很好解释，这需要引入“志恒论”中的“人类并无思想思维”的理论，这并非定向移动，你以为是你自己左右的规律的运动，实则不然，就像水中花粉收到外界条件干扰会后，自身移动变化会产生一定改变一样，人类也是如此，人类的移动一定是受外界干扰所作出的反射，并非你想动而是你不得不动，并非你不想动而是你不能动。移动也是人类行为的一部分，在“人类并无思想思维”理论中，自然是不受所谓人类的思维自己所左右的。<br>    于是“我为什么会移动”这个问题便逐渐清晰了，也许能解释布朗运动，也就能解释人类的移动。尽管我一度认为布朗运动是一个笑话，在绝对的静止中也许并不存在布朗运动。况且宏观的运动也许是规律的，也也许是不规律的。<br>    这似乎不是人类能理解的。</p>\n\n\n\n<p class=\"has-text-align-right wp-block-paragraph\">    &#8212;&#8212;写于2020年9月30日  11：10分</p>\n",
+      "excerpt": "<p>    今日军训结束，教官已离开了。    略有感触，想起了高中时代一直无法理解的    “为什么我会移动”  [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 531,
+      "slug": "%e3%80%8a%e4%ba%ba%e7%b1%bb%e6%97%a0%e6%80%9d%e6%83%b3%e6%80%9d%e7%bb%b4%e3%80%8b%e5%b9%bb%e6%83%b3",
+      "slugFa": "",
+      "title": "《人类无思想思维》幻想",
+      "date": "2023-05-26T15:47:38",
+      "modified": "2023-09-06T21:50:43",
+      "link": "https://garfieldgod.cn/index.php/531/",
+      "content": "\n<p class=\"wp-block-paragraph\">    前几日有人提起人类的奇妙，于是又说说我关于人类思维的看法。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;&nbsp;我的观点是：其实人类并没有所谓的“思维”</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;&nbsp;因为人类究其根本也就是一堆物质的组成。没有“思维”的意思，用通俗易懂的话讲，就是说，其实你做什么事情，并非是你想做而去做，你的决定，并非按照你自己的意愿，可以说是，你做任何事情，都是被迫做的。你的大脑仅仅是现实的物质，脑细胞等的运作，你其实根本无法对一件事情做出判断。人类的行为不过是对外界刺激和影响的反应。比如你走在路上，有人叫你，你就会停下来与他交流，如果并没有人叫住你，你就不会停下。也许被人叫住你也不会停下，但这并非是你做出的决定，而是另外一些影响对你造成的结果。比如这个人曾经做过让你讨厌的事。这并非是你自己的决定，而是这些因素造成了你以为的“决定”。你也许会觉得，你做一个事情之前，可以选择怎样做，做还是不做。然而并不能，你所处的环境必定使你做出你以为的多种选择中的一种，但事实上就只有这一种选择，且一定会发生这一种，根本不会有“如果换一种方式做，结果就会不一样”的情况，因为只能发生一件事，且不可回溯，就只有一种选择，是必定的。这可以很好的解释无力感，并非你做不到，而是你所处环境的影响使你对环境的反应做不到。不同人对不同刺激响应不同，人的构造是有差别的，你所喜欢的并非你喜欢的，只是恰好这种刺激与你的反应相对。就像我看向天空，想到宇宙，就会热泪盈眶一样。宇宙的图像，光，刺激我的眼睛，传入我的大脑，就像拼图相接一样，与我的构造恰好适合，所以产生了“我热爱宇宙”的假象。一切事物同理。所以要说人类奇妙，并非因为人类特殊而奇妙，是因为万物奇妙，一粒灰尘，一缕尘埃，都非常奇妙。人类与这些同理，只是看似复杂一些而已，实质是相同的&#8230;&#8230;</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;&nbsp;但我想可能没有人能理解我的意思，毕竟如此想的话，所谓的人生就会毫无意义，所有行为，所有想法都无意义，那都是自然的运动规律而已罢了，人类并没有能力来决定这些。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;&nbsp;不过不理解我也好。毫无意义，人类不就是这样吗。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;&nbsp;我充其量不也就是个愚蠢的人类</p>\n\n\n\n<p class=\"wp-block-paragraph\">                                                                                                                               </p>\n\n\n\n<p class=\"has-text-align-right wp-block-paragraph\">&#8212;&#8212;&#8212;-写于  2020年  4月30日  23:42</p>\n",
+      "excerpt": "<p>  前几日有人提起人类的奇妙，于是又说说我关于人类思维的看法。 &nbsp; &nbsp;&nbsp;我的观点 [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 529,
+      "slug": "%e3%80%8a%e6%af%8d%e6%80%9d%e7%bb%b4%e3%80%8b%e5%b9%bb%e6%83%b3",
+      "slugFa": "",
+      "title": "《母思维》幻想",
+      "date": "2023-05-26T15:45:53",
+      "modified": "2023-09-06T21:50:46",
+      "link": "https://garfieldgod.cn/index.php/529/",
+      "content": "\n<p class=\"wp-block-paragraph\">    在我看来，所谓的一个人的思维，在进入深度思考后，就不仅仅是个体的思维了，而是被分成多个的，思考时会有多个不同其他思维的理由来反驳主体思维的观点，就像多个人在争论。而我所理解的思维是等量的，不管分成多少个，它们自身的量是相等的，所思考的量也是相等的，唯一区别在于所持观点不同。接着我想提出“母思维”的观点，母思维就如同一个服务器，由无数的子思维联接，这便是可以解释为什么人在浅层思考时只有主体思维而在深层思考时有多个思维了。因为深层思考时你头脑中的是母思维，而浅层时是子思维。而母思维由无数子思维组成，子思维分布在每个人的浅层思考中。那么得出结论，人在进行深层思考时，其实是在与他人进行思维交流。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;&nbsp;说这么多难以理解的，就想告诉大家，不要害怕别离，不要害怕寂寞，也不要说再也没有再见之时，当你在深度思考自己为什么要别离，为什么会寂寞时，其实没有别离也不寂寞，因为我那时在和你进行思想交流，你并不孤独，我时刻都在你身边，我的思想。</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;最后，</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;祝您身体健康，</p>\n\n\n\n<p class=\"wp-block-paragraph\">&nbsp; &nbsp;再见。</p>\n\n\n\n<p class=\"has-text-align-right wp-block-paragraph\">&nbsp;&nbsp; &nbsp; &nbsp; &#8212;&#8212;&#8212;&#8212;-写于&nbsp; &nbsp;2017年&nbsp; 9月23日 21:10</p>\n\n\n\n<p class=\"wp-block-paragraph\">（注：此幻想与《人类并无思想思维》略有矛盾，以最新发表为准。注释于&nbsp; 2020年&nbsp; 9月30日&nbsp; 11：29）</p>\n",
+      "excerpt": "<p>    在我看来，所谓的一个人的思维，在进入深度思考后，就不仅仅是个体的思维了，而是被分成多个的，思考时会有多 [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 472,
+      "slug": "%e8%bf%99%e6%98%af%e7%ac%ac%e4%b8%80%e6%9d%a1%e7%a4%be%e5%8c%ba%e5%86%85%e5%ae%b9%ef%bc%81",
+      "slugFa": "",
+      "title": "这是第一条社区内容！",
+      "date": "2023-05-25T12:39:46",
+      "modified": "2023-05-25T14:13:57",
+      "link": "https://garfieldgod.cn/index.php/472/",
+      "content": "<p>你好！欢迎发布您自己的文章！</p>\n<p><img loading=\"lazy\" decoding=\"async\" class=\"alignnone size-medium wp-image-527\" src=\"/uploads/527-1684995228-14.jpg\" alt=\"\" width=\"300\" height=\"169\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14-300x169.jpg 300w, https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14-1024x576.jpg 1024w, https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14-768x432.jpg 768w, https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14-1536x864.jpg 1536w, https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14.jpg 1920w\" sizes=\"auto, (max-width: 300px) 100vw, 300px\" /></p>\n",
+      "excerpt": "<p>你好！欢迎发布您自己的文章！</p>\n",
+      "featured": "527-1684995228-14.jpg",
+      "categories": [
+        41
+      ],
+      "tags": []
+    },
+    {
+      "id": 263,
+      "slug": "%e5%8f%aa%e7%8b%bc",
+      "slugFa": "",
+      "title": "只狼",
+      "date": "2023-05-23T23:14:56",
+      "modified": "2023-05-25T13:46:04",
+      "link": "https://garfieldgod.cn/index.php/263/",
+      "content": "\n<p class=\"wp-block-paragraph\">以前画的一个只狼捏</p>\n\n\n\n<figure class=\"wp-block-image size-large\"><img loading=\"lazy\" decoding=\"async\" width=\"1024\" height=\"1024\" src=\"/uploads/264-只狼11.png\" alt=\"\" class=\"wp-image-264\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/05/只狼11-1024x1024.png 1024w, https://garfieldgod.cn/wp-content/uploads/2023/05/只狼11-300x300.png 300w, https://garfieldgod.cn/wp-content/uploads/2023/05/只狼11-150x150.png 150w, https://garfieldgod.cn/wp-content/uploads/2023/05/只狼11-768x768.png 768w, https://garfieldgod.cn/wp-content/uploads/2023/05/只狼11-1536x1536.png 1536w, https://garfieldgod.cn/wp-content/uploads/2023/05/只狼11-2048x2048.png 2048w\" sizes=\"auto, (max-width: 1024px) 100vw, 1024px\" /></figure>\n",
+      "excerpt": "<p>以前画的一个只狼捏</p>\n",
+      "featured": "264-只狼11.png",
+      "categories": [
+        11,
+        16
+      ],
+      "tags": []
+    },
+    {
+      "id": 253,
+      "slug": "%e5%a4%b4%e5%83%8f",
+      "slugFa": "",
+      "title": "头像",
+      "date": "2023-05-23T23:03:30",
+      "modified": "2023-05-25T13:46:10",
+      "link": "https://garfieldgod.cn/index.php/253/",
+      "content": "\n<p class=\"wp-block-paragraph\">头像练习</p>\n\n\n\n<figure class=\"wp-block-image size-large\"><img loading=\"lazy\" decoding=\"async\" width=\"768\" height=\"1024\" src=\"/uploads/256-头像43.png\" alt=\"\" class=\"wp-image-256\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/05/头像43-768x1024.png 768w, https://garfieldgod.cn/wp-content/uploads/2023/05/头像43-225x300.png 225w, https://garfieldgod.cn/wp-content/uploads/2023/05/头像43-1152x1536.png 1152w, https://garfieldgod.cn/wp-content/uploads/2023/05/头像43-1536x2048.png 1536w, https://garfieldgod.cn/wp-content/uploads/2023/05/头像43.png 1800w\" sizes=\"auto, (max-width: 768px) 100vw, 768px\" /></figure>\n",
+      "excerpt": "<p>头像练习</p>\n",
+      "featured": "256-头像43.png",
+      "categories": [
+        11,
+        16
+      ],
+      "tags": []
+    },
+    {
+      "id": 219,
+      "slug": "what-are-words",
+      "slugFa": "what-are-words",
+      "title": "What Are Words",
+      "date": "2023-05-23T19:52:30",
+      "modified": "2023-09-06T21:50:51",
+      "link": "https://garfieldgod.cn/index.php/219/",
+      "content": "<p>Anywhere you are, I am near<br />\n不论你在哪儿，我都会在你身旁<br />\nAnywhere you go ,I&#8217;ll be there<br />\n不论你去哪儿，我都会在那里<br />\nAnytime you whisper my name, you&#8217;ll see<br />\n你任何时候轻呼我的名字，我都会在<br />\nEvery single promise I keep<br />\n我会信守我对你的每一个承诺<br />\nCause what kind of guy would I be<br />\n我会是一个什么样的人啊<br />\nIf I was to leave when you need me most<br />\n如果我在你最需要我的时候离去<br />\nWhat are words<br />\n什么是诺言<br />\nIf you really don&#8217;t mean them<br />\n却又不是你的心声<br />\nWhen you say them<br />\n当你说出那些话时<br />\nWhat are words<br />\n什么是诺言啊<br />\nIf they&#8217;re only for good times<br />\n如果只是在美好的时刻说出来<br />\nThen they don&#8217;t<br />\n那么那些承诺就不会天长地久<br />\nWhen it&#8217;s love<br />\n情到深处<br />\nYeah, you say them out-loud ,those words<br />\n你大声地喊出了自己的誓言，那些话<br />\nThey never go away<br />\n永远不会褪色<br />\nThey live on, even when we&#8217;re gone<br />\n它们会一直存在，即使我们都不在这世间了<br />\nAnd I know an angel was sent just for me<br />\n我知道，你是上苍赠予我的天使<br />\nAnd I know I&#8217;m meant to be where I am<br />\n我知道，我希望在你生命中占什么样的位置<br />\nAnd I&#8217;m gonna be standing right beside her tonight<br />\n今晚我将守护在她的身边<br />\nAnd I&#8217;m gonna be by your side<br />\n我会一直守护在你身边<br />\nI would never leave when she needs me most<br />\n当她最需要我的时候，我绝不会离去<br />\nWhat are words<br />\n什么是诺言啊<br />\nIf you really don&#8217;t mean them<br />\n如果你不想去遵守<br />\nWhen you say them<br />\n当你说出来的时候<br />\nWhat are words<br />\n什么是诺言啊<br />\nIf they&#8217;re only for good times<br />\n如果它们只在美好的时刻存在<br />\nThen they don&#8217;t<br />\n那么它们就不叫诺言<br />\nWhen it&#8217;s love<br />\n情到深处<br />\nYeah, you say them out-loud those words<br />\n你大声喊出自己的承诺<br />\nThey never go away<br />\n那些话，永远不会褪色<br />\nThey live on, even when we&#8217;re gone<br />\n它们会一直存在，即使我们已经离开了这个世界<br />\nAnywhere you are, I am near<br />\n不论你在哪儿，我都在你身边<br />\nAnywhere you go, I&#8217;ll be there<br />\n不论你去哪儿，我都会在那里<br />\nAnd I&#8217;m gonna be here forever more<br />\n我会在你身边，比永远更远<br />\nEvery single promise I keep<br />\n我会信守我的每一个承诺<br />\nCause what kind of guy would I be<br />\n因为如果我在你最需要我的时候离去<br />\nIf I was to leave when you need me most<br />\n那将证明我是一个不够爱你的人<br />\nI&#8217;m forever keeping my angel close<br />\n我会永远守护在我的天使身边</p>\n",
+      "excerpt": "<p>Anywhere you are, I am near 不论你在哪儿，我都会在你身旁 Anywhere you [&hellip;]</p>\n",
+      "featured": null,
+      "categories": [
+        12
+      ],
+      "tags": []
+    },
+    {
+      "id": 50,
+      "slug": "%e5%85%89%e5%bd%b1%e7%bb%83%e4%b9%a0",
+      "slugFa": "",
+      "title": "光影练习",
+      "date": "2023-05-23T12:08:04",
+      "modified": "2023-05-25T13:46:21",
+      "link": "https://garfieldgod.cn/index.php/50/",
+      "content": "\n<p class=\"wp-block-paragraph\">附上动听的一首歌~</p>\n\n\n\n<figure class=\"wp-block-image size-large is-resized\"><img loading=\"lazy\" decoding=\"async\" src=\"/uploads/52-光影练习改916.png\" alt=\"\" class=\"wp-image-52\" width=\"651\" height=\"1143\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/05/光影练习改916-584x1024.png 584w, https://garfieldgod.cn/wp-content/uploads/2023/05/光影练习改916-171x300.png 171w, https://garfieldgod.cn/wp-content/uploads/2023/05/光影练习改916-768x1347.png 768w\" sizes=\"auto, (max-width: 651px) 100vw, 651px\" /></figure>\n\n\n\n<figure class=\"wp-block-audio\"><audio controls src=\"/uploads/53-Lullaby.mp3\"></audio></figure>\n",
+      "excerpt": "<p>附上动听的一首歌~</p>\n",
+      "featured": "52-光影练习改916.png",
+      "categories": [
+        11,
+        16
+      ],
+      "tags": []
+    },
+    {
+      "id": 1,
+      "slug": "hello-world",
+      "slugFa": "hello-world",
+      "title": "世界，您好！",
+      "date": "2023-05-22T17:09:31",
+      "modified": "2023-05-25T14:06:18",
+      "link": "https://garfieldgod.cn/index.php/1/",
+      "content": "\n<p class=\"wp-block-paragraph\">欢迎访问GarfieldGod的主页！</p>\n\n\n\n<figure class=\"wp-block-image size-large\"><img loading=\"lazy\" decoding=\"async\" width=\"1024\" height=\"576\" src=\"/uploads/296-11-1.jpg\" alt=\"\" class=\"wp-image-296\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/05/11-1-1024x576.jpg 1024w, https://garfieldgod.cn/wp-content/uploads/2023/05/11-1-300x169.jpg 300w, https://garfieldgod.cn/wp-content/uploads/2023/05/11-1-768x432.jpg 768w, https://garfieldgod.cn/wp-content/uploads/2023/05/11-1-1536x864.jpg 1536w, https://garfieldgod.cn/wp-content/uploads/2023/05/11-1.jpg 1920w\" sizes=\"auto, (max-width: 1024px) 100vw, 1024px\" /></figure>\n\n\n\n<p class=\"wp-block-paragraph\"></p>\n",
+      "excerpt": "<p>欢迎访问GarfieldGod的主页！</p>\n",
+      "featured": "296-11-1.jpg",
+      "categories": [
+        9,
+        11
+      ],
+      "tags": []
+    }
+  ],
+  "pages": [
+    {
+      "id": 372,
+      "slug": "forum",
+      "title": "社区",
+      "link": "https://garfieldgod.cn/index.php/forum/",
+      "content": "\n<div class=\"wp-block-group alignwide is-layout-flow wp-container-core-group-is-layout-bd2ca8f0 wp-block-group-is-layout-flow\" style=\"padding-top:0;padding-right:0;padding-bottom:0;padding-left:0\">\n<div class=\"wp-block-columns alignfull are-vertically-aligned-top is-layout-flex wp-container-core-columns-is-layout-f56f613f wp-block-columns-is-layout-flex\">\n<div class=\"wp-block-column is-vertically-aligned-top is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:75%\">\n<div class=\"wp-block-group is-layout-constrained wp-block-group-is-layout-constrained\">\n<div class=\"wp-block-group alignwide has-foreground-color has-background-background-color has-text-color has-background is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-c2b1d69c wp-block-group-is-layout-flex\" style=\"border-radius:15px;margin-top:0;margin-bottom:0;padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px\">\n<h4 class=\"wp-block-heading\" style=\"margin-top:var(--wp--preset--spacing--30);margin-right:var(--wp--preset--spacing--30);margin-bottom:var(--wp--preset--spacing--30);margin-left:var(--wp--preset--spacing--30)\">最新文章：</h4>\n\n\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity is-style-wide\" style=\"margin-top:var(--wp--preset--spacing--30);margin-bottom:var(--wp--preset--spacing--30)\"/>\n\n\n\n<div class=\"wp-block-query is-layout-flow wp-block-query-is-layout-flow\"><ul class=\"wp-block-post-template is-layout-flow wp-block-post-template-is-layout-flow\"><li class=\"wp-block-post post-762 post type-post status-publish format-standard has-post-thumbnail hentry category-9 category-11 category-42\">\n\n<div class=\"wp-block-group has-cyan-bluish-gray-background-color has-background has-small-font-size is-layout-flow wp-container-core-group-is-layout-08be40cc wp-block-group-is-layout-flow\" style=\"border-radius:15px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)\">\n<div class=\"wp-block-columns is-layout-flex wp-container-core-columns-is-layout-f56f613f wp-block-columns-is-layout-flex\">\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:40%\">\n<div class=\"wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-d62794ec wp-block-group-is-layout-flex\"><h2 style=\"font-style:normal;font-weight:900;text-transform:none;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-title has-large-font-size\"><a href=\"https://garfieldgod.cn/index.php/762/\" target=\"_self\" >屏幕音频路由器</a></h2>\n\n<div style=\"font-size:0.5rem;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20);margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-excerpt has-text-color has-foreground-color\"><p class=\"wp-block-post-excerpt__excerpt\">一个内置屏幕路由器功能（ScreenAudioRouter）的EarTrumpet版本。 下载链接: vers&hellip; </p></div></div>\n</div>\n\n\n\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:30%\"><figure class=\"wp-block-post-featured-image\"><a href=\"https://garfieldgod.cn/index.php/762/\" target=\"_self\" ><img loading=\"lazy\" decoding=\"async\" width=\"1600\" height=\"1200\" src=\"/uploads/771-1767520763-ScreenAudioRouter.png\" class=\"attachment-post-thumbnail size-post-thumbnail wp-post-image\" alt=\"屏幕音频路由器\" style=\"border-radius:15px;border-width:2px;height:100px;width:200px;object-fit:cover;\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter.png 1600w, https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter-300x225.png 300w, https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter-1024x768.png 1024w, https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter-768x576.png 768w, https://garfieldgod.cn/wp-content/uploads/2026/01/1767520763-ScreenAudioRouter-1536x1152.png 1536w\" sizes=\"auto, (max-width: 1600px) 100vw, 1600px\" /></a></figure></div>\n\n\n\n<div class=\"wp-block-column is-layout-flow wp-block-column-is-layout-flow\">\n<div class=\"wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-a987baf2 wp-block-group-is-layout-flex\">\n<div class=\"wp-block-group is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-73d85c4d wp-block-group-is-layout-flex\">\n<p class=\"has-text-align-left wp-block-paragraph\">作者：</p>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"has-text-align-right wp-block-post-author-name has-text-color has-foreground-color has-small-font-size\"><a href=\"https://garfieldgod.cn/index.php/author/1351763110qq-com/\" target=\"_blank\" class=\"wp-block-post-author-name__link\">Garfield God</a></div></div>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"wp-block-post-date__modified-date has-text-align-right wp-block-post-date has-text-color has-foreground-color\"><time datetime=\"2026-01-04T18:05:13+08:00\">2026年1月4日</time></div></div>\n</div>\n</div>\n</div>\n\n</li><li class=\"wp-block-post post-749 post type-post status-publish format-standard has-post-thumbnail hentry category-9 category-11 category-42\">\n\n<div class=\"wp-block-group has-cyan-bluish-gray-background-color has-background has-small-font-size is-layout-flow wp-container-core-group-is-layout-08be40cc wp-block-group-is-layout-flow\" style=\"border-radius:15px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)\">\n<div class=\"wp-block-columns is-layout-flex wp-container-core-columns-is-layout-f56f613f wp-block-columns-is-layout-flex\">\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:40%\">\n<div class=\"wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-d62794ec wp-block-group-is-layout-flex\"><h2 style=\"font-style:normal;font-weight:900;text-transform:none;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-title has-large-font-size\"><a href=\"https://garfieldgod.cn/index.php/749/\" target=\"_self\" >From Final Fantasy 7 Rebirth</a></h2>\n\n<div style=\"font-size:0.5rem;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20);margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-excerpt has-text-color has-foreground-color\"><p class=\"wp-block-post-excerpt__excerpt\">FFF7R DownLoad GitHub: https://github.com/GarfieldGod/F&hellip; </p></div></div>\n</div>\n\n\n\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:30%\"><figure class=\"wp-block-post-featured-image\"><a href=\"https://garfieldgod.cn/index.php/749/\" target=\"_self\" ><img loading=\"lazy\" decoding=\"async\" width=\"875\" height=\"312\" src=\"/uploads/750-1747813994-20250521-155245.jpg\" class=\"attachment-post-thumbnail size-post-thumbnail wp-post-image\" alt=\"From Final Fantasy 7 Rebirth\" style=\"border-radius:15px;border-width:2px;height:100px;width:200px;object-fit:cover;\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2025/05/1747813994-20250521-155245.jpg 875w, https://garfieldgod.cn/wp-content/uploads/2025/05/1747813994-20250521-155245-300x107.jpg 300w, https://garfieldgod.cn/wp-content/uploads/2025/05/1747813994-20250521-155245-768x274.jpg 768w\" sizes=\"auto, (max-width: 875px) 100vw, 875px\" /></a></figure></div>\n\n\n\n<div class=\"wp-block-column is-layout-flow wp-block-column-is-layout-flow\">\n<div class=\"wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-a987baf2 wp-block-group-is-layout-flex\">\n<div class=\"wp-block-group is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-73d85c4d wp-block-group-is-layout-flex\">\n<p class=\"has-text-align-left wp-block-paragraph\">作者：</p>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"has-text-align-right wp-block-post-author-name has-text-color has-foreground-color has-small-font-size\"><a href=\"https://garfieldgod.cn/index.php/author/1351763110qq-com/\" target=\"_blank\" class=\"wp-block-post-author-name__link\">Garfield God</a></div></div>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"wp-block-post-date__modified-date has-text-align-right wp-block-post-date has-text-color has-foreground-color\"><time datetime=\"2025-05-21T15:57:23+08:00\">2025年5月21日</time></div></div>\n</div>\n</div>\n</div>\n\n</li><li class=\"wp-block-post post-668 post type-post status-publish format-standard has-post-thumbnail hentry category-9 category-11 category-42\">\n\n<div class=\"wp-block-group has-cyan-bluish-gray-background-color has-background has-small-font-size is-layout-flow wp-container-core-group-is-layout-08be40cc wp-block-group-is-layout-flow\" style=\"border-radius:15px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)\">\n<div class=\"wp-block-columns is-layout-flex wp-container-core-columns-is-layout-f56f613f wp-block-columns-is-layout-flex\">\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:40%\">\n<div class=\"wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-d62794ec wp-block-group-is-layout-flex\"><h2 style=\"font-style:normal;font-weight:900;text-transform:none;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-title has-large-font-size\"><a href=\"https://garfieldgod.cn/index.php/668/\" target=\"_self\" >【I,Bandit】</a></h2>\n\n<div style=\"font-size:0.5rem;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20);margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-excerpt has-text-color has-foreground-color\"><p class=\"wp-block-post-excerpt__excerpt\">大一时做的一个2D小游戏小游戏Demo，源码已经弄丢了，但是中间的成果还在，如下 下载链接2：百度云（点击这里&hellip; </p></div></div>\n</div>\n\n\n\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:30%\"><figure class=\"wp-block-post-featured-image\"><a href=\"https://garfieldgod.cn/index.php/668/\" target=\"_self\" ><img loading=\"lazy\" decoding=\"async\" width=\"1024\" height=\"1134\" src=\"/uploads/669-1694752022-Ibandit.jpg\" class=\"attachment-post-thumbnail size-post-thumbnail wp-post-image\" alt=\"【I,Bandit】\" style=\"border-radius:15px;border-width:2px;height:100px;width:200px;object-fit:cover;\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694752022-Ibandit.jpg 1024w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694752022-Ibandit-271x300.jpg 271w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694752022-Ibandit-925x1024.jpg 925w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694752022-Ibandit-768x851.jpg 768w\" sizes=\"auto, (max-width: 1024px) 100vw, 1024px\" /></a></figure></div>\n\n\n\n<div class=\"wp-block-column is-layout-flow wp-block-column-is-layout-flow\">\n<div class=\"wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-a987baf2 wp-block-group-is-layout-flex\">\n<div class=\"wp-block-group is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-73d85c4d wp-block-group-is-layout-flex\">\n<p class=\"has-text-align-left wp-block-paragraph\">作者：</p>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"has-text-align-right wp-block-post-author-name has-text-color has-foreground-color has-small-font-size\"><a href=\"https://garfieldgod.cn/index.php/author/1351763110qq-com/\" target=\"_blank\" class=\"wp-block-post-author-name__link\">Garfield God</a></div></div>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"wp-block-post-date__modified-date has-text-align-right wp-block-post-date has-text-color has-foreground-color\"><time datetime=\"2023-10-15T14:46:59+08:00\">2023年10月15日</time></div></div>\n</div>\n</div>\n</div>\n\n</li><li class=\"wp-block-post post-628 post type-post status-publish format-standard has-post-thumbnail hentry category-9 category-11 category-42\">\n\n<div class=\"wp-block-group has-cyan-bluish-gray-background-color has-background has-small-font-size is-layout-flow wp-container-core-group-is-layout-08be40cc wp-block-group-is-layout-flow\" style=\"border-radius:15px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)\">\n<div class=\"wp-block-columns is-layout-flex wp-container-core-columns-is-layout-f56f613f wp-block-columns-is-layout-flex\">\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:40%\">\n<div class=\"wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-d62794ec wp-block-group-is-layout-flex\"><h2 style=\"font-style:normal;font-weight:900;text-transform:none;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-title has-large-font-size\"><a href=\"https://garfieldgod.cn/index.php/628/\" target=\"_self\" >Linux下的扫雷</a></h2>\n\n<div style=\"font-size:0.5rem;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20);margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-excerpt has-text-color has-foreground-color\"><p class=\"wp-block-post-excerpt__excerpt\">基于：C语言，GTK+2.0，Sqlite3 使用工具：VMware，MobaXterm，Sublime Te&hellip; </p></div></div>\n</div>\n\n\n\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:30%\"><figure class=\"wp-block-post-featured-image\"><a href=\"https://garfieldgod.cn/index.php/628/\" target=\"_self\" ><img loading=\"lazy\" decoding=\"async\" width=\"422\" height=\"665\" src=\"/uploads/629-1694584264-图片1.png\" class=\"attachment-post-thumbnail size-post-thumbnail wp-post-image\" alt=\"Linux下的扫雷\" style=\"border-radius:15px;border-width:2px;height:100px;width:200px;object-fit:cover;\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/09/1694584264-图片1.png 422w, https://garfieldgod.cn/wp-content/uploads/2023/09/1694584264-图片1-190x300.png 190w\" sizes=\"auto, (max-width: 422px) 100vw, 422px\" /></a></figure></div>\n\n\n\n<div class=\"wp-block-column is-layout-flow wp-block-column-is-layout-flow\">\n<div class=\"wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-a987baf2 wp-block-group-is-layout-flex\">\n<div class=\"wp-block-group is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-73d85c4d wp-block-group-is-layout-flex\">\n<p class=\"has-text-align-left wp-block-paragraph\">作者：</p>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"has-text-align-right wp-block-post-author-name has-text-color has-foreground-color has-small-font-size\"><a href=\"https://garfieldgod.cn/index.php/author/1351763110qq-com/\" target=\"_blank\" class=\"wp-block-post-author-name__link\">Garfield God</a></div></div>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"wp-block-post-date__modified-date has-text-align-right wp-block-post-date has-text-color has-foreground-color\"><time datetime=\"2023-10-15T14:24:57+08:00\">2023年10月15日</time></div></div>\n</div>\n</div>\n</div>\n\n</li><li class=\"wp-block-post post-593 post type-post status-publish format-standard hentry category-community\">\n\n<div class=\"wp-block-group has-cyan-bluish-gray-background-color has-background has-small-font-size is-layout-flow wp-container-core-group-is-layout-08be40cc wp-block-group-is-layout-flow\" style=\"border-radius:15px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)\">\n<div class=\"wp-block-columns is-layout-flex wp-container-core-columns-is-layout-f56f613f wp-block-columns-is-layout-flex\">\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:40%\">\n<div class=\"wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-d62794ec wp-block-group-is-layout-flex\"><h2 style=\"font-style:normal;font-weight:900;text-transform:none;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-title has-large-font-size\"><a href=\"https://garfieldgod.cn/index.php/593/\" target=\"_self\" >【时间的恒心】</a></h2>\n\n<div style=\"font-size:0.5rem;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20);margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-excerpt has-text-color has-foreground-color\"><p class=\"wp-block-post-excerpt__excerpt\">此贴用以记录永恒的心，却也变化的恒心，志恒之心。 </p></div></div>\n</div>\n\n\n\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:30%\"></div>\n\n\n\n<div class=\"wp-block-column is-layout-flow wp-block-column-is-layout-flow\">\n<div class=\"wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-a987baf2 wp-block-group-is-layout-flex\">\n<div class=\"wp-block-group is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-73d85c4d wp-block-group-is-layout-flex\">\n<p class=\"has-text-align-left wp-block-paragraph\">作者：</p>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"has-text-align-right wp-block-post-author-name has-text-color has-foreground-color has-small-font-size\"><a href=\"https://garfieldgod.cn/index.php/author/1351763110qq-com/\" target=\"_blank\" class=\"wp-block-post-author-name__link\">Garfield God</a></div></div>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"wp-block-post-date__modified-date has-text-align-right wp-block-post-date has-text-color has-foreground-color\"><time datetime=\"2023-09-19T19:36:26+08:00\">2023年9月19日</time></div></div>\n</div>\n</div>\n</div>\n\n</li><li class=\"wp-block-post post-472 post type-post status-publish format-standard has-post-thumbnail hentry category-community\">\n\n<div class=\"wp-block-group has-cyan-bluish-gray-background-color has-background has-small-font-size is-layout-flow wp-container-core-group-is-layout-08be40cc wp-block-group-is-layout-flow\" style=\"border-radius:15px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)\">\n<div class=\"wp-block-columns is-layout-flex wp-container-core-columns-is-layout-f56f613f wp-block-columns-is-layout-flex\">\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:40%\">\n<div class=\"wp-block-group is-vertical is-layout-flex wp-container-core-group-is-layout-d62794ec wp-block-group-is-layout-flex\"><h2 style=\"font-style:normal;font-weight:900;text-transform:none;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-title has-large-font-size\"><a href=\"https://garfieldgod.cn/index.php/472/\" target=\"_self\" >这是第一条社区内容！</a></h2>\n\n<div style=\"font-size:0.5rem;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20);margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\" class=\"wp-block-post-excerpt has-text-color has-foreground-color\"><p class=\"wp-block-post-excerpt__excerpt\">你好！欢迎发布您自己的文章！ </p></div></div>\n</div>\n\n\n\n<div class=\"wp-block-column is-vertically-aligned-center is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:30%\"><figure class=\"wp-block-post-featured-image\"><a href=\"https://garfieldgod.cn/index.php/472/\" target=\"_self\" ><img loading=\"lazy\" decoding=\"async\" width=\"1920\" height=\"1080\" src=\"/uploads/527-1684995228-14.jpg\" class=\"attachment-post-thumbnail size-post-thumbnail wp-post-image\" alt=\"这是第一条社区内容！\" style=\"border-radius:15px;border-width:2px;height:100px;width:200px;object-fit:cover;\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14.jpg 1920w, https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14-300x169.jpg 300w, https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14-1024x576.jpg 1024w, https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14-768x432.jpg 768w, https://garfieldgod.cn/wp-content/uploads/2023/05/1684995228-14-1536x864.jpg 1536w\" sizes=\"auto, (max-width: 1920px) 100vw, 1920px\" /></a></figure></div>\n\n\n\n<div class=\"wp-block-column is-layout-flow wp-block-column-is-layout-flow\">\n<div class=\"wp-block-group is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-a987baf2 wp-block-group-is-layout-flex\">\n<div class=\"wp-block-group is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-73d85c4d wp-block-group-is-layout-flex\">\n<p class=\"has-text-align-left wp-block-paragraph\">作者：</p>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"has-text-align-right wp-block-post-author-name has-text-color has-foreground-color has-small-font-size\"><a href=\"https://garfieldgod.cn/index.php/author/1395245710qq-com/\" target=\"_blank\" class=\"wp-block-post-author-name__link\">Noctis</a></div></div>\n\n\n<div style=\"font-style:italic;font-weight:100\" class=\"wp-block-post-date__modified-date has-text-align-right wp-block-post-date has-text-color has-foreground-color\"><time datetime=\"2023-05-25T14:13:57+08:00\">2023年5月25日</time></div></div>\n</div>\n</div>\n</div>\n\n</li></ul></div>\n</div>\n</div>\n</div>\n\n\n\n<div class=\"wp-block-column is-vertically-aligned-top is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:25%\">\n<div class=\"wp-block-group has-background-background-color has-background is-layout-flow wp-container-core-group-is-layout-9b732d40 wp-block-group-is-layout-flow\" style=\"border-radius:15px;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40)\"></div>\n</div>\n</div>\n</div>\n",
+      "excerpt": "<p>最新文章：</p>\n"
+    },
+    {
+      "id": 365,
+      "slug": "draft-posts",
+      "title": "Draft Posts",
+      "link": "https://garfieldgod.cn/index.php/draft-posts/",
+      "content": "<p>[frontier-post frontier_list_draft_posts=&#8221;true&#8221;]</p>\n",
+      "excerpt": "<p>[frontier-post frontier_list_draft_posts=&#8221;true&#038;#8 [&hellip;]</p>\n"
+    },
+    {
+      "id": 364,
+      "slug": "pending-posts",
+      "title": "Pending Posts",
+      "link": "https://garfieldgod.cn/index.php/pending-posts/",
+      "content": "<p>[frontier-post frontier_list_pending_posts=&#8221;true&#8221;]</p>\n",
+      "excerpt": "<p>[frontier-post frontier_list_pending_posts=&#8221;true&#038; [&hellip;]</p>\n"
+    },
+    {
+      "id": 363,
+      "slug": "my-posts",
+      "title": "我的文章",
+      "link": "https://garfieldgod.cn/index.php/forum/my-posts/",
+      "content": "\n<div class=\"wp-block-group alignfull is-layout-constrained wp-block-group-is-layout-constrained\">\n<p>[frontier-post]</p>\n</div>\n",
+      "excerpt": "<p>[frontier-post]</p>\n"
+    },
+    {
+      "id": 318,
+      "slug": "%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5",
+      "title": "友情链接",
+      "link": "https://garfieldgod.cn/index.php/%e5%8f%8b%e6%83%85%e9%93%be%e6%8e%a5/",
+      "content": "\n<div class=\"wp-block-group alignwide is-layout-constrained wp-block-group-is-layout-constrained\">\n<div class=\"wp-block-group alignwide has-background-background-color has-background is-vertical is-layout-flex wp-container-core-group-is-layout-c020569f wp-block-group-is-layout-flex\" style=\"border-radius:15px\">\n<div class=\"wp-block-group has-background-background-color has-background is-nowrap is-layout-flex wp-container-core-group-is-layout-ad1b0443 wp-block-group-is-layout-flex\" style=\"border-width:1px;border-radius:15px;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--20)\">\n<figure class=\"wp-block-image size-thumbnail is-resized has-custom-border is-style-rounded\"><a href=\"https://jisheng.xyz/\"><img loading=\"lazy\" decoding=\"async\" src=\"https://garfieldgod.cn/wp-content/uploads/2023/05/jisheng-150x150.jpg\" alt=\"\" class=\"wp-image-307\" style=\"border-width:1px;border-radius:100px\" width=\"60\" height=\"60\"/></a></figure>\n\n\n\n<div class=\"wp-block-group is-vertical is-content-justification-left is-nowrap is-layout-flex wp-container-core-group-is-layout-dbf87790 wp-block-group-is-layout-flex\" style=\"padding-top:0;padding-right:0;padding-bottom:0;padding-left:0\">\n<h5 class=\"wp-block-heading\"><a href=\"https://jisheng.xyz\">JISHENG</a></h5>\n\n\n\n<p class=\"has-cyan-bluish-gray-color has-text-color wp-block-paragraph\" style=\"margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;font-size:0.5rem\">我亦无他，惟手熟尔</p>\n</div>\n</div>\n\n\n\n<div style=\"height:300px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n</div>\n</div>\n",
+      "excerpt": "<p>JISHENG 我亦无他，惟手熟尔</p>\n"
+    },
+    {
+      "id": 268,
+      "slug": "%e4%b8%aa%e4%ba%ba%e4%bf%a1%e6%81%af",
+      "title": "个人信息",
+      "link": "https://garfieldgod.cn/index.php/%e4%b8%aa%e4%ba%ba%e4%bf%a1%e6%81%af/",
+      "content": "\n<p class=\"has-text-align-center has-medium-font-size wp-block-paragraph\" style=\"margin-top:var(--wp--preset--spacing--80);margin-right:var(--wp--preset--spacing--80);margin-bottom:var(--wp--preset--spacing--80);margin-left:var(--wp--preset--spacing--80)\">&#8212;&#8212;该页面正在建设中&#8212;&#8212;</p>\n\n\n\n<div class=\"wp-block-group alignwide is-layout-constrained wp-block-group-is-layout-constrained\">\n<div class=\"wp-block-group alignwide has-background-background-color has-background is-vertical is-content-justification-stretch is-layout-flex wp-container-core-group-is-layout-a987baf2 wp-block-group-is-layout-flex\" style=\"border-radius:15px\">\n<div class=\"wp-block-group alignwide has-background-background-color has-background is-nowrap is-layout-flex wp-container-core-group-is-layout-f5822cd0 wp-block-group-is-layout-flex\" style=\"border-radius:15px;margin-top:0;margin-bottom:0\">\n<figure class=\"wp-block-image size-full is-resized has-custom-border\"><img loading=\"lazy\" decoding=\"async\" width=\"512\" height=\"512\" src=\"/uploads/library/59-cropped-1-2.jpg\" alt=\"\" class=\"wp-image-59\" style=\"border-width:3px;border-radius:17px;width:170px;height:170px\" srcset=\"https://garfieldgod.cn/wp-content/uploads/2023/05/cropped-1-2.jpg 512w, https://garfieldgod.cn/wp-content/uploads/2023/05/cropped-1-2-300x300.jpg 300w, https://garfieldgod.cn/wp-content/uploads/2023/05/cropped-1-2-150x150.jpg 150w, https://garfieldgod.cn/wp-content/uploads/2023/05/cropped-1-2-270x270.jpg 270w, https://garfieldgod.cn/wp-content/uploads/2023/05/cropped-1-2-192x192.jpg 192w, https://garfieldgod.cn/wp-content/uploads/2023/05/cropped-1-2-180x180.jpg 180w, https://garfieldgod.cn/wp-content/uploads/2023/05/cropped-1-2-32x32.jpg 32w\" sizes=\"auto, (max-width: 512px) 100vw, 512px\" /></figure>\n\n\n\n<ul class=\"wp-block-list\">\n<li>中文昵称：神加菲尔德</li>\n\n\n\n<li>英文昵称：GarfieldGod</li>\n\n\n\n<li>含义：加菲猫之神</li>\n\n\n\n<li>GitHub: <a href=\"https://github.com/GarfieldGod\">https://github.com/GarfieldGod</a></li>\n</ul>\n</div>\n\n\n\n<p class=\"has-background-background-color has-background has-medium-font-size wp-block-paragraph\" style=\"margin-top:0;margin-right:0;margin-bottom:0;margin-left:0\">个人说明：说。。。说不出来了</p>\n</div>\n</div>\n\n\n\n<div style=\"height:69px\" aria-hidden=\"true\" class=\"wp-block-spacer\"></div>\n\n\n\n<hr class=\"wp-block-separator has-alpha-channel-opacity is-style-wide\"/>\n\n\n\n<div class=\"wp-block-group is-layout-constrained wp-block-group-is-layout-constrained\">\n<div class=\"wp-block-comments\">\n<h4 class=\"wp-block-heading\">留言</h4>\n\n\n<ol class=\"wp-block-comment-template\"><li id=\"comment-32\" class=\"comment even thread-even depth-1\">\n\n<div class=\"wp-block-columns has-background-background-color has-background is-layout-flex wp-container-core-columns-is-layout-f56f613f wp-block-columns-is-layout-flex\" style=\"border-radius:15px\">\n<div class=\"wp-block-column is-layout-flow wp-block-column-is-layout-flow\" style=\"flex-basis:40px\"><div class=\"wp-block-avatar\"><img alt='ANKOPALA 的头像' src='https://secure.gravatar.com/avatar/?s=40&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/?s=80&#038;d=mm&#038;r=g 2x' class='avatar avatar-40 photo avatar-default wp-block-avatar__image' height='40' width='40'  style=\"border-radius:20px;\"/></div></div>\n\n\n\n<div class=\"wp-block-column is-layout-flow wp-block-column-is-layout-flow\"><div class=\"wp-block-comment-author-name has-small-font-size\">ANKOPALA</div>\n\n\n<div class=\"wp-block-group is-layout-flex wp-block-group-is-layout-flex\" style=\"margin-top:0px;margin-bottom:0px\"><div class=\"wp-block-comment-date has-small-font-size\"><time datetime=\"2024-06-01T01:48:37+08:00\"><a href=\"https://garfieldgod.cn/index.php/%e4%b8%aa%e4%ba%ba%e4%bf%a1%e6%81%af/#comment-32\">2024年6月1日</a></time></div>\n\n</div>\n\n\n<div class=\"wp-block-comment-content\"><p>可爱</p>\n</div>\n\n<div class=\"wp-block-comment-reply-link has-small-font-size\"><a rel=\"nofollow\" class=\"comment-reply-login\" href=\"https://garfieldgod.cn/wp-login.php?redirect_to=https%3A%2F%2Fgarfieldgod.cn%2Findex.php%2F%25e4%25b8%25aa%25e4%25ba%25ba%25e4%25bf%25a1%25e6%2581%25af%2F\">登录以回复</a></div></div>\n</div>\n\n</li></ol>\n\n\n\n\t<div id=\"respond\" class=\"comment-respond wp-block-post-comments-form has-medium-font-size has-text-align-center\">\n\t\t<h3 id=\"reply-title\" class=\"comment-reply-title\">发表回复 <small><a rel=\"nofollow\" id=\"cancel-comment-reply-link\" href=\"/wp-json/wp/v2/pages?per_page=100#respond\" style=\"display:none;\">取消回复</a></small></h3><p class=\"must-log-in\">要发表评论，您必须先<a href=\"https://garfieldgod.cn/wp-login.php?redirect_to=https%3A%2F%2Fgarfieldgod.cn%2Findex.php%2F%25e4%25b8%25aa%25e4%25ba%25ba%25e4%25bf%25a1%25e6%2581%25af%2F\">登录</a>。</p>\t</div><!-- #respond -->\n\t</div>\n</div>\n\n\n\n<div class=\"wp-block-group is-content-justification-center is-nowrap is-layout-flex wp-container-core-group-is-layout-88c01e81 wp-block-group-is-layout-flex\">\n<p class=\"wp-block-paragraph\">您可以选择先</p>\n\n\n<div class=\"logged-out wp-block-loginout\"><a href=\"https://garfieldgod.cn/wp-login.php?redirect_to=https%3A%2F%2Fgarfieldgod.cn%2Fwp-json%2Fwp%2Fv2%2Fpages%3Fper_page%3D100\">登录</a></div>\n\n\n<p class=\"wp-block-paragraph\">后再评论</p>\n</div>\n\n\n<div id='mvcwid'style='text-align: center; color: #000000;'><div id=\"wpsvccount\"><img src='https://garfieldgod.cn/wp-content/plugins/wps-visitor-counter/styles/image/Allstar/0.gif' alt='0'><img src='https://garfieldgod.cn/wp-content/plugins/wps-visitor-counter/styles/image/Allstar/0.gif' alt='0'><img src='https://garfieldgod.cn/wp-content/plugins/wps-visitor-counter/styles/image/Allstar/8.gif' alt='8'><img src='https://garfieldgod.cn/wp-content/plugins/wps-visitor-counter/styles/image/Allstar/2.gif' alt='2'><img src='https://garfieldgod.cn/wp-content/plugins/wps-visitor-counter/styles/image/Allstar/4.gif' alt='4'><img src='https://garfieldgod.cn/wp-content/plugins/wps-visitor-counter/styles/image/Allstar/7.gif' alt='7'></div>\n\t<div id=\"wpsvctable\"></div></div>\n\n\n<div class=\"wp-block-group alignfull is-layout-constrained wp-block-group-is-layout-constrained\">\n<hr class=\"wp-block-separator alignfull has-alpha-channel-opacity is-style-wide\"/>\n</div>\n",
+      "excerpt": "<p>&#8212;&#8212;该页面正在建设中&#8212;&#8212; 个人说明：说。。。说不出来了 您可以 [&hellip;]</p>\n"
+    }
+  ],
+  "comments": [
+    {
+      "id": 32,
+      "post": 268,
+      "author": "ANKOPALA",
+      "author_email": "",
+      "date": "2024-06-01T01:48:37",
+      "content": "<p>可爱</p>\n",
+      "status": "approved"
+    },
+    {
+      "id": 26,
+      "post": 613,
+      "author": "Garfield God",
+      "author_email": "",
+      "date": "2023-06-24T21:14:12",
+      "content": "<p>想到了更形象更容易理解的解释情况：<br />\n把文中的未来更换为现在<br />\n即现在的一切都是注定的，不会改变的，再推送到未来的注定<br />\n日后有空详细补充</p>\n",
+      "status": "approved"
+    },
+    {
+      "id": 24,
+      "post": 531,
+      "author": "Garfield God",
+      "author_email": "",
+      "date": "2023-06-23T03:03:01",
+      "content": "<p>这是很久以前和同学讨论时，简略地说了说的感想，还很不完善。</p>\n",
+      "status": "approved"
+    },
+    {
+      "id": 19,
+      "post": 1,
+      "author": "",
+      "author_email": "",
+      "date": "2023-05-25T18:16:47",
+      "content": "<p>尊嘟假嘟这么高级</p>\n",
+      "status": "approved"
+    },
+    {
+      "id": 13,
+      "post": 1,
+      "author": "akiyama",
+      "author_email": "",
+      "date": "2023-05-24T15:00:26",
+      "content": "<p>纳尼</p>\n",
+      "status": "approved"
+    },
+    {
+      "id": 8,
+      "post": 1,
+      "author": "ANKOPALA",
+      "author_email": "",
+      "date": "2023-05-23T20:03:09",
+      "content": "<p>Hello!</p>\n",
+      "status": "approved"
+    },
+    {
+      "id": 6,
+      "post": 1,
+      "author": "Garfield God",
+      "author_email": "",
+      "date": "2023-05-23T18:32:30",
+      "content": "<p>你好！</p>\n",
+      "status": "approved"
+    }
+  ],
+  "mediaMap": {
+    "7": "7-7.jpg",
+    "18": "18-7-1.jpg",
+    "19": "19-7-1-edited.jpg",
+    "20": "20-7-edited.jpg",
+    "24": "24-bilibili.png",
+    "25": "25-QQspace.png",
+    "26": "26-steam.png",
+    "27": "27-QQspace-1.png",
+    "28": "28-QQspace-2.png",
+    "29": "29-QQspace-3.png",
+    "51": "51-XX.jpg",
+    "52": "52-光影练习改916.png",
+    "53": "53-Lullaby.mp3",
+    "58": "58-1-2.jpg",
+    "59": "59-cropped-1-2.jpg",
+    "70": "70-steam-1.png",
+    "71": "71-bilibili-1.png",
+    "72": "72-QQspace-4.png",
+    "73": "73-cropped-7.jpg",
+    "164": "164-1.mp4",
+    "165": "165-11.jpg",
+    "170": "170-bilibili-2.png",
+    "171": "171-QQspace-5.png",
+    "172": "172-steam-2.png",
+    "213": "213-cropped-7-1.jpg",
+    "254": "254-超脱43.png",
+    "255": "255-Luna43.png",
+    "256": "256-头像43.png",
+    "257": "257-人物B43.png",
+    "258": "258-人物A43.png",
+    "259": "259-头像上色43.png",
+    "264": "264-只狼11.png",
+    "269": "269-L1.jpg",
+    "270": "270-L2.jpg",
+    "271": "271-L3-scaled.jpg",
+    "272": "272-L1-1.jpg",
+    "273": "273-L2-1-e1684906590831.jpg",
+    "274": "274-L3-1.jpg",
+    "296": "296-11-1.jpg",
+    "307": "307-jisheng-e1684920740884.jpg",
+    "527": "527-1684995228-14.jpg",
+    "605": "605-1686742077-1.jpg",
+    "608": "608-1686744862-2.jpg",
+    "609": "609-1686745579-2-s.jpg",
+    "629": "629-1694584264-图片1.png",
+    "630": "630-1694584264-图片2.png",
+    "631": "631-1694584265-图片3.png",
+    "632": "632-1694584265-图片4.png",
+    "633": "633-1694584265-图片5.png",
+    "634": "634-1694584266-图片6.png",
+    "635": "635-1694584266-图片7.png",
+    "636": "636-1694584267-图片8.png",
+    "637": "637-1694584267-图片9.png",
+    "638": "638-1694584267-图片10.png",
+    "639": "639-1694584268-图片11.png",
+    "640": "640-1694584269-图片12.png",
+    "641": "641-1694584270-图片13.png",
+    "642": "642-1694584270-图片14.png",
+    "643": "643-1694584271-图片15.png",
+    "644": "644-1694584271-图片16.png",
+    "645": "645-1694584271-图片17.png",
+    "646": "646-1694584272-图片18.png",
+    "647": "647-1694584272-图片19.png",
+    "648": "648-1694584273-图片20.png",
+    "649": "649-1694584273-图片21.png",
+    "650": "650-1694584273-图片22.png",
+    "651": "651-1694584274-图片23.png",
+    "652": "652-1694584274-图片24.png",
+    "653": "653-1694584276-图片25.png",
+    "654": "654-1694584276-图片26.png",
+    "655": "655-1694584277-图片27.png",
+    "656": "656-1694584277-图片28.png",
+    "657": "657-1694584277-图片29.png",
+    "658": "658-1694584278-图片30.png",
+    "659": "659-1694584278-图片31.png",
+    "660": "660-1694584279-图片32.png",
+    "661": "661-1694584279-图片33.png",
+    "662": "662-1694584279-图片34.png",
+    "663": "663-1694584280-图片35.png",
+    "664": "664-1694584280-图片36.png",
+    "665": "665-1694584281-图片37.png",
+    "669": "669-1694752022-Ibandit.jpg",
+    "750": "750-1747813994-20250521-155245.jpg",
+    "771": "771-1767520763-ScreenAudioRouter.png"
+  }
+}

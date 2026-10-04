@@ -1,0 +1,21 @@
+{
+  "name": "garfieldgod-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "build:static": "node scripts/build-static.mjs",
+    "publish:static": "node scripts/auto-publish.mjs",
+    "preview:static": "node scripts/serve-static.mjs dist",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "marked": "^18.0.14",
+    "nuxt": "^3.15.4",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  }
+}

@@ -1,0 +1,88 @@
+:root {
+  --gg-bg: #f6f6f6;
+  --gg-surface: #ffffff;
+  --gg-surface-2: #ececec;
+  --gg-ink: #141414;
+  --gg-inksoft: #3b3b3b;
+  --gg-muted: #6d6d6d;
+  --gg-border: #e2e2e2;
+  --gg-accent: #141414;
+  --gg-accent-bright: #000000;
+  --gg-accent-soft: #f1f1f1;
+  --gg-font: 'WorkSans', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', system-ui, -apple-system, sans-serif;
+  /* 原站 h1/h2 使用的衬线字体（艺术字），与 twentytwentytwo 主题一致 */
+  --gg-serif: 'Source Serif Pro', Georgia, 'Times New Roman', 'Songti SC', serif;
+  --gg-max: 1100px;
+  --gg-radius: 12px;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--gg-font);
+  color: var(--gg-ink);
+  background: var(--gg-bg);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--gg-accent); }
+img { max-width: 100%; height: auto; }
+
+/* ===== 通用排版 ===== */
+h1, h2, h3, h4, h5, h6 { line-height: 1.3; color: var(--gg-ink); }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.55rem; }
+h3 { font-size: 1.25rem; }
+
+/* ===== Gutenberg 块基础样式（正文渲染） ===== */
+.gg-content > * { max-width: 720px; margin-left: auto; margin-right: auto; }
+.gg-content > .alignwide { max-width: 860px; }
+.gg-content > .alignfull { max-width: 100%; }
+.gg-content p { margin: 1em 0; }
+.gg-content h1, .gg-content h2, .gg-content h3, .gg-content h4 { margin: 1.4em 0 0.6em; }
+.gg-content ul, .gg-content ol { margin: 1em 0; padding-left: 1.6em; }
+.gg-content li { margin: 0.35em 0; }
+.gg-content code {
+  font-family: 'JetBrainsMono', Consolas, monospace;
+  font-size: 0.85em;
+  background: var(--gg-surface-2);
+  padding: 0.15em 0.5em;
+  border-radius: 6px;
+  color: #1a1a1a;
+}
+.gg-content pre {
+  background: #1a1a1a;
+  color: #f1f1f1;
+  padding: 16px;
+  border-radius: 10px;
+  overflow-x: auto;
+  max-width: 720px;
+  margin: 1em auto;
+}
+.gg-content pre code { background: none; color: inherit; padding: 0; }
+.gg-content img, .gg-content figure { max-width: 100%; }
+.gg-content figure.wp-block-image { margin: 1.5em 0; text-align: center; }
+.gg-content figure img { border-radius: 12px; }
+.gg-content figcaption { color: var(--gg-muted); font-size: 0.85rem; margin-top: 8px; }
+.gg-content hr.wp-block-separator { border: none; border-top: 1px solid var(--gg-border); margin: 2em auto; max-width: 720px; }
+.gg-content blockquote {
+  margin: 1.5em auto;
+  padding: 4px 0 4px 18px;
+  border-left: 3px solid var(--gg-accent-bright);
+  color: var(--gg-inksoft);
+  max-width: 720px;
+}
+.gg-content ol.wp-block-list { list-style: decimal; }
+.gg-content ul.wp-block-list { list-style: disc; }
+.gg-content .wp-block-spacer { height: auto; }
+.gg-content table { border-collapse: collapse; margin: 1em auto; width: 100%; max-width: 720px; }
+.gg-content th, .gg-content td { border: 1px solid var(--gg-border); padding: 8px 12px; }
+.gg-content a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* 页面切换淡入淡出（与布局层封面/导航 0.42s 收起动画大致同步：0.22s × 2 段） */
+.fade-enter-active, .fade-leave-active { transition: opacity 0.22s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .fade-enter-active, .fade-leave-active { transition: none; }
+}

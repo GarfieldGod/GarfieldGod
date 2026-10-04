@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GarfieldGod 部署与后台访问控制指南</title>
+<style>
+  :root {
+    --bg: #f6f6f6;
+    --surface: #ffffff;
+    --ink: #141414;
+    --ink-soft: #3b3b3b;
+    --muted: #6d6d6d;
+    --border: #e2e2e2;
+    --soft: #f1f1f1;
+    --ok: #1a7f4b;
+    --ok-bg: #eef7f1;
+    --warn: #9a6200;
+    --warn-bg: #fdf5e6;
+    --danger: #b02a2a;
+    --danger-bg: #fbeeee;
+    --serif: 'Source Serif Pro', Georgia, 'Times New Roman', 'Songti SC', serif;
+    --sans: 'WorkSans', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', 'Cascadia Mono', Consolas, 'Courier New', monospace;
+    --max: 900px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 64px 24px 120px; }
+
+  header.doc-head { margin-bottom: 44px; }
+  .kicker {
+    font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 14px;
+  }
+  h1 {
+    font-family: var(--serif); font-size: 2.4rem; line-height: 1.25;
+    margin: 0 0 16px; font-weight: 700;
+  }
+  .lede { font-size: 1.05rem; color: var(--ink-soft); margin: 0; max-width: 62ch; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 8px 18px;
+    margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border);
+    font-size: 0.84rem; color: var(--muted);
+  }
+
+  h2 {
+    font-family: var(--serif); font-size: 1.55rem; margin: 0 0 6px;
+    padding-top: 8px;
+  }
+  h3 { font-size: 1.06rem; margin: 30px 0 8px; }
+  section { margin-top: 56px; }
+  section > .sec-num {
+    display: inline-block; font-size: 0.78rem; letter-spacing: 0.14em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 8px;
+  }
+  section > .sec-sub { color: var(--muted); font-size: 0.92rem; margin: 0 0 22px; }
+  p { margin: 0 0 14px; }
+  ul, ol { margin: 0 0 16px; padding-left: 1.4em; }
+  li { margin: 6px 0; }
+  strong { font-weight: 600; }
+  code {
+    font-family: var(--mono); font-size: 0.87em;
+    background: var(--soft); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 5px;
+  }
+  pre {
+    background: #16181d; color: #e7e9ee; border-radius: 10px;
+    padding: 16px 18px; overflow-x: auto; font-size: 0.83rem;
+    line-height: 1.7; margin: 0 0 18px;
+  }
+  pre code { background: none; border: 0; padding: 0; color: inherit; font-size: inherit; }
+  pre .c { color: #8b93a7; }
+  pre .k { color: #8fd3ff; }
+  pre .s { color: #b9e7a0; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px 26px; margin: 0 0 18px;
+  }
+  .callout {
+    border-radius: 10px; padding: 14px 18px; margin: 0 0 18px;
+    font-size: 0.92rem; border: 1px solid transparent;
+  }
+  .callout .t { font-weight: 600; display: block; margin-bottom: 4px; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout.warn { background: var(--warn-bg); border-color: #f0dcb4; color: #6b4400; }
+  .callout.danger { background: var(--danger-bg); border-color: #f0c9c9; color: #7d2020; }
+  .callout.ok { background: var(--ok-bg); border-color: #c9e6d5; color: #145c37; }
+  .callout.info { background: var(--soft); border-color: var(--border); color: var(--ink-soft); }
+
+  table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { font-weight: 600; color: var(--ink-soft); background: var(--soft); font-size: 0.82rem; }
+  tr:last-child td { border-bottom: 0; }
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 18px; }
+  .table-wrap table { margin: 0; }
+
+  .steps { counter-reset: step; list-style: none; padding: 0; margin: 0; }
+  .steps > li {
+    counter-increment: step; position: relative;
+    padding: 0 0 22px 46px; margin: 0;
+    border-left: 1px solid var(--border); margin-left: 13px;
+  }
+  .steps > li:last-child { border-left-color: transparent; padding-bottom: 0; }
+  .steps > li::before {
+    content: counter(step);
+    position: absolute; left: -14px; top: -2px;
+    width: 27px; height: 27px; border-radius: 50%;
+    background: var(--ink); color: #fff;
+    font-size: 0.78rem; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .steps > li > .st { font-weight: 600; display: block; margin-bottom: 6px; }
+
+  .flow {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 22px; margin-bottom: 18px;
+    display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap;
+  }
+  .flow .node {
+    flex: 1 1 150px; border: 1px solid var(--border); border-radius: 9px;
+    padding: 12px 14px; background: var(--bg);
+  }
+  .flow .node b { display: block; font-size: 0.86rem; margin-bottom: 3px; }
+  .flow .node span { font-size: 0.76rem; color: var(--muted); }
+  .flow .arrow { align-self: center; color: var(--muted); font-size: 1.1rem; }
+
+  .check { list-style: none; padding: 0; margin: 0; }
+  .check li {
+    position: relative; padding-left: 30px; margin: 9px 0; font-size: 0.93rem;
+  }
+  .check li::before {
+    content: ''; position: absolute; left: 0; top: 4px;
+    width: 15px; height: 15px; border: 1.5px solid #b9b9b9; border-radius: 4px;
+  }
+  footer.doc-foot {
+    margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--border);
+    font-size: 0.82rem; color: var(--muted);
+  }
+  a { color: var(--ink); text-decoration-color: #b9b9b9; text-underline-offset: 3px; }
+  @media (max-width: 640px) {
+    .wrap { padding: 40px 18px 80px; }
+    h1 { font-size: 1.85rem; }
+    .flow .arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc-head">
+  <p class="kicker">部署运维文档</p>
+  <h1>GarfieldGod 站点部署<br />与后台访问控制指南</h1>
+  <p class="lede">
+    后台入口采用独立路径 <code>garfieldgod.cn/admin</code>，由 Cloudflare Access 在边缘完成身份校验；
+    源站只接受经 Cloudflare 回源的请求，应用侧通过 <code>GG_TRUST_ACCESS=1</code> 放行。
+    本文按顺序给出可照做的操作步骤。
+  </p>
+  <div class="meta">
+    <span>站点：garfieldgod.cn</span>
+    <span>栈：Nuxt 3 + Nitro + node:sqlite</span>
+    <span>更新：2026-09-28</span>
+  </div>
+</header>
+
+<section>
+  <span class="sec-num">总览</span>
+  <h2>请求链路</h2>
+  <p class="sec-sub">用户请求先到 Cloudflare，通过 Access 策略后才回源到你的服务器。</p>
+
+  <div class="flow">
+    <div class="node"><b>访问者</b><span>浏览器 / 手机</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="node"><b>Cloudflare 边缘</b><span>DNS · SSL · Access 策略</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="node"><b>源站 Nitro</b><span>只接受 CF 回源</span></div>
+    <div class="arrow">&rarr;</div>
+    <div class="node"><b>SQLite + 上传目录</b><span>.data/ 持久化</span></div>
+  </div>
+
+  <div class="callout info">
+    <span class="t">为什么要让源站只接受 Cloudflare 回源</span>
+    <p>
+      Cloudflare 会把请求头原样转发给源站，其中就包括 Access 注入的
+      <code>CF-Access-Authenticated-User-Email</code>。如果源站 IP 可以直接访问，
+      攻击者伪造这个请求头就能绕过整套鉴权。所以第 3 步（锁定源站）不是可选项。
+    </p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-num">前置</span>
+  <h2>代码侧已就绪的能力</h2>
+  <p class="sec-sub">以下均已实现并实测通过，部署时无需再改动。</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:32%">能力</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>后台页面</td><td>独立布局，不含站点导航与封面。含概览面板、文章列表/编辑、评论审核、媒体库、站点信息。</td></tr>
+        <tr><td>文章编辑器</td><td>Markdown 实时预览；图片上传后自动插入正文；支持草稿/已发布状态。</td></tr>
+        <tr><td>内容渲染</td><td>正文在服务端按 <code>format</code> 渲染为 HTML，前端不引入 Markdown 解析库。</td></tr>
+        <tr><td>访问守卫</td><td><code>server/middleware/admin-guard.ts</code> 覆盖 <code>/admin</code> 与 <code>/api/admin/*</code>。</td></tr>
+        <tr><td>媒体服务</td><td>文件落在 <code>.data/uploads/年/月/</code>，经 <code>/uploads/*</code> 提供访问，已拦截路径穿越。</td></tr>
+        <tr><td>搜索收录</td><td><code>robots.txt</code> 已 <code>Disallow: /admin</code>。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>访问控制模式与优先级</h3>
+  <p>
+    守卫按以下顺序判断，<strong>先命中先返回</strong>，因此接入 Access 后不要保留口令配置：
+  </p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:16%">模式</th><th style="width:30%">触发条件</th><th>行为</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>password</b></td><td>设置了 <code>GG_ADMIN_PASSWORD</code></td><td>口令换 8 小时会话 cookie；<b>优先级最高</b></td></tr>
+        <tr><td><b>access</b></td><td><code>GG_TRUST_ACCESS=1</code></td><td>要求携带 <code>CF-Access-Authenticated-User-Email</code> 头</td></tr>
+        <tr><td><b>dev</b></td><td><code>NODE_ENV !== production</code></td><td>直接放行，仅用于本地开发</td></tr>
+        <tr><td><b>locked</b></td><td>生产环境且上面都不满足</td><td>返回 403 并提示配置方式，避免后台裸奔</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout danger">
+    <span class="t">最容易踩的坑</span>
+    <p>
+      接入 Cloudflare Access 后，<strong>必须删掉 <code>GG_ADMIN_PASSWORD</code></strong>。
+      只要它还在，守卫就停留在口令模式，Access 头会被忽略——你会通过 Cloudflare 校验后又被自己的登录页拦一次。
+    </p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-num">第一步</span>
+  <h2>域名接入 Cloudflare</h2>
+  <p class="sec-sub">这一步在 Cloudflare 控制台与域名注册商完成。</p>
+
+  <ol class="steps">
+    <li>
+      <span class="st">添加站点</span>
+      登录 Cloudflare，Add a site，输入 <code>garfieldgod.cn</code>，选择 Free 计划。
+    </li>
+    <li>
+      <span class="st">核对 DNS 记录</span>
+      Cloudflare 会自动扫描现有记录。确认 <code>A</code>/<code>AAAA</code> 记录指向你的源站 IP，
+      且代理状态为 <b>Proxied</b>（橙色云）。若源站用 Tunnel，则改为 Tunnel 生成的 CNAME。
+    </li>
+    <li>
+      <span class="st">在注册商处修改 NS</span>
+      把域名的 NS 改成 Cloudflare 分配的两个地址，等待生效（通常几分钟，最长 24 小时）。
+      生效后 <code>dig NS garfieldgod.cn</code> 应返回 Cloudflare 的域名服务器。
+    </li>
+    <li>
+      <span class="st">设置加密模式</span>
+      SSL/TLS &rarr; Overview &rarr; 选择 <b>Full (strict)</b>。
+      源站需有有效证书（Cloudflare Origin Certificate 或 Let's Encrypt 均可）。
+    </li>
+    <li>
+      <span class="st">强制 HTTPS</span>
+      Edge Certificates &rarr; 打开 <b>Always Use HTTPS</b> 与 <b>Automatic HTTPS Rewrites</b>。
+    </li>
+  </ol>
+
+  <div class="callout warn">
+    <span class="t">加密模式不要选 Flexible</span>
+    <p>Flexible 会让 Cloudflare 到源站走明文 HTTP，既无法保证 Full (strict)，也容易被中间人利用。</p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-num">第二步</span>
+  <h2>源站部署</h2>
+  <p class="sec-sub">把站点跑起来，并让数据落在持久化目录。</p>
+
+<pre><code><span class="c"># 构建</span>
+npm ci
+npm run build
+
+<span class="c"># 运行（Node &ge; 22.5，内置 node:sqlite；本项目实测 22.16）</span>
+node .output/server/index.mjs</code></pre>
+
+  <h3>生产环境变量</h3>
+<pre><code>NODE_ENV=production
+GG_TRUST_ACCESS=1
+<span class="c"># 持久化路径，建议放在用户目录或独立数据盘</span>
+GG_DB_PATH=/var/lib/garfieldgod/garfieldgod.db
+GG_UPLOAD_DIR=/var/lib/garfieldgod/uploads
+PORT=3000</code></pre>
+
+  <div class="callout warn">
+    <span class="t">生产环境不会自动读取 .env</span>
+    <p>
+      Nuxt 只在 dev/build 阶段自动加载 <code>.env</code>。直接 <code>node .output/server/index.mjs</code>
+      时需用 systemd 的 <code>EnvironmentFile</code>，或 <code>node --env-file=.env .output/server/index.mjs</code> 注入。
+      完整变量清单见仓库根目录的 <code>.env.example</code>。
+    </p>
+  </div>
+
+  <h3>systemd 单元示例</h3>
+<pre><code>[Unit]
+Description=GarfieldGod site
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/srv/garfieldgod
+EnvironmentFile=/srv/garfieldgod/.env
+ExecStart=/usr/bin/node .output/server/index.mjs
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+
+  <h3>需要备份的两样东西</h3>
+  <ul>
+    <li><code>GG_DB_PATH</code> 指向的 SQLite 文件（连同 <code>-wal</code>/<code>-shm</code>，或先停服务再拷贝）</li>
+    <li><code>GG_UPLOAD_DIR</code> 上传目录</li>
+  </ul>
+</section>
+
+<section>
+  <span class="sec-num">第三步</span>
+  <h2>锁定源站</h2>
+  <p class="sec-sub">三选一，按可靠性排序。这一步决定了鉴权能否被绕过。</p>
+
+  <div class="card">
+    <h3 style="margin-top:0">A. Cloudflare Tunnel（推荐）</h3>
+    <p>
+      源站完全不开放公网入站端口，由 <code>cloudflared</code> 主动向 Cloudflare 建立隧道。
+      源站 IP 不可达，伪造请求头无从谈起。
+    </p>
+<pre><code><span class="c"># 源站上安装后登录授权</span>
+cloudflared tunnel login
+cloudflared tunnel create garfieldgod
+cloudflared tunnel route dns garfieldgod garfieldgod.cn
+
+<span class="c"># config.yml</span>
+tunnel: garfieldgod
+credentials-file: /root/.cloudflared/&lt;tunnel-id&gt;.json
+ingress:
+  - hostname: garfieldgod.cn
+    service: http://127.0.0.1:3000
+  - service: http_status:404
+
+<span class="c"># 常驻</span>
+cloudflared service install</code></pre>
+    <p style="margin-bottom:0">防火墙同时关闭 80/443 的公网入站，只保留 SSH。</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">B. 防火墙仅放行 Cloudflare 回源 IP</h3>
+    <p style="margin-bottom:0">
+      保留公网端口，但只允许 Cloudflare 的 IP 段访问。
+      注意 Cloudflare 会更新 IP 列表，需要定期同步（官方在
+      <code>cloudflare.com/ips-v4</code> 与 <code>ips-v6</code> 提供）。
+    </p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">C. Authenticated Origin Pulls（mTLS）</h3>
+    <p style="margin-bottom:0">
+      在 SSL/TLS &rarr; Origin Server 打开，源站校验 Cloudflare 客户端证书。
+      配置量比 A 大，且仍需保证源站不被直连绕过。
+    </p>
+  </div>
+
+  <h3>可选加固：共享密钥</h3>
+  <p>
+    若暂时无法做到 A/B/C，可再加一层：用 Transform Rule 给所有回源请求注入一个自定义头，
+    应用侧比对同值。本项目已支持，设 <code>GG_ACCESS_SECRET</code> 即启用。
+  </p>
+<pre><code><span class="c"># Cloudflare 控制台：Rules → Transform Rules → Modify Request Header</span>
+<span class="c"># 规则：当 主机名 等于 garfieldgod.cn</span>
+<span class="c"># 操作：Set 静态值</span>
+x-gg-access-secret: &lt;一串随机字符串&gt;
+
+<span class="c"># 源站 .env</span>
+GG_ACCESS_SECRET=&lt;同一串随机字符串&gt;</code></pre>
+  <div class="callout info">
+    <p style="margin:0">
+      该头由 Cloudflare 覆盖写入，访问者无法自带。启用后即缺少该头的请求一律拒绝，
+      为源站被直连的情况兜底。生成随机值可用 <code>openssl rand -hex 32</code>。
+    </p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-num">第四步</span>
+  <h2>配置 Cloudflare Access</h2>
+  <p class="sec-sub">在 Zero Trust 里为后台路径加一道身份校验。免费版支持 50 个用户。</p>
+
+  <ol class="steps">
+    <li>
+      <span class="st">进入 Access</span>
+      Cloudflare 控制台左侧 <b>Zero Trust</b> &rarr; <b>Access</b> &rarr; <b>Applications</b>，
+      点 <b>Add an application</b>，选择 <b>Self-hosted</b>。
+    </li>
+    <li>
+      <span class="st">创建后台页面应用</span>
+      应用名 <code>GarfieldGod Admin</code>；
+      Application domain 填 <code>garfieldgod.cn</code>，Path 填 <code>admin</code>。
+      Path 会自动覆盖 <code>/admin</code> 及其所有子路径。
+      <br /><span style="color:var(--muted);font-size:0.88rem">注意：Path 不要写前导斜杠。</span>
+    </li>
+    <li>
+      <span class="st">再加一个后台接口应用</span>
+      同样方式创建第二个应用，Path 填 <code>api/admin</code>。
+      页面和接口分开建，便于分别看日志与调策略。
+    </li>
+    <li>
+      <span class="st">写放行策略</span>
+      在策略区：Action 选 <b>Allow</b>，Include 选 <b>Emails</b>，填入你自己的邮箱。
+      只有名单内的身份能通过。
+    </li>
+    <li>
+      <span class="st">开启二次验证</span>
+      同页面的 Authentication 区域，把 <b>Login methods</b> 设为 One-time PIN（邮箱验证码）
+      或你已接入的身份源（Google / GitHub 等）。
+      需要更强保证时，在策略下加一条 <b>Require &rarr; MFA</b>。
+    </li>
+    <li>
+      <span class="st">设置会话时长</span>
+      建议 24 小时。到期后需要重新验证一次，之后一段时间内不再打断。
+    </li>
+    <li>
+      <span class="st">保存并回到源站启用</span>
+      确认源站 <code>.env</code> 为 <code>GG_TRUST_ACCESS=1</code>，
+      且<strong>没有</strong> <code>GG_ADMIN_PASSWORD</code>，然后重启服务。
+    </li>
+  </ol>
+
+  <div class="callout ok">
+    <span class="t">验证过的守卫行为</span>
+    <p>
+      在 Access 模式下实测：不带任何头的 <code>/api/admin/*</code> 返回 401、页面 302 跳转；
+      只有伪造的 CF 头而没有共享密钥时返回 401；两个头都正确时返回 200。公开站不受影响。
+    </p>
+  </div>
+</section>
+
+<section>
+  <span class="sec-num">第五步</span>
+  <h2>验收清单</h2>
+  <p class="sec-sub">逐条确认，全部通过即可认为接入完成。</p>
+
+  <ul class="check">
+    <li>无痕窗口访问 <code>https://garfieldgod.cn/</code>，首页正常，说明公开站未被 Access 拦住。</li>
+    <li>无痕窗口访问 <code>https://garfieldgod.cn/admin</code>，先跳到 Cloudflare 登录页，验证邮箱后进入后台。</li>
+    <li>未登录状态直接请求 <code>https://garfieldgod.cn/api/admin/stats</code>，返回 401 或跳转登录，不返回数据。</li>
+    <li>后台能新建一篇文章、上传一张图片，并在公开页看到渲染结果。</li>
+    <li>提交一条评论，在后台评论页能审核通过。</li>
+    <li>直接访问源站 IP（如 <code>http://&lt;源站IP&gt;:3000/admin</code>）应连接失败或被拒绝。</li>
+    <li>服务器重启后数据仍在，<code>GG_DB_PATH</code> 与上传目录指向的是持久化位置。</li>
+  </ul>
+</section>
+
+<section>
+  <span class="sec-num">附录</span>
+  <h2>排障与回滚</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:42%">现象</th><th>原因与处理</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>通过 Cloudflare 验证后又被自己的登录页拦住</td>
+          <td>设了 <code>GG_ADMIN_PASSWORD</code>，守卫停在口令模式。删掉它并重启。</td>
+        </tr>
+        <tr>
+          <td>生产环境访问后台返回 403「后台未启用访问控制」</td>
+          <td>既没有 <code>GG_TRUST_ACCESS=1</code> 也没有口令，属预期的安全兜底。按第四步配置。</td>
+        </tr>
+        <tr>
+          <td>Access 已放行，但接口仍返回 401</td>
+          <td>源站没收到 <code>CF-Access-*</code> 头。检查 Access 应用的 Path 是否写对、请求是否确实走了 Cloudflare。</td>
+        </tr>
+        <tr>
+          <td>上传图片后页面 404</td>
+          <td><code>GG_UPLOAD_DIR</code> 目录不存在或不可写，检查运行用户权限。</td>
+        </tr>
+        <tr>
+          <td>上传报「文件超过 20MB 限制」</td>
+          <td>单文件上限 20MB，且仅允许 png/jpg/gif/webp/avif/mp4/webm/mp3。</td>
+        </tr>
+        <tr>
+          <td>想临时用口令进后台</td>
+          <td>设 <code>GG_ADMIN_PASSWORD</code> 即退回口令模式（会同时忽略 Access 头）。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>回滚</h3>
+  <ul>
+    <li>临时放开后台：删除两个 Access 应用即可恢复公开访问。</li>
+    <li>退回口令模式：设置 <code>GG_ADMIN_PASSWORD</code>，无需改代码。</li>
+    <li>域名迁回：在注册商处把 NS 改回原值。</li>
+  </ul>
+</section>
+
+<footer class="doc-foot">
+  GarfieldGod 站点 · 部署与后台访问控制指南 · 与仓库 <code>.env.example</code> 配套使用
+</footer>
+
+</div>
+</body>
+</html>
