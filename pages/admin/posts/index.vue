@@ -11,6 +11,12 @@ const tagFilter = ref<number | null>(null)
 const busyId = ref<number | null>(null)
 const message = ref('')
 
+// 批量操作：勾选的文章 + 下拉菜单开合
+const selectedIds = ref<number[]>([])
+const menuOpen = ref(false)
+const bulkBusy = ref(false)
+const menuWrap = ref<HTMLElement | null>(null)
+
 // 状态与关键词先过一遍，页面 / 标签的可选值和计数都以它为基数
 const basePosts = computed(() => {
   const list = data.value?.posts ?? []
@@ -71,6 +77,32 @@ const posts = computed(() =>
   }),
 )
 
+// ===== 批量选择 =====
+const allPosts = computed(() => data.value?.posts ?? [])
+const selectedPosts = computed(() => allPosts.value.filter((p) => selectedIds.value.includes(p.id)))
+const allChecked = computed(
+  () => posts.value.length > 0 && posts.value.every((p) => selectedIds.value.includes(p.id)),
+)
+const someChecked = computed(
+  () => !allChecked.value && posts.value.some((p) => selectedIds.value.includes(p.id)),
+)
+
+function toggleAll() {
+  if (allChecked.value) {
+    const visible = new Set(posts.value.map((p) => p.id))
+    selectedIds.value = selectedIds.value.filter((id) => !visible.has(id))
+  } else {
+    const set = new Set(selectedIds.value)
+    for (const p of posts.value) set.add(p.id)
+    selectedIds.value = [...set]
+  }
+}
+
+// 筛选条件一变就清空选择，避免误操作到已经看不见的文章
+watch([statusFilter, keyword, pageFilter, tagFilter], () => {
+  selectedIds.value = []
+})
+
 const hasFilter = computed(
   () =>
     statusFilter.value !== 'all' ||
@@ -109,29 +141,34 @@ async function remove(post: AdminPost) {
   }
 }
 
+// 后台的 PUT 是「整篇覆盖」：必须回传完整字段，漏掉谁就会把谁重置成默认值
+// （样式方案、样式设置、正文宽度、留言开关）。批量操作也走这里。
+function postPayload(post: AdminPost, overrides: Partial<PostPayload> = {}): PostPayload {
+  return {
+    title: post.title,
+    date: post.date,
+    content: post.content,
+    excerpt: post.excerpt,
+    featured: post.featured,
+    pageIds: post.pages.map((p) => p.id),
+    tagIds: post.tags.map((t) => t.id),
+    status: post.status,
+    format: post.format,
+    contentWidth: post.contentWidth,
+    postStyle: post.postStyle,
+    postStyleOptions: post.postStyleOptions,
+    allowComments: post.allowComments,
+    ...overrides,
+  }
+}
+
 async function toggleStatus(post: AdminPost) {
   busyId.value = post.id
   message.value = ''
   try {
     await $fetch(`/api/admin/posts/${post.id}`, {
       method: 'PUT',
-      body: {
-        title: post.title,
-        date: post.date,
-        content: post.content,
-        excerpt: post.excerpt,
-        featured: post.featured,
-        pageIds: post.pages.map((p) => p.id),
-        tagIds: post.tags.map((t) => t.id),
-        status: post.status === 'published' ? 'draft' : 'published',
-        format: post.format,
-        // 这几个必须一并回传：后台的 PUT 是「整篇覆盖」，
-        // 漏掉谁就会把谁重置成默认值（样式方案、样式设置、正文宽度、留言开关）
-        contentWidth: post.contentWidth,
-        postStyle: post.postStyle,
-        postStyleOptions: post.postStyleOptions,
-        allowComments: post.allowComments,
-      },
+      body: postPayload(post, { status: post.status === 'published' ? 'draft' : 'published' }),
     })
     await refresh()
   } catch (e) {
@@ -140,6 +177,96 @@ async function toggleStatus(post: AdminPost) {
     busyId.value = null
   }
 }
+
+// ===== 批量操作 =====
+function openBulkEdit() {
+  menuOpen.value = false
+  if (!selectedIds.value.length) return
+  navigateTo(`/admin/posts/bulk?ids=${selectedIds.value.join(',')}`)
+}
+
+async function bulkToDraft() {
+  menuOpen.value = false
+  const targets = selectedPosts.value.filter((p) => p.status !== 'draft')
+  if (!targets.length) {
+    message.value = '所选文章都已是草稿。'
+    return
+  }
+  if (!confirm(`确定把所选的 ${targets.length} 篇文章转为草稿？`)) return
+  bulkBusy.value = true
+  message.value = ''
+  try {
+    for (const p of targets) {
+      await $fetch(`/api/admin/posts/${p.id}`, {
+        method: 'PUT',
+        body: postPayload(p, { status: 'draft' }),
+      })
+    }
+    selectedIds.value = []
+    await refresh()
+    message.value = `已把 ${targets.length} 篇文章转为草稿。`
+  } catch (e) {
+    message.value = adminError(e, '操作失败')
+  } finally {
+    bulkBusy.value = false
+  }
+}
+
+// 导出交给服务端打包：按每篇的 format 出 .md / .html，合成一个 zip 回传
+async function bulkExport() {
+  menuOpen.value = false
+  const ids = selectedIds.value
+  if (!ids.length) return
+  bulkBusy.value = true
+  message.value = '正在打包导出…'
+  try {
+    const blob = await $fetch<Blob>(`/api/admin/posts/export?ids=${ids.join(',')}`, {
+      responseType: 'blob',
+    })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `garfieldgod-posts-${new Date().toISOString().slice(0, 10)}.zip`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    // 立刻 revoke 会让部分浏览器取消下载，留一点余量再回收
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+    message.value = `已导出 ${ids.length} 篇文章。`
+  } catch (e) {
+    message.value = adminError(e, '导出失败')
+  } finally {
+    bulkBusy.value = false
+  }
+}
+
+async function bulkRemove() {
+  menuOpen.value = false
+  const targets = selectedPosts.value
+  if (!targets.length) return
+  if (!confirm(`确定删除所选的 ${targets.length} 篇文章？评论与阅读数会一并删除，且不可恢复。`)) return
+  bulkBusy.value = true
+  message.value = ''
+  try {
+    for (const p of targets) {
+      await $fetch(`/api/admin/posts/${p.id}`, { method: 'DELETE' })
+    }
+    selectedIds.value = []
+    await refresh()
+    message.value = `已删除 ${targets.length} 篇文章。`
+  } catch (e) {
+    message.value = adminError(e, '删除失败')
+  } finally {
+    bulkBusy.value = false
+  }
+}
+
+// 点空白处收起下拉
+function onDocClick(e: MouseEvent) {
+  if (menuWrap.value && !menuWrap.value.contains(e.target as Node)) menuOpen.value = false
+}
+onMounted(() => document.addEventListener('click', onDocClick))
+onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
 </script>
 
 <template>
@@ -163,6 +290,23 @@ async function toggleStatus(post: AdminPost) {
             <option value="draft">草稿</option>
           </select>
           <input v-model="keyword" class="ad-input" type="search" placeholder="搜索标题" style="width: 200px" />
+          <NuxtLink class="ad-btn ad-btn--sm ad-btn--primary" to="/admin/posts/import">批量导入</NuxtLink>
+          <div ref="menuWrap" class="ad-menu">
+            <button
+              class="ad-btn ad-btn--sm"
+              type="button"
+              :disabled="!selectedIds.length || bulkBusy"
+              @click="menuOpen = !menuOpen"
+            >
+              批量操作{{ selectedIds.length ? `（${selectedIds.length}）` : '' }} ▾
+            </button>
+            <div v-if="menuOpen" class="ad-menu__list">
+              <button class="ad-menu__item" type="button" @click="openBulkEdit">编辑</button>
+              <button class="ad-menu__item" type="button" @click="bulkToDraft">转为草稿</button>
+              <button class="ad-menu__item" type="button" @click="bulkExport">导出</button>
+              <button class="ad-menu__item is-danger" type="button" @click="bulkRemove">删除</button>
+            </div>
+          </div>
         </div>
         <div class="ad-actions">
           <span class="ad-hint">筛选结果 {{ posts.length }} 篇</span>
@@ -231,6 +375,16 @@ async function toggleStatus(post: AdminPost) {
         <table class="ad-table">
           <thead>
             <tr>
+              <th class="ad-table__check">
+                <input
+                  type="checkbox"
+                  :checked="allChecked"
+                  :indeterminate.prop="someChecked"
+                  :disabled="!posts.length"
+                  title="全选本页"
+                  @change="toggleAll"
+                />
+              </th>
               <th>标题</th>
               <th>状态</th>
               <th>展示页面</th>
@@ -242,6 +396,9 @@ async function toggleStatus(post: AdminPost) {
           </thead>
           <tbody>
             <tr v-for="p in posts" :key="p.id">
+              <td class="ad-table__check">
+                <input v-model="selectedIds" type="checkbox" :value="p.id" />
+              </td>
               <td>
                 <NuxtLink class="ad-table__title" :to="`/admin/posts/${p.id}`">{{ p.title }}</NuxtLink>
                 <div class="ad-hint">{{ p.format === 'markdown' ? 'Markdown' : 'HTML' }}</div>
@@ -279,3 +436,51 @@ async function toggleStatus(post: AdminPost) {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* 勾选列：窄且居中，不抢标题的宽度 */
+.ad-table__check {
+  width: 36px;
+  text-align: center;
+}
+.ad-table__check input {
+  cursor: pointer;
+}
+
+/* 批量操作下拉 */
+.ad-menu {
+  position: relative;
+  display: inline-block;
+}
+.ad-menu__list {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  min-width: 132px;
+  padding: 6px;
+  display: grid;
+  gap: 2px;
+  background: var(--gg-surface);
+  border: 1px solid var(--gg-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+.ad-menu__item {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--gg-ink);
+  text-align: left;
+  cursor: pointer;
+}
+.ad-menu__item:hover {
+  background: var(--gg-surface-2);
+}
+.ad-menu__item.is-danger {
+  color: #c0392b;
+}
+</style>
