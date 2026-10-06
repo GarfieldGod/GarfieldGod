@@ -1,5 +1,6 @@
 // 后台通用类型与请求辅助。数据全部来自 /api/admin/*。
 
+import type { NuxtApp } from '#app'
 import type { NavPage, PageRef, PostStyleOptions, TagRef } from './useSiteData'
 
 export type AdminMode = 'password' | 'access' | 'dev' | 'locked'
@@ -246,4 +247,62 @@ export function toLocalInput(value: string): string {
   if (Number.isNaN(d.getTime())) return ''
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+// ===== 后台提速：会话级缓存 + 空闲 / 悬停预热 =====
+// 与公共页同一套机制（见 composables/useSiteData.ts）：把「本次会话已取到的数据」写回
+// payload.data，客户端导航时 getCachedData 命中即同步出内容，不再等一次接口往返
+// （经 Cloudflare 回源约 1-5 秒）。各页面的写操作照旧用 refresh() / refreshNuxtData(key)
+// 真刷新——它的 cause 以 refresh: 开头，会绕过缓存重新取数，因此后台数据的实时性不受影响。
+
+/** 各后台导航项对应要预热的数据，与页面里 useFetch 的 key 一一对应 */
+const ADMIN_WARM_TARGETS: Record<string, { key: string; url: string }[]> = {
+  '/admin': [
+    { key: 'admin-stats', url: '/api/admin/stats' },
+    { key: 'admin-posts', url: '/api/admin/posts' },
+    { key: 'admin-comments', url: '/api/admin/comments' },
+  ],
+  '/admin/pages': [{ key: 'admin-nav-pages', url: '/api/admin/nav-pages' }],
+  '/admin/posts': [{ key: 'admin-posts', url: '/api/admin/posts' }],
+  '/admin/comments': [{ key: 'admin-comments', url: '/api/admin/comments' }],
+  '/admin/media': [{ key: 'admin-media', url: '/api/admin/media' }],
+  '/admin/site': [{ key: 'admin-site', url: '/api/admin/site' }],
+}
+
+/**
+ * 预热：把数据提前写进缓存槽。失败静默——真点进去时还会再取一次。
+ * force 用于详情类数据（hover 时覆盖旧值），保证点开时拿到的就是最新的。
+ */
+function warmAdmin(nuxtApp: NuxtApp, key: string, url: string, force = false) {
+  if (!import.meta.client) return
+  if (!force && nuxtApp.payload.data[key] != null) return
+  $fetch(url)
+    .then((data) => {
+      if (data != null) nuxtApp.payload.data[key] = data
+    })
+    .catch(() => {
+      // 预热失败不影响正常导航
+    })
+}
+
+/** 空闲预热全部后台列表数据：进入后台后一次备齐 */
+export function prefetchAdminData(nuxtApp: NuxtApp) {
+  for (const targets of Object.values(ADMIN_WARM_TARGETS)) {
+    for (const t of targets) warmAdmin(nuxtApp, t.key, t.url)
+  }
+}
+
+/** 悬停某个后台导航项时，提前备好它要用的数据 */
+export function prefetchAdminPath(path: string, nuxtApp: NuxtApp) {
+  for (const t of ADMIN_WARM_TARGETS[path] ?? []) warmAdmin(nuxtApp, t.key, t.url)
+}
+
+/** 悬停文章行时预热详情：点进去时 await 命中缓存立即返回 */
+export function prefetchAdminPost(id: number | string, nuxtApp: NuxtApp) {
+  warmAdmin(nuxtApp, `admin-post:${id}`, `/api/admin/posts/${id}`, true)
+}
+
+/** 悬停页面行时预热详情 */
+export function prefetchAdminNavPage(id: number | string, nuxtApp: NuxtApp) {
+  warmAdmin(nuxtApp, `admin-nav-page:${id}`, `/api/admin/nav-pages/${id}`, true)
 }

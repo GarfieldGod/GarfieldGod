@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { marked } from 'marked'
 import type { TagRef } from '~/composables/useSiteData'
-import { resolvePostStyleOptions } from '~/composables/useSiteData'
+import { resolvePostStyleOptions, sessionCachedData } from '~/composables/useSiteData'
 
 definePageMeta({ layout: 'admin' })
 useHead({ title: '批量导入 — GarfieldGod 后台' })
 
-const { data: pagesData } = await useFetch<{ pages: AdminNavPage[]; tags: TagRef[] }>(
+const { data: pagesData } = useFetch<{ pages: AdminNavPage[]; tags: TagRef[] }>(
   '/api/admin/nav-pages',
-  { key: 'admin-nav-pages' },
+  { key: 'admin-nav-pages', getCachedData: sessionCachedData },
 )
 
 // 与编辑页一致的页面树构造：父节点穿过、posts 节点收录
@@ -239,8 +239,9 @@ const doneCount = computed(() => validItems.value.filter((i) => i.state === 'don
 const failedCount = computed(() => validItems.value.filter((i) => i.state === 'failed').length)
 
 // 重名检测：与服务端已有文章比对
-const { data: existingPosts } = await useFetch<{ posts: AdminPost[] }>('/api/admin/posts', {
+const { data: existingPosts } = useFetch<{ posts: AdminPost[] }>('/api/admin/posts', {
   key: 'admin-posts',
+  getCachedData: sessionCachedData,
 })
 const existingTitles = computed(
   () => new Set((existingPosts.value?.posts ?? []).map((p) => p.title)),

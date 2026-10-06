@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { sessionCachedData } from '~/composables/useSiteData'
+
 definePageMeta({ layout: 'admin' })
 useHead({ title: '站点信息 — GarfieldGod 后台' })
 
@@ -12,8 +14,11 @@ interface SiteMetaShape {
   favicon?: string
 }
 
+// 这里保留 await：表单在 setup 期同步初始化，SSR 与水合才能拿到同一份初值（避免水合不匹配）。
+// 提速交给 getCachedData + 空闲 / 悬停预热——命中缓存时 await 同步返回，点进来即秒开
 const { data } = await useFetch<{ meta: SiteMetaShape }>('/api/admin/site', {
   key: 'admin-site',
+  getCachedData: sessionCachedData,
 })
 
 const metaForm = reactive({
@@ -131,7 +136,8 @@ async function saveMeta() {
   metaMessage.value = ''
   try {
     await $fetch('/api/admin/site', { method: 'PUT', body: { meta: { ...metaForm } } })
-    await refreshNuxtData('site-meta')
+    // 前台读 site-meta、后台读 admin-site，两个缓存槽都要刷新，避免回到本页时看到旧值
+    await Promise.all([refreshNuxtData('site-meta'), refreshNuxtData('admin-site')])
     metaFailed.value = false
     metaMessage.value = '已保存。'
   } catch (e) {

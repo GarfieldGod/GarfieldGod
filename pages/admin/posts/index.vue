@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import { prefetchAdminPost } from '~/composables/useAdmin'
+import { sessionCachedData } from '~/composables/useSiteData'
+
 definePageMeta({ layout: 'admin' })
 useHead({ title: '文章 — GarfieldGod 后台' })
 
-const { data, refresh } = await useFetch<{ posts: AdminPost[] }>('/api/admin/posts', { key: 'admin-posts' })
+const nuxtApp = useNuxtApp()
+const { data, refresh } = useFetch<{ posts: AdminPost[] }>('/api/admin/posts', {
+  key: 'admin-posts',
+  getCachedData: sessionCachedData,
+})
 
 const keyword = ref('')
 const statusFilter = ref<'all' | 'published' | 'draft'>('all')
@@ -395,7 +402,11 @@ onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
             </tr>
           </thead>
           <tbody>
-            <tr v-for="p in posts" :key="p.id">
+            <tr
+              v-for="p in posts"
+              :key="p.id"
+              @mouseenter="prefetchAdminPost(p.id, nuxtApp)"
+            >
               <td class="ad-table__check">
                 <input v-model="selectedIds" type="checkbox" :value="p.id" />
               </td>

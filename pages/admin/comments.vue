@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { sessionCachedData } from '~/composables/useSiteData'
+
 definePageMeta({ layout: 'admin' })
 useHead({ title: '评论 — GarfieldGod 后台' })
 
-const { data, refresh } = await useFetch<{ comments: AdminComment[] }>('/api/admin/comments', {
+const { data, refresh } = useFetch<{ comments: AdminComment[] }>('/api/admin/comments', {
   key: 'admin-comments',
+  getCachedData: sessionCachedData,
 })
 
 const filter = ref<'all' | 'approved' | 'hidden'>('all')

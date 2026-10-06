@@ -6,7 +6,7 @@ import { extname, join, resolve, sep } from 'node:path'
 export default defineEventHandler(async (event) => {
   const rel = String(getRouterParam(event, 'path') ?? '')
   const root = resolve(uploadsDir())
-  const target = resolve(join(root, rel))
+  let target = resolve(join(root, rel))
 
   if (target !== root && !target.startsWith(root + sep)) {
     throw createError({ statusCode: 403, message: '非法路径' })
@@ -16,8 +16,20 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: '非法路径' })
   }
 
-  const info = await stat(target).catch(() => null)
-  if (!info || !info.isFile()) {
+  let info = await stat(target).catch(() => null)
+
+  // 派生缩略图缺失时回落原图：老图还没回填、gif 之类不派生缩略图的格式都会走到这里，
+  // 否则卡片会挂一张 404 的坏图
+  if (!info?.isFile()) {
+    const origin = thumbOriginPath(target)
+    const originInfo = origin ? await stat(origin).catch(() => null) : null
+    if (origin && originInfo?.isFile()) {
+      target = origin
+      info = originInfo
+    }
+  }
+
+  if (!info?.isFile()) {
     throw createError({ statusCode: 404, message: '文件不存在' })
   }
 

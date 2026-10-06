@@ -16,6 +16,7 @@ import {
   postPlainText,
   markLeadParagraph,
 } from '~/utils/postStyle'
+import { thumbSrc } from '~/utils/media'
 
 const props = withDefaults(
   defineProps<{
@@ -204,7 +205,7 @@ const { el: stageEl } = usePreviewFit(1080)
         <section class="pg-hero" :class="`pg-hero--${styleOptions.heroSize}`">
           <div
             class="pg-hero__img"
-            :style="styleOptions.heroImage ? { backgroundImage: `url(${styleOptions.heroImage})` } : undefined"
+            :style="styleOptions.heroImage ? { backgroundImage: `url(${thumbSrc(styleOptions.heroImage, 1600)})` } : undefined"
             aria-hidden="true"
           />
           <div class="pg-hero__scrim" aria-hidden="true" />

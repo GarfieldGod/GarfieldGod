@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { thumbSrc } from '~/utils/media'
+
 // 从媒体库挑一张图：这里只列媒体库目录，文章私有图片不会出现在这里。
 // 选中后由调用方决定用途（插入正文 / 设为封面 / 设为头图）。
 const emit = defineEmits<{
@@ -52,7 +54,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
               :title="f.name"
               @click="emit('select', f.url)"
             >
-              <img class="ad-media__thumb" :src="f.url" :alt="f.name" loading="lazy" />
+              <SmartImage class="ad-media__thumb" :src="thumbSrc(f.url)" :fallback="f.url" :alt="f.name" />
               <span class="ad-media__name">{{ f.name }}</span>
             </button>
           </div>

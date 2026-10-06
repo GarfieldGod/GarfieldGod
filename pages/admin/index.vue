@@ -1,11 +1,21 @@
 <script setup lang="ts">
+import { sessionCachedData } from '~/composables/useSiteData'
+
 definePageMeta({ layout: 'admin' })
 useHead({ title: '概览面板 — GarfieldGod 后台' })
 
-const { data: stats } = await useFetch<AdminStats>('/api/admin/stats', { key: 'admin-stats' })
-const { data: postData } = await useFetch<{ posts: AdminPost[] }>('/api/admin/posts', { key: 'admin-posts' })
-const { data: commentData } = await useFetch<{ comments: AdminComment[] }>('/api/admin/comments', {
+// 三个请求并行下发、都不 await：页面框架先渲染，数据到齐后自动填充（不再串行阻塞切换）
+const { data: stats } = useFetch<AdminStats>('/api/admin/stats', {
+  key: 'admin-stats',
+  getCachedData: sessionCachedData,
+})
+const { data: postData } = useFetch<{ posts: AdminPost[] }>('/api/admin/posts', {
+  key: 'admin-posts',
+  getCachedData: sessionCachedData,
+})
+const { data: commentData } = useFetch<{ comments: AdminComment[] }>('/api/admin/comments', {
   key: 'admin-comments',
+  getCachedData: sessionCachedData,
 })
 
 const cards = computed(() => [

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { NavPage, Post } from '~/composables/useSiteData'
-import { aspectRatioCss, resolveDatePosition, prefetchPost } from '~/composables/useSiteData'
+import { aspectRatioCss, resolveDatePosition, prefetchPost, prefetchPostDetail } from '~/composables/useSiteData'
 import { cleanExcerpt, coverSrc, formatDateCn } from '~/utils/pageFormat'
+import { thumbSrc } from '~/utils/media'
 
 // 单个条目。卡片外观完全由「条目类型」（page.cardType）决定；
 // 「条目显示字段」只决定卡片里显示哪些内容，不会改变卡片形态；
@@ -24,6 +25,8 @@ const showCover = computed(() => fields.value.cover !== false && !!props.post.fe
 
 // 封面地址：老数据是裸文件名、新上传是 /uploads/... 完整路径，交给 coverSrc 统一成可用地址
 const coverUrl = computed(() => coverSrc(props.post.featured))
+// 卡片只显示几百像素宽，取缩略图；原图留给正文，取不到时 SmartImage 会回落
+const coverThumb = computed(() => thumbSrc(coverUrl.value))
 
 const dateText = computed(() => (fields.value.date ? formatDateCn(props.post.date) : ''))
 
@@ -69,16 +72,45 @@ const itemClasses = computed(() => ({
   'has-ratio': !!ratio.value,
 }))
 
-// 悬停/聚焦即预热详情页：鼠标移上去时正文、阅读数、留言已在路上，
-// 点下去直接命中缓存，不用等接口（对照 GameRank 的卡片悬停预加载）。
+// 预热详情页分两档：
+// 1) 进入视口就先取正文——切页时正文是唯一「没有就没东西可渲染」的数据；
+// 2) 悬停 / 聚焦再补上阅读数与留言。
+// 正文不能只靠悬停：经 Cloudflare 回源一次要 1–5 秒，鼠标移上去到点下去往往只有几百毫秒。
 const nuxtApp = useNuxtApp()
+const cardEl = ref<unknown>(null)
+let observer: IntersectionObserver | undefined
+
 function warmPost() {
   prefetchPost(props.post.id, nuxtApp)
 }
+
+onMounted(() => {
+  if (typeof IntersectionObserver === 'undefined') return
+  // NuxtLink 上取到的是组件实例，真正的 DOM 节点在 $el
+  const node = ((cardEl.value as { $el?: unknown } | null)?.$el ?? cardEl.value) as unknown
+  if (!(node instanceof Element)) return
+  observer = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return
+      prefetchPostDetail(props.post.id, nuxtApp)
+      observer?.disconnect()
+      observer = undefined
+    },
+    // 提前 240px 预热：滚到附近时请求已在路上，点下去通常已经命中
+    { rootMargin: '240px 0px' },
+  )
+  observer.observe(node)
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  observer = undefined
+})
 </script>
 
 <template>
   <NuxtLink
+    ref="cardEl"
     :to="`/post/${props.post.id}`"
     class="gg-item"
     :class="[`gg-item--${cardType}`, itemClasses]"
@@ -89,7 +121,7 @@ function warmPost() {
     <!-- 全图叠加：图片铺满，信息压在底部渐变上 -->
     <template v-if="cardType === 'overlay'">
       <div v-if="showCover" class="gg-item__media">
-        <img :src="coverUrl" :alt="props.post.title" loading="lazy" />
+        <SmartImage :src="coverThumb" :fallback="coverUrl" :alt="props.post.title" />
       </div>
       <div class="gg-item__grad" />
       <div class="gg-item__overlay">
@@ -107,11 +139,11 @@ function warmPost() {
     <!-- 网格卡：图在上、信息在下 -->
     <template v-else-if="cardType === 'mosaic'">
       <div v-if="fields.cover !== false" class="gg-item__media">
-        <img
+        <SmartImage
           v-if="showCover"
-          :src="coverUrl"
+          :src="coverThumb"
+          :fallback="coverUrl"
           :alt="props.post.title"
-          loading="lazy"
         />
         <span v-else class="gg-item__nocover">NO COVER</span>
       </div>
@@ -141,14 +173,14 @@ function warmPost() {
         <div v-if="pillLabel"><span class="gg-item__pill">{{ pillLabel }}</span></div>
       </div>
       <span v-if="showCover" class="gg-item__thumb">
-        <img :src="coverUrl" :alt="props.post.title" loading="lazy" />
+        <SmartImage :src="coverThumb" :fallback="coverUrl" :alt="props.post.title" />
       </span>
     </template>
 
     <!-- 左图右文：缩略图居左、信息居右 -->
     <template v-else-if="cardType === 'horizontal'">
       <span v-if="showCover" class="gg-item__thumb">
-        <img :src="coverUrl" :alt="props.post.title" loading="lazy" />
+        <SmartImage :src="coverThumb" :fallback="coverUrl" :alt="props.post.title" />
       </span>
       <div class="gg-item__body">
         <div class="gg-item__meta">
@@ -163,7 +195,7 @@ function warmPost() {
     <!-- 标准：复刻改造前的列表行卡 -->
     <template v-else>
       <span v-if="showCover" class="gg-item__thumb">
-        <img :src="coverUrl" :alt="props.post.title" loading="lazy" />
+        <SmartImage :src="coverThumb" :fallback="coverUrl" :alt="props.post.title" />
       </span>
       <div class="gg-item__body">
         <div class="gg-item__head">

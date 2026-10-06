@@ -68,6 +68,8 @@ export default defineEventHandler(async (event) => {
     // 文章编辑器上传的进文章私有目录，随文章删除；站点设置与媒体库上传的进媒体库
     const target = String(query.scope ?? '') === 'post' ? postTarget(query) : libraryTarget()
     const stored = await storeUpload(target.dir, file.filename!, file.type!, file.data)
+    // 原图落盘后顺带生成卡片用的 WebP 缩略图（失败不拦上传，缺失时由 /uploads 回落原图）
+    await generateThumbs(join(target.dir, stored.name))
 
     setResponseStatus(event, 201)
     return {

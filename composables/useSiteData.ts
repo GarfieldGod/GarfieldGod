@@ -270,9 +270,18 @@ export function prefetchNavPage(slug: string, nuxtApp: NuxtApp) {
   warm(nuxtApp, `nav-page:${slug}`, navPageUrl(slug))
 }
 
-/** 预热文章详情页：正文、阅读数、留言一起备好，点卡片时不用等 */
-export function prefetchPost(id: string | number, nuxtApp: NuxtApp) {
+/**
+ * 只预热正文详情：卡片进入视口时调用，请求量最小。
+ * 正文是唯一决定「有没有东西可渲染」的数据；阅读数与留言晚到不影响阅读，
+ * 留给悬停（prefetchPost）补齐，避免整屏卡片一进页面就发一堆请求。
+ */
+export function prefetchPostDetail(id: string | number, nuxtApp: NuxtApp) {
   warm(nuxtApp, `post:${id}`, `/api/posts/${id}`)
+}
+
+/** 预热文章详情页：正文、阅读数、留言一起备好，悬停 / 聚焦卡片时调用 */
+export function prefetchPost(id: string | number, nuxtApp: NuxtApp) {
+  prefetchPostDetail(id, nuxtApp)
   warm(nuxtApp, `views:${id}`, `/api/views/${id}`)
   warm(nuxtApp, `comments:${id}`, '/api/comments', { post: id })
 }

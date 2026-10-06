@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { marked } from 'marked'
+import { sessionCachedData } from '~/composables/useSiteData'
 import type { TagRef } from '~/composables/useSiteData'
 
 definePageMeta({ layout: 'admin' })
@@ -10,19 +11,26 @@ const isNew = idParam === 'new'
 
 useHead({ title: `${isNew ? '写新文章' : '编辑文章'} — GarfieldGod 后台` })
 
-const { data: pagesData } = await useFetch<{ pages: AdminNavPage[]; tags: TagRef[] }>(
+// 页面 / 标签候选不 await：它是表单的候选项，不阻塞编辑区渲染
+const { data: pagesData } = useFetch<{ pages: AdminNavPage[]; tags: TagRef[] }>(
   '/api/admin/nav-pages',
-  { key: 'admin-nav-pages' },
+  { key: 'admin-nav-pages', getCachedData: sessionCachedData },
 )
 
-const { data: postData } = await useAsyncData(`admin-post:${idParam}`, async () => {
-  if (isNew) return { post: null as AdminPost | null }
-  try {
-    return await $fetch<{ post: AdminPost | null }>(`/api/admin/posts/${idParam}`)
-  } catch (e) {
-    throw createError({ statusCode: 404, message: adminError(e, '文章不存在'), fatal: true })
-  }
-})
+// 详情保留 await：命中 hover 预热 / 会话缓存时同步返回（秒开），未命中则照旧等一次；
+// 保留 await 也维持了原来的 404 语义与「表单在 setup 期初始化」的写法
+const { data: postData } = await useAsyncData(
+  `admin-post:${idParam}`,
+  async () => {
+    if (isNew) return { post: null as AdminPost | null }
+    try {
+      return await $fetch<{ post: AdminPost | null }>(`/api/admin/posts/${idParam}`)
+    } catch (e) {
+      throw createError({ statusCode: 404, message: adminError(e, '文章不存在'), fatal: true })
+    }
+  },
+  { getCachedData: sessionCachedData },
+)
 
 // 展示页面候选：只有「内容来源 = 本页文章」的页面会直接收录文章。
 // 其余页面（聚合 / 最新 / 静态）不列出自己，但仍要作为层级节点穿过——
@@ -232,7 +240,11 @@ async function save() {
     }
 
     await $fetch(`/api/admin/posts/${idParam}`, { method: 'PUT', body })
-    await refreshNuxtData('admin-posts')
+    // 列表与详情两个缓存槽都要刷新：否则返回列表 / 再次打开本页时会命中旧缓存
+    await Promise.all([
+      refreshNuxtData('admin-posts'),
+      refreshNuxtData(`admin-post:${idParam}`),
+    ])
     baseline.value = JSON.stringify(form)
     failed.value = false
     message.value = '已保存。'

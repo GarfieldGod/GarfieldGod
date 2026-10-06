@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { marked } from 'marked'
 import {
+  sessionCachedData,
   supportsAspectRatio,
   supportsDatePosition,
   type AspectRatio,
@@ -20,19 +21,26 @@ const isNew = idParam === 'new'
 
 useHead({ title: `${isNew ? '新建页面' : '编辑页面'} — GarfieldGod 后台` })
 
-const { data: listData } = await useFetch<{ pages: AdminNavPage[] }>('/api/admin/nav-pages', {
+// 页面清单不 await：它只喂父页面 / 聚合候选，不阻塞编辑区渲染
+const { data: listData } = useFetch<{ pages: AdminNavPage[] }>('/api/admin/nav-pages', {
   key: 'admin-nav-pages',
+  getCachedData: sessionCachedData,
 })
 
-const { data: detail } = await useAsyncData(`admin-nav-page:${idParam}`, async () => {
-  // 新建时也返回同形状的空对象：useAsyncData 在 SSR 下返回 null 会触发 Nuxt 警告
-  if (isNew) return { page: null as AdminNavPage | null }
-  try {
-    return await $fetch<{ page: AdminNavPage }>(`/api/admin/nav-pages/${idParam}`)
-  } catch (e) {
-    throw createError({ statusCode: 404, message: adminError(e, '页面不存在'), fatal: true })
-  }
-})
+// 详情保留 await：命中 hover 预热 / 会话缓存时同步返回，未命中则照旧等一次
+const { data: detail } = await useAsyncData(
+  `admin-nav-page:${idParam}`,
+  async () => {
+    // 新建时也返回同形状的空对象：useAsyncData 在 SSR 下返回 null 会触发 Nuxt 警告
+    if (isNew) return { page: null as AdminNavPage | null }
+    try {
+      return await $fetch<{ page: AdminNavPage }>(`/api/admin/nav-pages/${idParam}`)
+    } catch (e) {
+      throw createError({ statusCode: 404, message: adminError(e, '页面不存在'), fatal: true })
+    }
+  },
+  { getCachedData: sessionCachedData },
+)
 
 const source = detail.value?.page ?? null
 const allPages = computed(() => listData.value?.pages ?? [])
@@ -92,9 +100,10 @@ const previewUrl = computed(
   () =>
     `/api/nav-pages/${(source?.slug ?? '').split('/').filter(Boolean).map(encodeURIComponent).join('/')}`,
 )
-const { data: previewData } = await useFetch<NavPageDetail>(previewUrl, {
+const { data: previewData } = useFetch<NavPageDetail>(previewUrl, {
   key: `admin-page-preview:${idParam}`,
   immediate: !isNew && !!source?.slug,
+  getCachedData: sessionCachedData,
 })
 
 const previewPage = computed<NavPage>(() => ({
@@ -279,7 +288,12 @@ async function save() {
     }
 
     await $fetch(`/api/admin/nav-pages/${idParam}`, { method: 'PUT', body })
-    await refreshNuxtData('admin-nav-pages')
+    // 清单 / 详情 / 预览三个缓存槽都刷新，避免返回列表或再次打开本页时命中旧缓存
+    await Promise.all([
+      refreshNuxtData('admin-nav-pages'),
+      refreshNuxtData(`admin-nav-page:${idParam}`),
+      refreshNuxtData(`admin-page-preview:${idParam}`),
+    ])
     baseline.value = JSON.stringify(form)
     failed.value = false
     message.value = '已保存。'

@@ -29,6 +29,7 @@ import { DatabaseSync } from 'node:sqlite'
 import { dirname, join, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { checkTemplateRoots } from './check-template-roots.mjs'
+import { generateMissingThumbs } from './gen-thumbs.mjs'
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const MARKER = '.gg-static'
@@ -105,7 +106,12 @@ console.log(
   `[static] 枚举到 ${routeList.length} 条路由（页面 ${pageCount} + 文章 ${postCount} + 首页 + 孤儿页 ${ORPHAN_ROUTES.length}）`,
 )
 
-// ===== 2. 独立目录构建 =====
+// ===== 2. 补齐派生缩略图 =====
+// 卡片封面引用的是 <基名>.w720.webp 这类派生文件。静态站由文件系统直接提供图片，
+// 没有 /uploads 路由可回落原图，缺文件就是坏图，所以进产物前先把存量图补齐。
+await generateMissingThumbs(uploadsPath, { log: console.log })
+
+// ===== 3. 独立目录构建 =====
 // 构建前先验模板根节点：多根会让前台路由切换白屏，这种故障只在特定点击路径下暴露，
 // 不该等到部署上线后才被发现。
 const roots = checkTemplateRoots(rootDir)
@@ -143,7 +149,7 @@ if (!existsSync(join(publicDir, 'index.html'))) {
   fail(`未找到生成产物 ${publicDir}/index.html`)
 }
 
-// ===== 3. 发布目录：原子替换 =====
+// ===== 4. 发布目录：原子替换 =====
 // Nuxt 的 generate 结束时会把 dist 建成指向产物目录的软链接/目录联接；
 // 我们要的是带媒体的真实目录，所以先把这类链接移除（它指向的产物由本工具生成，可安全替换）。
 if (pathExists(distDir) && isLink(distDir)) {
@@ -206,7 +212,7 @@ try {
 }
 rmSync(backupDir, { recursive: true, force: true })
 
-// ===== 4. 校验与汇总 =====
+// ===== 5. 校验与汇总 =====
 const missing = routeList.filter((r) => !existsSync(routeToFile(distDir, r)))
 const { files, bytes } = measure(distDir)
 

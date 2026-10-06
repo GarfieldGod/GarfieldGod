@@ -2,6 +2,7 @@
 import { useSiteMeta, useNavPages, navPagePath, prefetchNavPage } from '~/composables/useSiteData'
 import type { NavPage } from '~/composables/useSiteData'
 import { coverSrc } from '~/utils/pageFormat'
+import { thumbSrc } from '~/utils/media'
 import { preloadRouteComponents } from '#app'
 
 const { data: meta } = await useSiteMeta()
@@ -83,6 +84,17 @@ const showCover = computed(() => currentPage.value?.showCover ?? false)
 const coverImageSrc = computed(
   () => coverSrc(currentPage.value?.coverImage) || DEFAULT_HOME_COVER,
 )
+// 封面是全宽大图，用 1600 档缩略图；取不到时 /uploads 路由会回落原图
+const coverThumbSrc = computed(() => thumbSrc(coverImageSrc.value, 1600))
+
+// 封面「准备好了再出现」：加载完成前透明，完成后淡入。
+// 这里没用 SmartImage——封面收起靠的是给这张图设 opacity: 0，
+// 而 SmartImage 用 animation 淡入会盖住那条规则（动画优先级高于普通声明）。
+const coverImg = ref<HTMLImageElement | null>(null)
+const coverReady = ref(false)
+onMounted(() => {
+  if (coverImg.value?.complete) coverReady.value = true
+})
 
 const socials = [
   { label: 'GitHub', href: 'https://github.com/GarfieldGod', img: '/media/github.svg' },
@@ -95,7 +107,16 @@ const socials = [
   <div class="site">
     <!-- 封面图：常驻 DOM，靠 is-collapsed 收起/展开，保证首页↔其他页可平滑过渡 -->
     <section class="site-cover" :class="{ 'is-collapsed': !showCover }">
-      <img class="site-cover__bg" :src="coverImageSrc" alt="" aria-hidden="true" :fetchpriority="isHome ? 'high' : 'low'" />
+      <img
+        ref="coverImg"
+        class="site-cover__bg"
+        :class="{ 'is-ready': coverReady }"
+        :src="coverThumbSrc"
+        alt=""
+        aria-hidden="true"
+        :fetchpriority="isHome ? 'high' : 'low'"
+        @load="coverReady = true"
+      />
       <div class="site-cover__scrim" />
     </section>
 
@@ -220,8 +241,11 @@ const socials = [
   height: 100%;
   object-fit: cover;
   object-position: 50% 70%;
-  transition: opacity 0.3s ease;
+  /* 加载完成前透明，完成后淡入（收起时下面那条规则会把时长压回 0.3s） */
+  opacity: 0;
+  transition: opacity 0.6s ease;
 }
+.site-cover__bg.is-ready { opacity: 1; }
 /* 原站 has-background-dim：黑色 50% 遮罩（保留色彩，仅压暗） */
 .site-cover__scrim {
   position: absolute;
@@ -231,7 +255,11 @@ const socials = [
   transition: opacity 0.3s ease;
 }
 /* 收起时只让图片与遮罩淡出，封面黑色底随高度归零自然消失 */
-.site-cover.is-collapsed .site-cover__bg,
+.site-cover.is-collapsed .site-cover__bg {
+  opacity: 0;
+  /* 收起要跟高度收缩同步，别用淡入那 0.6s */
+  transition: opacity 0.3s ease;
+}
 .site-cover.is-collapsed .site-cover__scrim {
   opacity: 0;
 }

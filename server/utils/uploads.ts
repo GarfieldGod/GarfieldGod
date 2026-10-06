@@ -78,6 +78,117 @@ export const MIME_BY_EXT: Record<string, string> = {
   '.mp3': 'audio/mpeg',
 }
 
+// ---------- 派生缩略图 ----------
+//
+// 卡片封面只用到 340×300 上下的尺寸，却常常要拉 1MB 的原图。上传时顺带在原图旁边
+// 生成两档 WebP（`基名.w720.webp` / `基名.w1600.webp`）：卡片引用缩略图，正文仍引用原图。
+// 缩略图是派生文件——不进媒体库列表、随原图改名/删除，也由 /uploads 路由兜底回落原图。
+
+export const THUMB_WIDTHS = [720, 1600] as const
+export type ThumbWidth = (typeof THUMB_WIDTHS)[number]
+
+// 可派生的源格式。gif 多为动图，派生后动画会丢；视频/音频本来就不是图片
+const THUMBABLE_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif'])
+
+// 派生文件识别：原图全名 + .w<数字>.webp
+const THUMB_NAME_RE = /\.w\d+\.webp$/i
+
+export function isThumbName(name: string): boolean {
+  return THUMB_NAME_RE.test(name)
+}
+
+// 命名接在原图全名之后（`photo.jpg` → `photo.jpg.w720.webp`）而不是替换扩展名，
+// 这样从派生文件名就能还原出原图全名，缺缩略图时才能回落原图
+export function thumbName(originalName: string, width: number): string {
+  return `${originalName}.w${width}.webp`
+}
+
+// 从派生缩略图路径还原原图路径；不是派生文件返回 null
+export function thumbOriginPath(path: string): string | null {
+  return THUMB_NAME_RE.test(path) ? path.replace(THUMB_NAME_RE, '') : null
+}
+
+function escapeRe(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+// Windows 上刚被 /uploads 路由读过（Nitro 的读流句柄还没释放）的文件，改名/删除会短暂
+// 报 EBUSY/EPERM。这类锁是瞬时的——退避重试几次即可；不重试就会留下「原图改了名、
+// 缩略图还叫旧名」的孤儿派生文件，媒体库里看不到、也永远不会被清理。
+// 退避到约 1 秒：客户端还在下载大图时句柄会多占一会儿，太短等于没重试。
+const TRANSIENT_FS_CODES = new Set(['EBUSY', 'EPERM', 'EACCES'])
+
+async function withFsRetry<T>(op: () => Promise<T>, attempts = 7): Promise<T> {
+  for (let i = 0; ; i += 1) {
+    try {
+      return await op()
+    } catch (e: any) {
+      if (i >= attempts - 1 || !TRANSIENT_FS_CODES.has(e?.code)) throw e
+      await new Promise((r) => setTimeout(r, Math.min(25 * 2 ** i, 250)))
+    }
+  }
+}
+
+// 某张原图对应的全部派生文件名（改名/删除时按这个模式连带处理）
+function thumbNameRe(originalName: string): RegExp {
+  return new RegExp(`^${escapeRe(originalName)}\\.w\\d+\\.webp$`, 'i')
+}
+
+// 生成缩略图，返回成功写出的张数。
+// 原图比目标宽度还小就不放大；失败只记 0，因为缩略图只是加速手段，
+// 缺了由 /uploads 路由回落原图，不能让上传本身失败。
+export async function generateThumbs(abs: string): Promise<number> {
+  if (!THUMBABLE_EXT.has(splitExt(abs).ext.toLowerCase())) return 0
+
+  const dir = dirname(abs)
+  const name = basename(abs)
+  let written = 0
+  try {
+    const sharp = (await import('sharp')).default
+    for (const width of THUMB_WIDTHS) {
+      await sharp(abs)
+        .resize({ width, withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toFile(join(dir, thumbName(name, width)))
+      written += 1
+    }
+  } catch {
+    return written
+  }
+  return written
+}
+
+// 删掉某张原图派生出来的全部缩略图
+export async function removeThumbs(abs: string): Promise<number> {
+  const dir = dirname(abs)
+  const re = thumbNameRe(basename(abs))
+  let removed = 0
+  for (const name of await readdir(dir).catch(() => [])) {
+    if (!re.test(name)) continue
+    await withFsRetry(() => rm(join(dir, name), { force: true }))
+    removed += 1
+  }
+  return removed
+}
+
+// 原图改名后，把派生缩略图一起改名，保持「缩略图紧挨原图」的关系
+async function renameThumbs(fromAbs: string, toAbs: string): Promise<void> {
+  const dir = dirname(fromAbs)
+  const fromName = basename(fromAbs)
+  const toName = basename(toAbs)
+  if (fromName === toName) return
+
+  const re = thumbNameRe(fromName)
+  for (const name of await readdir(dir).catch(() => [])) {
+    const match = re.exec(name)
+    if (!match) continue
+    const suffix = name.slice(fromName.length)
+    await withFsRetry(() => rename(join(dir, name), join(dir, `${toName}${suffix}`))).catch((e) => {
+      console.warn('[thumbs] rename failed', name, '->', `${toName}${suffix}`, e.code, e.message)
+    })
+  }
+}
+
 export interface MediaItem {
   url: string
   name: string
@@ -122,6 +233,8 @@ export async function listMedia(dir: string, urlPrefix: string): Promise<MediaIt
         await walk(join(current, entry.name), rel)
         continue
       }
+      // 派生缩略图对用户不可见：媒体库列表、删除预览的体积/数量都只算原图
+      if (isThumbName(entry.name)) continue
       const info = await stat(join(current, entry.name)).catch(() => null)
       if (!info) continue
       out.push({
@@ -193,7 +306,9 @@ export async function describeMedia(abs: string, url: string, rel: string): Prom
 export async function removeMediaFile(abs: string): Promise<boolean> {
   const info = await stat(abs).catch(() => null)
   if (!info?.isFile()) return false
-  await rm(abs, { force: true })
+  await withFsRetry(() => rm(abs, { force: true }))
+  // 原图没了，派生缩略图就没有意义，一并清掉
+  await removeThumbs(abs)
   return true
 }
 
@@ -209,7 +324,8 @@ export async function renameMediaFile(abs: string, wanted: string): Promise<stri
   const target = await uniqueFilePath(dir, `${base}${ext}`)
   if (resolve(target) === resolve(abs)) return abs
 
-  await rename(abs, target)
+  await withFsRetry(() => rename(abs, target))
+  await renameThumbs(abs, target)
   return target
 }
 

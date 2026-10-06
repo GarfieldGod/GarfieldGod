@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { sessionCachedData } from '~/composables/useSiteData'
+import { thumbSrc } from '~/utils/media'
+
 definePageMeta({ layout: 'admin' })
 useHead({ title: '独立媒体库 — GarfieldGod 后台' })
 
-const { data, refresh } = await useFetch<{ files: LibraryFile[] }>('/api/admin/media', { key: 'admin-media' })
+const { data, refresh } = useFetch<{ files: LibraryFile[] }>('/api/admin/media', {
+  key: 'admin-media',
+  getCachedData: sessionCachedData,
+})
 
 const uploading = ref(false)
 const dragOver = ref(false)
@@ -178,7 +184,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
             :title="isImage(f.name) ? `查看 ${f.name}` : f.name"
             @click="openViewer(f)"
           >
-            <img v-if="isImage(f.name)" class="ad-media__thumb" :src="f.url" :alt="f.name" loading="lazy" />
+            <SmartImage
+              v-if="isImage(f.name)"
+              class="ad-media__thumb"
+              :src="thumbSrc(f.url)"
+              :fallback="f.url"
+              :alt="f.name"
+            />
             <span v-else class="ad-media__thumb ad-media__thumb--file">{{ extOf(f.name) }}</span>
           </button>
           <span class="ad-media__badge" :class="{ 'is-quiet': !f.refPosts && !f.refPages }">

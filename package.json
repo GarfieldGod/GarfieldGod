@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "nuxt dev",
     "check:templates": "node scripts/check-template-roots.mjs",
+    "thumbs": "node scripts/gen-thumbs.mjs",
     "build": "npm run check:templates && nuxt build",
     "generate": "npm run check:templates && nuxt generate",
     "build:static": "node scripts/build-static.mjs",
@@ -16,6 +17,7 @@
   "dependencies": {
     "marked": "^18.0.14",
     "nuxt": "^3.15.4",
+    "sharp": "^0.35.5",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   }

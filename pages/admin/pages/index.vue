@@ -1,9 +1,14 @@
 <script setup lang="ts">
+import { prefetchAdminNavPage } from '~/composables/useAdmin'
+import { sessionCachedData } from '~/composables/useSiteData'
+
 definePageMeta({ layout: 'admin' })
 useHead({ title: '页面 — GarfieldGod 后台' })
 
-const { data, refresh } = await useFetch<{ pages: AdminNavPage[] }>('/api/admin/nav-pages', {
+const nuxtApp = useNuxtApp()
+const { data, refresh } = useFetch<{ pages: AdminNavPage[] }>('/api/admin/nav-pages', {
   key: 'admin-nav-pages',
+  getCachedData: sessionCachedData,
 })
 
 const busyId = ref<number | null>(null)
@@ -116,7 +121,12 @@ async function remove(page: AdminNavPage) {
               <td>
                 <div class="pg-name" :style="{ paddingLeft: `${row.depth * 20}px` }">
                   <span v-if="row.depth" class="pg-branch">└</span>
-                  <NuxtLink class="ad-table__title" :to="`/admin/pages/${row.page.id}`">
+                  <NuxtLink
+                    class="ad-table__title"
+                    :to="`/admin/pages/${row.page.id}`"
+                    @mouseenter="prefetchAdminNavPage(row.page.id, nuxtApp)"
+                    @focus="prefetchAdminNavPage(row.page.id, nuxtApp)"
+                  >
                     {{ row.page.title }}
                   </NuxtLink>
                   <span v-if="row.page.isHome" class="ad-badge">首页</span>

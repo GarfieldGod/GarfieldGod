@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { marked } from 'marked'
-import { resolvePostStyleOptions } from '~/composables/useSiteData'
+import { resolvePostStyleOptions, sessionCachedData } from '~/composables/useSiteData'
 import type { PostStyleOptions } from '~/composables/useSiteData'
 
 definePageMeta({ layout: 'admin' })
@@ -18,8 +18,9 @@ const ids = computed(() => {
     .filter((n) => Number.isInteger(n) && n > 0)
 })
 
-const { data: postsData } = await useFetch<{ posts: AdminPost[] }>('/api/admin/posts', {
+const { data: postsData } = useFetch<{ posts: AdminPost[] }>('/api/admin/posts', {
   key: 'admin-posts',
+  getCachedData: sessionCachedData,
 })
 
 const posts = computed(() => {
