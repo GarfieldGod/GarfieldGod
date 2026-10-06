@@ -45,7 +45,7 @@ const BULK_STYLES = Object.entries(POST_STYLE_LABELS)
   .map(([key, label]) => ({ key, label }))
 
 const TOC_SIDE_LABELS: Record<string, string> = { right: '右侧', left: '左侧' }
-const HERO_SIZE_LABELS: Record<string, string> = { compact: '紧凑', standard: '标准', tall: '加高' }
+const HERO_SIZE_LABELS: Record<string, string> = { compact: '紧凑', standard: '标准', tall: '加高', none: '无大图' }
 
 const styleHasSettings = computed(() => ['toc', 'magazine', 'cards'].includes(form.postStyle))
 const dirty = computed(() => form.comments !== KEEP || form.postStyle !== KEEP)
@@ -56,7 +56,12 @@ function styleOptionPatch(): Partial<PostStyleOptions> {
     case 'toc':
       return { tocSide: form.postStyleOptions.tocSide, tocProgress: form.postStyleOptions.tocProgress }
     case 'magazine':
-      return { heroSize: form.postStyleOptions.heroSize }
+      return {
+        heroSize: form.postStyleOptions.heroSize,
+        showByline: form.postStyleOptions.showByline,
+        dropCap: form.postStyleOptions.dropCap,
+        showLabel: form.postStyleOptions.showLabel,
+      }
     case 'cards':
       return { miniNav: form.postStyleOptions.miniNav, sectionNumbers: form.postStyleOptions.sectionNumbers }
     default:
@@ -298,19 +303,34 @@ const previewOptions = computed(() =>
             </template>
             <template v-else-if="form.postStyle === 'magazine'">
               <div class="ad-f c6">
-                <span>头图高度</span>
-                <div class="ad-seg ad-seg--block" style="max-width: 320px">
+                <span>头图挡位</span>
+                <div class="ad-seg ad-seg--block" style="max-width: 420px">
                   <button
                     v-for="(label, key) in HERO_SIZE_LABELS"
                     :key="key"
                     class="ad-seg__btn"
                     :class="{ 'is-on': form.postStyleOptions.heroSize === key }"
                     type="button"
-                    @click="form.postStyleOptions.heroSize = key as 'compact' | 'standard' | 'tall'"
+                    @click="form.postStyleOptions.heroSize = key as 'compact' | 'standard' | 'tall' | 'none'"
                   >
                     {{ label }}
                   </button>
                 </div>
+                <p class="ad-hint" style="margin: 0">选「无大图」时不显示封面带，标题区改由白卡顶端承载。</p>
+              </div>
+              <div class="ad-checks">
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.showByline" type="checkbox" />
+                  显示个人信息栏（作者 / 日期 / 阅读数）
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.dropCap" type="checkbox" />
+                  首字放大
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.showLabel" type="checkbox" />
+                  显示所属页面标签
+                </label>
               </div>
               <p class="ad-hint" style="margin: 0">头图沿用各篇文章自己的设置，批量不改图。</p>
             </template>

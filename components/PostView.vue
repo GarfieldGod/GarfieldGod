@@ -63,8 +63,10 @@ const lede = postPlainText(post.excerpt ?? '') || firstParagraphText(prepared.ht
 /** 所属页面串，用作各方案的分类标注 */
 const pageLabel = pages.map((p) => p.title).join(' · ') || '未分类'
 
-// 杂志大图：给首个段落打上 lead 类，用于首字下沉
-const magazineHtml = markLeadParagraph(prepared.html)
+// 杂志大图：首字下沉靠给首个段落打 lead 类实现，关掉这个开关就不打
+const magazineHtml = computed(() =>
+  styleOptions.dropCap ? markLeadParagraph(prepared.html) : prepared.html,
+)
 
 // ===== 方案 E：超链接（中转页） =====
 // 跳转目标：只放行 http / https。地址为空、协议不在白名单、或指向本站本文的，
@@ -383,7 +385,12 @@ async function submitComment() {
 
     <!-- ===== 方案 C：杂志大图 ===== -->
     <template v-else-if="postStyle === 'magazine'">
-      <section class="pg-hero" :class="`pg-hero--${styleOptions.heroSize}`">
+      <!-- 挡位 none：整条封面带不显示，标题区改由白卡顶端承载 -->
+      <section
+        v-if="styleOptions.heroSize !== 'none'"
+        class="pg-hero"
+        :class="`pg-hero--${styleOptions.heroSize}`"
+      >
         <div
           class="pg-hero__img"
           :style="styleOptions.heroImage ? { backgroundImage: `url(${thumbSrc(styleOptions.heroImage, 1600)})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined"
@@ -391,14 +398,20 @@ async function submitComment() {
         />
         <div class="pg-hero__scrim" aria-hidden="true" />
         <div class="pg-hero__inner">
-          <span class="pg-hero__chip">{{ pageLabel }}</span>
+          <span v-if="styleOptions.showLabel" class="pg-hero__chip">{{ pageLabel }}</span>
           <h1 class="pg-hero__title">{{ post.title }}</h1>
           <p v-if="lede" class="pg-hero__lede">{{ lede }}</p>
         </div>
       </section>
 
-      <article class="pg-sheet">
-        <div class="pg-byline">
+      <article class="pg-sheet" :class="{ 'pg-sheet--nocover': styleOptions.heroSize === 'none' }">
+        <template v-if="styleOptions.heroSize === 'none'">
+          <span v-if="styleOptions.showLabel" class="pg-nocover__chip">{{ pageLabel }}</span>
+          <h1 class="pg-nocover__title">{{ post.title }}</h1>
+          <p v-if="lede" class="pg-nocover__lede">{{ lede }}</p>
+        </template>
+
+        <div v-if="styleOptions.showByline" class="pg-byline">
           <span class="pg-byline__avatar" aria-hidden="true">G</span>
           <div class="pg-byline__id">
             <strong>Garfield God</strong>
@@ -1270,6 +1283,35 @@ async function submitComment() {
 }
 .pg-body--c :deep(pre) { padding: 18px 20px; }
 
+/* 挡位 none：没有封面带，标题区落到白卡顶端，白卡也不再上浮重叠 */
+.pg-sheet--nocover { margin-top: 32px; padding-top: clamp(30px, 4vw, 44px); }
+.pg-nocover__chip {
+  display: inline-block;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gg-ink);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 16px;
+}
+.pg-nocover__title {
+  font-family: var(--gg-serif);
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  font-weight: 400;
+  line-height: 1.16;
+  margin: 0 0 12px;
+  max-width: 20em;
+}
+.pg-nocover__lede {
+  font-size: 1.06rem;
+  line-height: 1.7;
+  color: var(--gg-inksoft);
+  margin: 0;
+  max-width: 40em;
+}
+
 /* ---------- 方案 D：分节卡片 ---------- */
 .post-style-cards { padding: 0; }
 .pg-mini {
@@ -1541,6 +1583,8 @@ async function submitComment() {
 }
 @media (max-width: 760px) {
   .pg-sheet { margin-top: -40px; border-radius: 12px; }
+  /* 无封面带时没有可上浮的对象，保持常规外边距 */
+  .pg-sheet--nocover { margin-top: 20px; }
   .pg-hero__inner { padding-bottom: 64px; }
   .pg-body--c { font-size: 1.05rem; }
 }

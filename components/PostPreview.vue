@@ -76,7 +76,9 @@ const lede = computed(() => firstParagraphText(prepared.value.html))
 const pageLabel = computed(() => props.pageLabels.join(' · ') || '未分类')
 
 // 杂志大图：首个段落打上 lead 类做首字下沉
-const magazineHtml = computed(() => markLeadParagraph(prepared.value.html))
+const magazineHtml = computed(() =>
+  styleOptions.value.dropCap ? markLeadParagraph(prepared.value.html) : prepared.value.html,
+)
 
 // 超链接：预览只是静态画布，所以只把中转页的外观摆出来，不挂倒计时也不真跳转
 const linkTarget = computed(() =>
@@ -202,7 +204,12 @@ const { el: stageEl } = usePreviewFit(1080)
 
       <!-- ===== 方案 C：杂志大图 ===== -->
       <template v-else-if="postStyle === 'magazine'">
-        <section class="pg-hero" :class="`pg-hero--${styleOptions.heroSize}`">
+        <!-- 挡位 none：整条封面带不显示，标题区改由白卡顶端承载 -->
+        <section
+          v-if="styleOptions.heroSize !== 'none'"
+          class="pg-hero"
+          :class="`pg-hero--${styleOptions.heroSize}`"
+        >
           <div
             class="pg-hero__img"
             :style="styleOptions.heroImage ? { backgroundImage: `url(${thumbSrc(styleOptions.heroImage, 1600)})` } : undefined"
@@ -210,14 +217,20 @@ const { el: stageEl } = usePreviewFit(1080)
           />
           <div class="pg-hero__scrim" aria-hidden="true" />
           <div class="pg-hero__inner">
-            <span class="pg-hero__chip">{{ pageLabel }}</span>
+            <span v-if="styleOptions.showLabel" class="pg-hero__chip">{{ pageLabel }}</span>
             <h1 class="pg-hero__title">{{ props.title || '未命名文章' }}</h1>
             <p v-if="lede" class="pg-hero__lede">{{ lede }}</p>
           </div>
         </section>
 
-        <article class="pg-sheet">
-          <div class="pg-byline">
+        <article class="pg-sheet" :class="{ 'pg-sheet--nocover': styleOptions.heroSize === 'none' }">
+          <template v-if="styleOptions.heroSize === 'none'">
+            <span v-if="styleOptions.showLabel" class="pg-nocover__chip">{{ pageLabel }}</span>
+            <h1 class="pg-nocover__title">{{ props.title || '未命名文章' }}</h1>
+            <p v-if="lede" class="pg-nocover__lede">{{ lede }}</p>
+          </template>
+
+          <div v-if="styleOptions.showByline" class="pg-byline">
             <span class="pg-byline__avatar" aria-hidden="true">G</span>
             <div class="pg-byline__id">
               <strong>Garfield God</strong>
@@ -914,6 +927,34 @@ const { el: stageEl } = usePreviewFit(1080)
   border-radius: 15px;
   padding: 0 48px 44px;
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.1);
+}
+/* 挡位 none：没有封面带，标题区落到白卡顶端，白卡也不再上浮重叠 */
+.pg-sheet--nocover { margin-top: 32px; padding-top: 44px; }
+.pg-nocover__chip {
+  display: inline-block;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gg-ink);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 16px;
+}
+.pg-nocover__title {
+  font-family: var(--gg-serif);
+  font-size: 3.1rem;
+  font-weight: 400;
+  line-height: 1.16;
+  margin: 0 0 12px;
+  max-width: 20em;
+}
+.pg-nocover__lede {
+  font-size: 1.06rem;
+  line-height: 1.7;
+  color: var(--gg-inksoft);
+  margin: 0;
+  max-width: 40em;
 }
 .pg-byline {
   display: flex;

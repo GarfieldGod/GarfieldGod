@@ -34,8 +34,14 @@ export interface PostStyleOptions {
   tocProgress: boolean
   /** 杂志大图：头图地址，留空时用渐变占位 */
   heroImage: string
-  /** 杂志大图：头图高度挡位 */
-  heroSize: 'compact' | 'standard' | 'tall'
+  /** 杂志大图：头图高度挡位；none 表示整条封面带不显示，标题区改由白卡顶端承载 */
+  heroSize: 'compact' | 'standard' | 'tall' | 'none'
+  /** 杂志大图：是否显示署名行（作者 / 日期 / 阅读数） */
+  showByline: boolean
+  /** 杂志大图：是否首字放大（首个段落的第一个字下沉） */
+  dropCap: boolean
+  /** 杂志大图：是否显示「所属页面」胶囊标注 */
+  showLabel: boolean
   /** 分节卡片：是否显示顶部迷你导航 */
   miniNav: boolean
   /** 分节卡片：是否显示「第 N 节」小节编号 */
@@ -51,6 +57,9 @@ export const POST_STYLE_OPTION_DEFAULTS: PostStyleOptions = {
   tocProgress: true,
   heroImage: '',
   heroSize: 'standard',
+  showByline: true,
+  dropCap: true,
+  showLabel: true,
   miniNav: true,
   sectionNumbers: true,
   linkUrl: '',
@@ -65,7 +74,13 @@ export function resolvePostStyleOptions(value?: Partial<PostStyleOptions> | null
     tocSide: o.tocSide === 'left' ? 'left' : 'right',
     tocProgress: o.tocProgress !== false,
     heroImage: typeof o.heroImage === 'string' ? o.heroImage : '',
-    heroSize: o.heroSize === 'compact' || o.heroSize === 'tall' ? o.heroSize : 'standard',
+    heroSize:
+      o.heroSize === 'compact' || o.heroSize === 'tall' || o.heroSize === 'none'
+        ? o.heroSize
+        : 'standard',
+    showByline: o.showByline !== false,
+    dropCap: o.dropCap !== false,
+    showLabel: o.showLabel !== false,
     miniNav: o.miniNav !== false,
     sectionNumbers: o.sectionNumbers !== false,
     linkUrl: typeof o.linkUrl === 'string' ? o.linkUrl : '',

@@ -134,7 +134,7 @@ const CONTENT_WIDTH_LABELS: Record<string, string> = {
 
 // 各方案自带的设置；「默认 / 经典单栏」沿用现有版式，没有额外设置
 const TOC_SIDE_LABELS: Record<string, string> = { right: '右侧', left: '左侧' }
-const HERO_SIZE_LABELS: Record<string, string> = { compact: '紧凑', standard: '标准', tall: '加高' }
+const HERO_SIZE_LABELS: Record<string, string> = { compact: '紧凑', standard: '标准', tall: '加高', none: '无大图' }
 // 出现「设置面板」的方案：选中它们时才展开对应的设置组
 const STYLES_WITH_SETTINGS = ['toc', 'magazine', 'cards', 'link']
 const styleHasSettings = computed(() => STYLES_WITH_SETTINGS.includes(form.postStyle))
@@ -489,24 +489,25 @@ async function remove() {
               </div>
             </template>
 
-            <!-- 杂志大图：头图高度 + 头图地址 -->
+            <!-- 杂志大图：头图挡位 + 头图地址 + 内容卡片开关 -->
             <template v-else-if="form.postStyle === 'magazine'">
               <div class="ad-f c6">
-                <span>头图高度</span>
-                <div class="ad-seg ad-seg--block" style="max-width: 320px">
+                <span>头图挡位</span>
+                <div class="ad-seg ad-seg--block" style="max-width: 420px">
                   <button
                     v-for="(label, key) in HERO_SIZE_LABELS"
                     :key="key"
                     type="button"
                     class="ad-seg__btn"
                     :class="{ 'is-on': form.postStyleOptions.heroSize === key }"
-                    @click="form.postStyleOptions.heroSize = key as 'compact' | 'standard' | 'tall'"
+                    @click="form.postStyleOptions.heroSize = key as 'compact' | 'standard' | 'tall' | 'none'"
                   >
                     {{ label }}
                   </button>
                 </div>
+                <p class="ad-hint" style="margin: 0">选「无大图」时不显示封面带，标题区改由白卡顶端承载。</p>
               </div>
-              <div class="ad-f c6">
+              <div v-if="form.postStyleOptions.heroSize !== 'none'" class="ad-f c6">
                 <span>头图地址</span>
                 <div class="ad-pick-row">
                   <input
@@ -517,6 +518,20 @@ async function remove() {
                   />
                   <button class="ad-btn ad-btn--sm" type="button" @click="picker = 'hero'">从媒体库选择</button>
                 </div>
+              </div>
+              <div class="ad-checks">
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.showByline" type="checkbox" />
+                  显示个人信息栏（作者 / 日期 / 阅读数）
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.dropCap" type="checkbox" />
+                  首字放大
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.showLabel" type="checkbox" />
+                  显示所属页面标签
+                </label>
               </div>
             </template>
 

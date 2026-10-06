@@ -86,7 +86,7 @@ const CONTENT_WIDTH_LABELS: Record<string, string> = {
   narrow: '窄幅',
 }
 const TOC_SIDE_LABELS: Record<string, string> = { right: '右侧', left: '左侧' }
-const HERO_SIZE_LABELS: Record<string, string> = { compact: '紧凑', standard: '标准', tall: '加高' }
+const HERO_SIZE_LABELS: Record<string, string> = { compact: '紧凑', standard: '标准', tall: '加高', none: '无大图' }
 const STYLES_WITH_SETTINGS = ['toc', 'magazine', 'cards', 'link']
 const styleHasSettings = computed(() => STYLES_WITH_SETTINGS.includes(form.postStyle))
 const widthSettingVisible = computed(() => form.postStyle === '' || form.postStyle === 'classic')
@@ -536,23 +536,38 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', beforeUnload))
             </template>
             <template v-else-if="form.postStyle === 'magazine'">
               <div class="ad-f c6">
-                <span>头图高度</span>
-                <div class="ad-seg ad-seg--block" style="max-width: 320px">
+                <span>头图挡位</span>
+                <div class="ad-seg ad-seg--block" style="max-width: 420px">
                   <button
                     v-for="(label, key) in HERO_SIZE_LABELS"
                     :key="key"
                     type="button"
                     class="ad-seg__btn"
                     :class="{ 'is-on': form.postStyleOptions.heroSize === key }"
-                    @click="form.postStyleOptions.heroSize = key as 'compact' | 'standard' | 'tall'"
+                    @click="form.postStyleOptions.heroSize = key as 'compact' | 'standard' | 'tall' | 'none'"
                   >
                     {{ label }}
                   </button>
                 </div>
+                <p class="ad-hint" style="margin: 0">选「无大图」时不显示封面带，标题区改由白卡顶端承载。</p>
               </div>
               <div class="ad-f c6">
                 <span>头图地址</span>
                 <input class="ad-input is-readonly" type="text" value="批量导入不设置头图" readonly />
+              </div>
+              <div class="ad-checks">
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.showByline" type="checkbox" />
+                  显示个人信息栏（作者 / 日期 / 阅读数）
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.dropCap" type="checkbox" />
+                  首字放大
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.showLabel" type="checkbox" />
+                  显示所属页面标签
+                </label>
               </div>
             </template>
             <template v-else-if="form.postStyle === 'cards'">
