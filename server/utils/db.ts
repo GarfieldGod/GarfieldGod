@@ -25,7 +25,9 @@ CREATE TABLE IF NOT EXISTS posts (
   post_style    TEXT NOT NULL DEFAULT '',
   post_style_options TEXT NOT NULL DEFAULT '{}',
   -- 是否允许留言：关掉后前台不出现留言面板，接口也会拒收
-  allow_comments INTEGER NOT NULL DEFAULT 1
+  allow_comments INTEGER NOT NULL DEFAULT 1,
+  -- 文章背景音乐：歌单里某一首的音频地址，空串表示没有
+  bgm_src TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_posts_date ON posts(date DESC);
 
@@ -202,6 +204,8 @@ function migrate(db: DatabaseSync) {
   addColumn(db, 'posts', 'post_style_options', "TEXT NOT NULL DEFAULT '{}'")
   // 是否允许留言：默认允许，老文章补列后行为不变
   addColumn(db, 'posts', 'allow_comments', 'INTEGER NOT NULL DEFAULT 1')
+  // 文章背景音乐：默认没有，老文章补列后行为不变
+  addColumn(db, 'posts', 'bgm_src', "TEXT NOT NULL DEFAULT ''")
   // 索引依赖 status 列，必须等补列完成后再建
   db.exec('CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status)')
 

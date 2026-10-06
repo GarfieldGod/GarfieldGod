@@ -34,6 +34,8 @@ export interface AdminPost {
   postStyleOptions: PostStyleOptions
   /** 是否允许留言 */
   allowComments: boolean
+  /** 背景音乐：歌单里某一首的音频地址，空串表示没有 */
+  bgmSrc: string
   views: number
   commentCount: number
 }
@@ -219,6 +221,8 @@ export interface PostPayload {
   postStyleOptions?: PostStyleOptions
   /** 是否允许留言；缺省视为允许 */
   allowComments?: boolean
+  /** 背景音乐：歌单里某一首的音频地址，空串表示没有 */
+  bgmSrc?: string
 }
 
 export function useAdminSession() {

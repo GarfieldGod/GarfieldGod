@@ -1,4 +1,5 @@
 import { useDb } from './db'
+import { normalizeMediaSrc } from '../../utils/media'
 
 export interface PostRow {
   id: number
@@ -16,6 +17,7 @@ export interface PostRow {
   post_style: string
   post_style_options: string
   allow_comments: number
+  bgm_src: string
 }
 
 /** 文章样式方案的附加设置；各方案各取所需，未用到的字段保持默认即可 */
@@ -143,6 +145,8 @@ export interface PostDTO {
   postStyleOptions: PostStyleOptions
   /** 是否允许留言：false 时前台不显示留言面板，接口也会拒收 */
   allowComments: boolean
+  /** 背景音乐：歌单里某一首的音频地址，空串表示没有 */
+  bgmSrc: string
 }
 
 export interface CommentDTO {
@@ -179,6 +183,8 @@ function toPostDTO(row: PostRow, pages: PageRefDTO[], tags: TagRefDTO[]): PostDT
     postStyleOptions: parsePostStyleOptions(row.post_style_options),
     // 老库补列前读到的可能是 undefined，一律按「允许留言」处理，与默认值一致
     allowComments: row.allow_comments !== 0,
+    // 出口统一规范化：老数据可能少了开头的斜杠，那样前台会按相对当前文章解析而 404
+    bgmSrc: normalizeMediaSrc(row.bgm_src ?? ''),
   }
 }
 

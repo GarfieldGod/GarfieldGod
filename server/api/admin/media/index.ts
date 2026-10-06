@@ -65,8 +65,9 @@ export default defineEventHandler(async (event) => {
     return {
       files: (await listMedia(libraryDir(), '/uploads/library')).map((f) => ({
         ...f,
-        refPosts: countPostRefs(refs, f.name),
-        refPages: hasPageRef(refs, f.name),
+        // 按「库内相对路径 + 文件名」两路匹配，避免同名文件互相串引用
+        refPosts: countPostRefs(refs, f.name, f.path),
+        refPages: hasPageRef(refs, f.name, f.path),
       })),
     }
   }

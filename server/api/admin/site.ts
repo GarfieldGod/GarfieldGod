@@ -1,3 +1,5 @@
+import { normalizeMediaSrc } from '../../../utils/media'
+
 export default defineEventHandler(async (event) => {
   const method = getMethod(event)
 
@@ -34,7 +36,9 @@ function normalizePlaylist(value: unknown): PlaylistEntry[] {
   for (const item of value.slice(0, 50)) {
     if (!item || typeof item !== 'object') continue
     const raw = item as Record<string, unknown>
-    const src = typeof raw.src === 'string' ? raw.src.trim().slice(0, 500) : ''
+    // 顺手规范化站内地址：后台是手填输入框，很容易漏掉开头的斜杠，
+    // 那样音频元素会按相对当前文章的路径去取，必然 404
+    const src = normalizeMediaSrc(typeof raw.src === 'string' ? raw.src.slice(0, 500) : '')
     if (!src) continue
     out.push({
       title: (typeof raw.title === 'string' ? raw.title.trim().slice(0, 120) : '') || '未命名曲目',

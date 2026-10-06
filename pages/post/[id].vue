@@ -32,6 +32,17 @@ watch(error, (e) => {
 
 const post = computed(() => data.value?.post)
 
+// 进文章页请求播放它的背景音乐：先试一次自动播放，被浏览器拦下时由右下角播放器
+// 展开气泡询问。放在挂载之后触发（而不是 setup 期），避免在水合阶段改动播放器状态
+// 造成水合不匹配；客户端切到另一篇文章时由 watch 兜住。
+const player = useAudioPlayer()
+function requestPostBgm() {
+  const p = post.value
+  if (p) player.requestBgm(`post:${p.id}`, p.bgmSrc ?? '')
+}
+watch(post, requestPostBgm)
+onMounted(requestPostBgm)
+
 // 标签页标题：文章名 — 站名（站名独立于导航栏「名称」，来自「站点信息」，后台可改）。
 // site-meta 由 layout 取过，这里命中缓存，不会多一次往返。
 const { data: meta } = await useSiteMeta()

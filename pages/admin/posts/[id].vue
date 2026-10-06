@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { marked } from 'marked'
+import { renderMarkdown } from '~/utils/markdown'
 import { sessionCachedData } from '~/composables/useSiteData'
 import type { TagRef } from '~/composables/useSiteData'
 
@@ -78,7 +78,13 @@ const form = reactive({
   postStyleOptions: resolvePostStyleOptions(source?.postStyleOptions),
   // 是否允许留言：默认允许，关掉后前台整块留言面板都不出现
   allowComments: source?.allowComments ?? true,
+  // 背景音乐：站点歌单里某一首的音频地址，空串表示没有
+  bgmSrc: source?.bgmSrc ?? '',
 })
+
+// 背景音乐候选来自站点歌单（后台「站点信息」里维护），只列有音频地址的曲目
+const { data: metaData } = useSiteMeta()
+const bgmOptions = computed(() => (metaData.value?.playlist ?? []).filter((t) => t.src))
 
 const pageTitle = computed(() => {
   const map = new Map<number, string>()
@@ -142,7 +148,7 @@ const styleHasSettings = computed(() => STYLES_WITH_SETTINGS.includes(form.postS
 const widthSettingVisible = computed(() => form.postStyle === '' || form.postStyle === 'classic')
 
 const previewHtml = computed(() =>
-  form.format === 'markdown' ? (marked.parse(form.content, { async: false }) as string) : form.content,
+  form.format === 'markdown' ? renderMarkdown(form.content) : form.content,
 )
 
 // ===== 右栏实时预览 =====
@@ -158,18 +164,26 @@ function toggleTag(id: number) {
   else form.tagIds.splice(i, 1)
 }
 
+// 插入的是块级内容（图片），前后各留一个空行：Markdown 里紧跟 HTML 块（如 Gutenberg 的
+// <figure>）的 ![](...) 会被当成 HTML 原文、渲染不出图片，隔开空行才会成为独立段落。
 function insertAtCursor(text: string) {
   const el = textarea.value
-  if (!el) {
-    form.content += `\n${text}\n`
-    return
-  }
-  const start = el.selectionStart ?? form.content.length
-  const end = el.selectionEnd ?? start
-  form.content = `${form.content.slice(0, start)}${text}${form.content.slice(end)}`
+  const value = form.content
+  const start = el ? (el.selectionStart ?? value.length) : value.length
+  const end = el ? (el.selectionEnd ?? start) : start
+  const before = value.slice(0, start)
+  const after = value.slice(end)
+
+  const lead = before === '' || /\n[ \t]*\n[ \t]*$/.test(before) ? '' : before.endsWith('\n') ? '\n' : '\n\n'
+  const tail = after === '' || /^[ \t]*\n[ \t]*\n/.test(after) ? '' : after.startsWith('\n') ? '\n' : '\n\n'
+
+  form.content = `${before}${lead}${text}${tail}${after}`
+  const cursor = before.length + lead.length + text.length
+
+  if (!el) return
   nextTick(() => {
     el.focus()
-    el.selectionStart = el.selectionEnd = start + text.length
+    el.selectionStart = el.selectionEnd = cursor
   })
 }
 
@@ -227,6 +241,7 @@ async function save() {
       postStyle: form.postStyle,
       postStyleOptions: form.postStyleOptions,
       allowComments: form.allowComments,
+      bgmSrc: form.bgmSrc,
     }
 
     if (isNew) {
@@ -620,6 +635,25 @@ async function remove() {
           <p v-else class="ad-hint" style="margin: 0 0 16px">
             当前方案的正文行宽由版式自身决定（目录栏 / 杂志大图 / 分节卡片 / 超链接），「正文宽度」不再参与。
           </p>
+
+          <!-- 背景音乐：从站点歌单里挑一首，进入文章页由右下角播放器播放 -->
+          <div class="ad-f c6" style="margin-bottom: 16px">
+            <span>背景音乐</span>
+            <select v-model="form.bgmSrc" class="ad-select" style="max-width: 480px">
+              <option value="">无背景音乐</option>
+              <option v-for="t in bgmOptions" :key="t.src" :value="t.src">
+                {{ t.title }}{{ t.artist ? ` — ${t.artist}` : '' }}
+              </option>
+            </select>
+            <p class="ad-hint" style="margin: 0">
+              <template v-if="bgmOptions.length">
+                选一首歌单里的曲子作为本文背景音乐。进入文章页会先尝试自动播放；被浏览器拦下时，右下角播放器会展开气泡询问是否播放。
+              </template>
+              <template v-else>
+                歌单还是空的，先到「站点信息 → 悬浮播放器」添加曲目。
+              </template>
+            </p>
+          </div>
 
           <!-- 单栏源码编辑：渲染效果统一看右栏「效果预览」，不再内嵌第二个预览框 -->
           <div class="ad-editor">

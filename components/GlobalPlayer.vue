@@ -6,9 +6,11 @@ import type { PlayerTrack } from '~/composables/useSiteData'
 // 另外浏览器禁止有声自动播放，所以这里全部由点击驱动，不做「进站即播」。
 const { data: meta } = useSiteMeta()
 const player = useAudioPlayer()
-const { index, playing, expanded, progress, elapsed, duration, volume, current } = player
+const route = useRoute()
+const { index, playing, expanded, progress, elapsed, duration, volume, bgmPrompt, current } = player
 
 const audioEl = ref<HTMLAudioElement | null>(null)
+const rootEl = ref<HTMLElement | null>(null)
 
 const playlist = computed<PlayerTrack[]>(() => {
   const list = meta.value?.playlist
@@ -20,32 +22,50 @@ const visible = computed(() => meta.value?.playerEnabled !== false && playlist.v
 
 watch(playlist, (list) => player.setTracks(list), { immediate: true })
 
+// 真正调 play() 只在这一处：换曲与播放状态两个入口都收敛到这里。
+// 成功就回报「自动播放完成」，被浏览器拦下就回报「被拦下」——进文章页试放背景音乐时，
+// 后者会触发左侧气泡询问用户；用户手动点播时没有 pending，这两个回报都是空操作。
+async function startPlayback() {
+  const a = audioEl.value
+  if (!a || !playing.value) return
+  try {
+    await a.play()
+    player.bgmStarted()
+  } catch (e: any) {
+    playing.value = false
+    // 只有「浏览器不允许自动播放」才值得问用户要不要播。
+    // 地址写错、文件缺失、格式不支持同样会让 play() 失败，那种情况弹气泡也没用，
+    // 只会让人以为点了就能放，所以只在 NotAllowedError 时提示。
+    if (e?.name === 'NotAllowedError') player.bgmBlocked()
+    else if (e?.name) console.warn('[player] 播放失败', e.name, a.currentSrc || a.src)
+  }
+}
+
+// 离开当前文章后，背景音乐询问气泡就不该继续挂着了。
+// 气泡是全局状态，切页不会自己消失——如果这篇没播也没关就跳走，会一直停在右下角。
+watch(() => route.path, () => player.dismissBgm())
+
 // 换曲：src 由模板绑定跟着换，这里只负责「本来在播就接着播」
 // flush post 是必须的——要等 DOM 把新的 src 写上去再调 play()
+watch(current, () => startPlayback(), { flush: 'post' })
+
+// 播放状态是唯一真源：任何入口只改这个值，真正调 play/pause 只在这一处。
+// 同样 flush post：切曲时先让 DOM 把新 src 写上去，避免误播上一首。
 watch(
-  current,
-  async () => {
+  playing,
+  (v) => {
     const a = audioEl.value
-    if (!a || !playing.value) return
-    await a.play().catch(() => {
-      playing.value = false
-    })
+    if (!a) return
+    if (v) {
+      // 用户一旦开始播放（气泡点播或手动点播），询问气泡就没必要留着了
+      bgmPrompt.value = false
+      startPlayback()
+    } else {
+      a.pause()
+    }
   },
   { flush: 'post' },
 )
-
-// 播放状态是唯一真源：任何入口只改这个值，真正调 play/pause 只在这一处
-watch(playing, async (v) => {
-  const a = audioEl.value
-  if (!a) return
-  if (v) {
-    await a.play().catch(() => {
-      playing.value = false
-    })
-  } else {
-    a.pause()
-  }
-})
 
 watch(
   volume,
@@ -59,7 +79,21 @@ onMounted(() => {
   const a = audioEl.value
   if (!a) return
   a.volume = volume.value
+  // 水合后 playing 可能已经是 true（进文章页请求了背景音乐），但页面 setup 期 ref 还没就绪，
+  // 那次 play() 被跳过了，这里补一次
+  if (playing.value) startPlayback()
 })
+
+// 点面板以外的地方自动收起：面板是浮层，不收起来会一直压着正文。
+// 用 pointerdown 而不是 click——正文里按下鼠标准备拖选文字时也能顺带收起，更接近原生浮层。
+function onDocPointerDown(e: PointerEvent) {
+  if (!expanded.value) return
+  const el = rootEl.value
+  if (el && !el.contains(e.target as Node)) expanded.value = false
+}
+
+onMounted(() => document.addEventListener('pointerdown', onDocPointerDown, true))
+onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocPointerDown, true))
 
 function fmt(s: number) {
   const v = Number.isFinite(s) && s > 0 ? s : 0
@@ -118,7 +152,7 @@ function onEnded() {
 </script>
 
 <template>
-  <div v-if="visible" class="gp" :class="{ 'is-open': expanded }">
+  <div v-if="visible" ref="rootEl" class="gp" :class="{ 'is-open': expanded }">
     <!-- 音频元素常驻，切页时不会被卸载，音乐因此可以连续播放 -->
     <audio
       ref="audioEl"
@@ -131,6 +165,19 @@ function onEnded() {
       @pause="playing = false"
       @ended="onEnded"
     />
+
+    <!-- 背景音乐询问：从悬浮球左侧展开，点播放或关掉后消失 -->
+    <div v-if="bgmPrompt && !expanded" class="gp__prompt" role="dialog" aria-label="背景音乐">
+      <button class="gp__prompt-x" type="button" aria-label="关闭提示" @click="player.dismissBgm()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M4.5 4.5l7 7M11.5 4.5l-7 7" />
+        </svg>
+      </button>
+      <p class="gp__prompt-text">这篇文章有背景音乐，要播放吗？</p>
+      <button class="gp__prompt-play" type="button" aria-label="播放背景音乐" @click="player.acceptBgm()">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z" /></svg>
+      </button>
+    </div>
 
     <div class="gp__panel" :aria-hidden="!expanded">
       <div class="gp__top">
@@ -268,6 +315,95 @@ function onEnded() {
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
   mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
   pointer-events: none;
+}
+
+/* ===== 背景音乐询问气泡：贴着悬浮球左侧展开 ===== */
+.gp__prompt {
+  position: absolute;
+  right: 68px;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 250px;
+  padding: 14px;
+  background: #fff;
+  color: var(--gg-ink);
+  border: 1px solid var(--gg-border);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+  /* 从右侧（播放器一侧）冒出来、向左铺开 */
+  transform-origin: right center;
+  animation: gp-prompt-in 0.2s ease-out;
+}
+@keyframes gp-prompt-in {
+  from {
+    opacity: 0;
+    transform: translateX(14px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+/* 关闭的叉放在左上角：气泡是从播放器左边长出来的，出口在这一侧 */
+.gp__prompt-x {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--gg-muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.gp__prompt-x:hover {
+  background: var(--gg-surface-2);
+  color: var(--gg-ink);
+}
+.gp__prompt-x svg {
+  width: 11px;
+  height: 11px;
+  display: block;
+}
+/* 文案在左、播放按钮在右，横向排一行（不是上下堆叠） */
+.gp__prompt-text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  /* 让开左上角的关闭按钮 */
+  padding-left: 20px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.gp__prompt-play {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.gp__prompt-play:hover {
+  transform: scale(1.07);
+}
+.gp__prompt-play svg {
+  width: 15px;
+  height: 15px;
 }
 
 /* ===== 展开面板 ===== */
@@ -491,12 +627,18 @@ function onEnded() {
   .gp__panel {
     width: calc(100vw - 28px);
   }
+  .gp__prompt {
+    width: min(200px, calc(100vw - 100px));
+  }
 }
 /* 偏好减少动效：不做缩放淡入 */
 @media (prefers-reduced-motion: reduce) {
   .gp__panel,
   .gp__ball {
     transition: none;
+  }
+  .gp__prompt {
+    animation: none;
   }
 }
 </style>

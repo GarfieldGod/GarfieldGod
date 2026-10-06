@@ -14,5 +14,11 @@ export default defineEventHandler(() => {
       playlist: [],
       playerEnabled: true,
     }
-  return JSON.parse(row.value)
+  // 歌单地址在这里统一规范化：老数据可能存着漏掉开头斜杠的写法，
+  // 前台直接当音频 src 用会解析成相对当前文章的路径而 404
+  try {
+    return withNormalizedPlaylist(JSON.parse(row.value))
+  } catch {
+    return { playlist: [], playerEnabled: true }
+  }
 })

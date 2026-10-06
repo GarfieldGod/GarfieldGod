@@ -165,6 +165,7 @@ function postPayload(post: AdminPost, overrides: Partial<PostPayload> = {}): Pos
     postStyle: post.postStyle,
     postStyleOptions: post.postStyleOptions,
     allowComments: post.allowComments,
+    bgmSrc: post.bgmSrc,
     ...overrides,
   }
 }

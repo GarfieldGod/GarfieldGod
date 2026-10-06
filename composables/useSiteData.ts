@@ -126,6 +126,8 @@ export interface Post {
   postStyleOptions?: PostStyleOptions
   /** 是否允许留言：false 时前台不显示留言面板 */
   allowComments?: boolean
+  /** 背景音乐：歌单里某一首的音频地址，空串表示没有 */
+  bgmSrc?: string
   /** 仅文章详情接口返回：按 format 在服务端渲染好的正文 */
   html?: string
 }

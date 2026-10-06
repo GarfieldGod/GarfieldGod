@@ -2,6 +2,7 @@
 // 只读查询沿用 content.ts，这里只负责「会改数据」的部分。
 import { createError } from 'h3'
 import { useDb } from './db'
+import { normalizeMediaSrc } from '../../utils/media'
 import { attachPages, normalizePostStyleOptions, type PostDTO, type PostRow } from './content'
 import {
   PAGE_LAYOUTS,
@@ -56,6 +57,8 @@ export interface PostInput {
   postStyleOptions?: unknown
   /** 是否允许留言；缺省视为允许 */
   allowComments?: boolean
+  /** 背景音乐：歌单里某一首的音频地址，空串表示没有 */
+  bgmSrc?: string
 }
 
 function normalizeTagIds(tags: unknown): number[] {
@@ -77,6 +80,12 @@ export function normalizeContentWidth(value: unknown): string {
 
 export function normalizePostStyle(value: unknown): string {
   return POST_STYLES.includes(value as any) ? String(value) : ''
+}
+
+/** 背景音乐只存音频地址；长度与站点歌单的地址上限保持一致 */
+export function normalizeBgmSrc(value: unknown): string {
+  // 顺手补齐站内地址开头漏掉的斜杠：否则前台按相对当前文章解析，音频必然加载失败
+  return typeof value === 'string' ? normalizeMediaSrc(value.slice(0, 500)) : ''
 }
 
 export function parsePostInput(body: any): PostInput {
@@ -112,6 +121,7 @@ export function parsePostInput(body: any): PostInput {
     postStyleOptions: normalizePostStyleOptions(body?.postStyleOptions),
     // 与 navVisible 同样的写法：缺省即「允许」，只有明确传 false 才关掉
     allowComments: body?.allowComments !== false,
+    bgmSrc: normalizeBgmSrc(body?.bgmSrc),
   }
 }
 
@@ -221,8 +231,8 @@ export function createPost(input: PostInput): AdminPost {
   try {
     const info = db
       .prepare(
-        `INSERT INTO posts (slug, title, date, modified, link, content, excerpt, featured, status, format, content_width, post_style, post_style_options, allow_comments)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO posts (slug, title, date, modified, link, content, excerpt, featured, status, format, content_width, post_style, post_style_options, allow_comments, bgm_src)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .run(
         null,
@@ -239,6 +249,7 @@ export function createPost(input: PostInput): AdminPost {
         postStyle,
         postStyleOptions,
         input.allowComments === false ? 0 : 1,
+        normalizeBgmSrc(input.bgmSrc),
       )
     const id = Number(info.lastInsertRowid)
     setPostPages(id, pageIds)
@@ -272,7 +283,7 @@ export function updatePost(id: number, input: PostInput): AdminPost | null {
     db.prepare(
       `UPDATE posts SET title = ?, date = ?, modified = ?, content = ?, excerpt = ?, featured = ?,
                         status = ?, format = ?, content_width = ?, post_style = ?, post_style_options = ?,
-                        allow_comments = ? WHERE id = ?`,
+                        allow_comments = ?, bgm_src = ? WHERE id = ?`,
     ).run(
       input.title,
       input.date,
@@ -286,6 +297,7 @@ export function updatePost(id: number, input: PostInput): AdminPost | null {
       postStyle,
       postStyleOptions,
       input.allowComments === false ? 0 : 1,
+      normalizeBgmSrc(input.bgmSrc),
       id,
     )
     setPostPages(id, pageIds)
@@ -357,13 +369,30 @@ export function deleteComment(id: number): boolean {
   return useDb().prepare('DELETE FROM comments WHERE id = ?').run(id).changes > 0
 }
 
+/**
+ * 站点信息出口统一规范化歌单地址。
+ * 老数据里可能存着漏掉开头斜杠的写法（uploads/...），前台直接拿去当音频 src 会被
+ * 解析成「相对当前文章」的路径而 404；写入口已经会补，这里兜住历史数据与所有读取方。
+ */
+export function withNormalizedPlaylist(meta: Record<string, unknown>): Record<string, unknown> {
+  if (!Array.isArray(meta.playlist)) return meta
+  return {
+    ...meta,
+    playlist: meta.playlist.map((track) => {
+      if (!track || typeof track !== 'object') return track
+      const t = track as Record<string, unknown>
+      return typeof t.src === 'string' ? { ...t, src: normalizeMediaSrc(t.src) } : track
+    }),
+  }
+}
+
 export function getSiteMeta(): Record<string, unknown> {
   const row = useDb().prepare("SELECT value FROM site_meta WHERE key = 'site'").get() as
     | { value: string }
     | undefined
   if (!row) return {}
   try {
-    return JSON.parse(row.value)
+    return withNormalizedPlaylist(JSON.parse(row.value))
   } catch {
     return {}
   }

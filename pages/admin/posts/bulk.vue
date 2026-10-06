@@ -88,6 +88,8 @@ function buildPayload(p: AdminPost): PostPayload {
     postStyle: p.postStyle,
     postStyleOptions: p.postStyleOptions,
     allowComments: p.allowComments,
+    // 批量编辑不动背景音乐，但整篇覆盖必须原样回传，否则会被清空
+    bgmSrc: p.bgmSrc,
   }
   if (form.comments !== KEEP) payload.allowComments = form.comments === 'allow'
   if (form.postStyle !== KEEP) {
