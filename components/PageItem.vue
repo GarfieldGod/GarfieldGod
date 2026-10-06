@@ -25,8 +25,19 @@ const showCover = computed(() => fields.value.cover !== false && !!props.post.fe
 
 // 封面地址：老数据是裸文件名、新上传是 /uploads/... 完整路径，交给 coverSrc 统一成可用地址
 const coverUrl = computed(() => coverSrc(props.post.featured))
-// 卡片只显示几百像素宽，取缩略图；原图留给正文，取不到时 SmartImage 会回落
-const coverThumb = computed(() => thumbSrc(coverUrl.value))
+
+// 只有「叠加卡」与「网格卡」会把封面铺满整张卡，卡宽随容器与列数变化。
+// 容器内容宽约 1050px（--gg-max 1100 减去左右内边距），单列时整卡就有这么宽；
+// 720 档缩略图铺上去等于放大近 1.5 倍，在 2 倍屏上要 2100px，实际放大近 3 倍，会明显发虚。
+// 所以按估算显示宽度选档：宽过 520px 的卡取 1600 档；其余卡型（图坑本身只有 170–300px）
+// 与多列窄卡继续用 720 档，不为看不清的细节多付体积。
+const coverWidth = computed<720 | 1600>(() => {
+  if (cardType.value !== 'overlay' && cardType.value !== 'mosaic') return 720
+  const cols = Math.max(1, props.page.columns || 1)
+  return 1050 / cols >= 520 ? 1600 : 720
+})
+// 原图留给正文；缺对应档位时由 /uploads 路由回落原图，SmartImage 再兜一层
+const coverThumb = computed(() => thumbSrc(coverUrl.value, coverWidth.value))
 
 const dateText = computed(() => (fields.value.date ? formatDateCn(props.post.date) : ''))
 
