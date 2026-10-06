@@ -148,7 +148,10 @@ function setTag(tag: string) {
 .cat-page__empty { color: var(--gg-muted); margin: 12px 0 0; }
 
 @media (max-width: 860px) {
-  .cat-page__body { flex-direction: column; gap: 20px; }
+  /* 改成列方向后交叉轴变成水平，align-items 若仍是 flex-start，卡片区会被收缩到
+     min-content 宽度而不是撑满整行：多列网格的 1fr 轨道直接塌成 0（卡片整个不可见），
+     单列也会比容器窄、右侧留白。这里显式改回 stretch 让卡片区占满整行 */
+  .cat-page__body { flex-direction: column; align-items: stretch; gap: 20px; }
 }
 @media (max-width: 720px) {
   /* 单列列表不参与降列，保持一列 */

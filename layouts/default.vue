@@ -11,6 +11,13 @@ const route = useRoute()
 const menuOpen = ref(false)
 const openDir = ref<number | null>(null)
 
+// 移动端导航面板：点完任一项都要收起来。路由切换只换 <slot/>，布局实例保留，
+// 面板不会自己消失，否则到了新页面它还挂着挡内容，得再点一次汉堡键
+function closeNav() {
+  menuOpen.value = false
+  openDir.value = null
+}
+
 // 头像与站点地址都来自「站点信息」，未设置时回落到原站资源
 const DEFAULT_AVATAR = '/media/609-1686745579-2-s.jpg'
 const DEFAULT_FAVICON = '/uploads/library/59-cropped-1-2.jpg'
@@ -153,7 +160,7 @@ const socials = [
                 :to="navPagePath(item)"
                 class="site-nav__link site-nav__link--parent"
                 :class="{ 'is-active': route.path === navPagePath(item) }"
-                @click="openDir = null"
+                @click="closeNav"
               >
                 {{ item.title }}
               </NuxtLink>
@@ -174,7 +181,7 @@ const socials = [
                   :key="c.id"
                   :to="navPagePath(c)"
                   class="site-nav__subitem"
-                  @click="openDir = null"
+                  @click="closeNav"
                 >
                   {{ c.title }}
                 </NuxtLink>
@@ -186,6 +193,7 @@ const socials = [
               :to="navPagePath(item)"
               class="site-nav__link"
               :class="{ 'is-active': route.path === navPagePath(item) }"
+              @click="closeNav"
             >
               {{ item.title }}
             </NuxtLink>
