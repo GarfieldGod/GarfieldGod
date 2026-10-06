@@ -28,6 +28,16 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/main.css', '~/assets/css/admin.css'],
+  // 模板里的注释在编译期一律丢弃。
+  // 注释在 Vue 里是实打实的模板节点：顶层写一句注释，组件就从单根变成多根，
+  // Nuxt 的页面过渡（out-in）会因此渲染失败——从该页点去别的路由白屏、刷新才恢复。
+  // 本项目已在 PageRenderer.vue 和 pages/[...path].vue 上踩过两次，关掉后这类问题
+  // 从原理上不可能再出现（构建期还有 scripts/check-template-roots.mjs 守多根）。
+  vue: {
+    compilerOptions: {
+      comments: false,
+    },
+  },
   nitro: {
     output: { dir: process.env.GG_STATIC_NITRO_OUT || '.output' },
     prerender: {

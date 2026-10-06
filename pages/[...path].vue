@@ -3,6 +3,10 @@ import { tabName } from '~/composables/useSiteData'
 
 // 数据驱动页面：路由路径即 nav_pages.slug（如 /category/notes、/tools、/personal）。
 // 首页 / 与文章详情 /post/:id、后台 /admin 仍是独立文件。
+//
+// 注意：<template> 顶层只能有那一个根元素，不能出现注释或文本节点。
+// 注释也是根节点，会让 Nuxt 的页面过渡在路由切换时渲染失败——从本页点进文章会白屏，
+// 刷新才恢复。说明文字一律写在 script 里，别放回模板顶层。
 const route = useRoute()
 
 const raw = route.params.path
@@ -33,7 +37,6 @@ useHead({
 </script>
 
 <template>
-  <!-- 单一根元素：页面过渡是 out-in 模式，根节点为注释会白屏 -->
   <div class="page-shell">
     <PageRenderer
       v-if="page"

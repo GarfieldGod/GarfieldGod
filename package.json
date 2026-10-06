@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "nuxt dev",
-    "build": "nuxt build",
-    "generate": "nuxt generate",
+    "check:templates": "node scripts/check-template-roots.mjs",
+    "build": "npm run check:templates && nuxt build",
+    "generate": "npm run check:templates && nuxt generate",
     "build:static": "node scripts/build-static.mjs",
     "publish:static": "node scripts/auto-publish.mjs",
     "preview:static": "node scripts/serve-static.mjs dist",

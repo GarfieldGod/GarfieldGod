@@ -28,6 +28,7 @@ import {
 import { DatabaseSync } from 'node:sqlite'
 import { dirname, join, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { checkTemplateRoots } from './check-template-roots.mjs'
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const MARKER = '.gg-static'
@@ -105,6 +106,18 @@ console.log(
 )
 
 // ===== 2. 独立目录构建 =====
+// 构建前先验模板根节点：多根会让前台路由切换白屏，这种故障只在特定点击路径下暴露，
+// 不该等到部署上线后才被发现。
+const roots = checkTemplateRoots(rootDir)
+if (roots.problems.length) {
+  fail(
+    `模板根节点检查未通过：${roots.problems
+      .map((p) => `${p.file}（${p.count} 个根节点）`)
+      .join('、')}；页面过渡要求单个根元素，详见 scripts/check-template-roots.mjs`,
+  )
+}
+console.log(`[static] 模板根节点检查通过（${roots.checked} 个模板）`)
+
 const binName = process.platform === 'win32' ? 'nuxi.cmd' : 'nuxi'
 const binPath = join(rootDir, 'node_modules', '.bin', binName)
 if (!existsSync(binPath)) fail(`找不到 nuxi：${binPath}（先在项目根目录执行 npm install）`)
