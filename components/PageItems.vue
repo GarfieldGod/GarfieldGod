@@ -21,6 +21,8 @@ const router = useRouter()
 const cols = computed(() => Math.max(1, props.page.columns || 1))
 const pageSize = computed(() => Math.max(1, props.page.pageSize || 10))
 const gridStyle = computed(() => ({ '--cols': String(cols.value) }))
+// 网格卡（开发项目）在移动端改成一行一个：图片卡挤成两列后每格太窄，图看不清
+const onePerRowOnMobile = computed(() => props.page.cardType === 'mosaic')
 
 const showFilter = computed(() => !props.embedded && props.page.tagFilter && props.tags.length > 0)
 
@@ -89,7 +91,11 @@ function setTag(tag: string) {
       />
 
       <div class="cat-page__main">
-        <div class="cat-page__grid" :class="{ 'is-single': cols === 1 }" :style="gridStyle">
+        <div
+          class="cat-page__grid"
+          :class="{ 'is-single': cols === 1, 'is-one-per-row': onePerRowOnMobile }"
+          :style="gridStyle"
+        >
           <PageItem
             v-for="p in pagedPosts"
             :key="p.id"
@@ -159,5 +165,10 @@ function setTag(tag: string) {
 }
 @media (max-width: 460px) {
   .cat-page__grid { grid-template-columns: minmax(0, 1fr); }
+}
+/* 网格卡（开发项目）移动端一行一个。必须排在上面那条降列规则之后：
+   两者都是两个类名，同优先级下靠源码顺序决定谁生效 */
+@media (max-width: 720px) {
+  .cat-page__grid.is-one-per-row { grid-template-columns: minmax(0, 1fr); }
 }
 </style>

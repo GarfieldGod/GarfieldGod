@@ -515,4 +515,25 @@ onBeforeUnmount(() => {
   .gg-item--editorial .gg-item__datecol { flex-direction: row; align-items: baseline; gap: 8px; padding-top: 0; }
   .gg-item--editorial .gg-item__thumb { order: -1; }
 }
+
+/* 标准卡（动态）：窄屏下把「所属页面胶囊」与日期提到标题上方，标题独占一行。
+   桌面保留原版式（标题与胶囊同一行、日期靠右）。用 order 重排而不是改模板，
+   这样服务端渲染出的 DOM 与桌面端完全一致，不必为两端各写一套结构 */
+@media (max-width: 720px) {
+  .gg-item--standard .gg-item__head {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .gg-item--standard .gg-item__title {
+    order: 3;
+    flex: 1 1 100%;
+  }
+  .gg-item--standard .gg-item__pill {
+    order: 1;
+  }
+  .gg-item--standard .gg-item__date {
+    order: 2;
+    margin-left: 0;
+  }
+}
 </style>
