@@ -208,7 +208,7 @@ const { el: stageEl } = usePreviewFit(1080)
         <section
           v-if="styleOptions.heroSize !== 'none'"
           class="pg-hero"
-          :class="`pg-hero--${styleOptions.heroSize}`"
+          :class="[`pg-hero--${styleOptions.heroSize}`, { 'is-center': styleOptions.centerTitle }]"
         >
           <div
             class="pg-hero__img"
@@ -219,16 +219,22 @@ const { el: stageEl } = usePreviewFit(1080)
           <div class="pg-hero__inner">
             <span v-if="styleOptions.showLabel" class="pg-hero__chip">{{ pageLabel }}</span>
             <h1 class="pg-hero__title">{{ props.title || '未命名文章' }}</h1>
-            <p v-if="lede" class="pg-hero__lede">{{ lede }}</p>
+            <p v-if="lede && styleOptions.showLede" class="pg-hero__lede">{{ lede }}</p>
           </div>
         </section>
 
-        <article class="pg-sheet" :class="{ 'pg-sheet--nocover': styleOptions.heroSize === 'none' }">
-          <template v-if="styleOptions.heroSize === 'none'">
+        <article
+          class="pg-sheet"
+          :class="{
+            'pg-sheet--nocover': styleOptions.heroSize === 'none',
+            'is-center': styleOptions.centerTitle,
+          }"
+        >
+          <div v-if="styleOptions.heroSize === 'none'" class="pg-nocover-head">
             <span v-if="styleOptions.showLabel" class="pg-nocover__chip">{{ pageLabel }}</span>
             <h1 class="pg-nocover__title">{{ props.title || '未命名文章' }}</h1>
-            <p v-if="lede" class="pg-nocover__lede">{{ lede }}</p>
-          </template>
+            <p v-if="lede && styleOptions.showLede" class="pg-nocover__lede">{{ lede }}</p>
+          </div>
 
           <div v-if="styleOptions.showByline" class="pg-byline">
             <span class="pg-byline__avatar" aria-hidden="true">G</span>
@@ -239,7 +245,12 @@ const { el: stageEl } = usePreviewFit(1080)
             <span class="pg-byline__right">阅读 0 次</span>
           </div>
 
-          <div v-if="contentHtml" class="pg-body pg-body--c gg-content" v-html="magazineHtml" />
+          <div
+            v-if="contentHtml"
+            class="pg-body pg-body--c gg-content"
+            :class="{ 'pg-body--full': styleOptions.fullWidthMedia }"
+            v-html="magazineHtml"
+          />
           <p v-else class="ppv__empty">正文还是空的。</p>
         </article>
       </template>
@@ -955,6 +966,28 @@ const { el: stageEl } = usePreviewFit(1080)
   color: var(--gg-inksoft);
   margin: 0;
   max-width: 40em;
+}
+/* 居中标题：整块一起居中，且只到标题块，不落到署名与正文上 */
+.pg-hero.is-center .pg-hero__inner {
+  align-items: center;
+  text-align: center;
+}
+.pg-hero.is-center .pg-hero__chip {
+  align-self: center;
+}
+.pg-sheet.is-center .pg-nocover-head {
+  text-align: center;
+}
+.pg-sheet.is-center .pg-nocover__title,
+.pg-sheet.is-center .pg-nocover__lede {
+  margin-left: auto;
+  margin-right: auto;
+}
+/* 图片撑满内容区（可选）：只解除页面的 720px 上限，不覆盖内容 HTML 的 width 声明。
+   比例由全局 img { height: auto } 保证 */
+.pg-body--full :deep(> figure),
+.pg-body--full :deep(> p:has(img)) {
+  max-width: 100%;
 }
 .pg-byline {
   display: flex;

@@ -11,6 +11,8 @@ export default defineEventHandler(() => {
       tabTagline: '',
       avatar: '',
       favicon: '',
+      playlist: [],
+      playerEnabled: true,
     }
   return JSON.parse(row.value)
 })

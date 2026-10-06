@@ -389,7 +389,7 @@ async function submitComment() {
       <section
         v-if="styleOptions.heroSize !== 'none'"
         class="pg-hero"
-        :class="`pg-hero--${styleOptions.heroSize}`"
+        :class="[`pg-hero--${styleOptions.heroSize}`, { 'is-center': styleOptions.centerTitle }]"
       >
         <div
           class="pg-hero__img"
@@ -400,16 +400,22 @@ async function submitComment() {
         <div class="pg-hero__inner">
           <span v-if="styleOptions.showLabel" class="pg-hero__chip">{{ pageLabel }}</span>
           <h1 class="pg-hero__title">{{ post.title }}</h1>
-          <p v-if="lede" class="pg-hero__lede">{{ lede }}</p>
+          <p v-if="lede && styleOptions.showLede" class="pg-hero__lede">{{ lede }}</p>
         </div>
       </section>
 
-      <article class="pg-sheet" :class="{ 'pg-sheet--nocover': styleOptions.heroSize === 'none' }">
-        <template v-if="styleOptions.heroSize === 'none'">
+      <article
+        class="pg-sheet"
+        :class="{
+          'pg-sheet--nocover': styleOptions.heroSize === 'none',
+          'is-center': styleOptions.centerTitle,
+        }"
+      >
+        <div v-if="styleOptions.heroSize === 'none'" class="pg-nocover-head">
           <span v-if="styleOptions.showLabel" class="pg-nocover__chip">{{ pageLabel }}</span>
           <h1 class="pg-nocover__title">{{ post.title }}</h1>
-          <p v-if="lede" class="pg-nocover__lede">{{ lede }}</p>
-        </template>
+          <p v-if="lede && styleOptions.showLede" class="pg-nocover__lede">{{ lede }}</p>
+        </div>
 
         <div v-if="styleOptions.showByline" class="pg-byline">
           <span class="pg-byline__avatar" aria-hidden="true">G</span>
@@ -420,7 +426,11 @@ async function submitComment() {
           <span class="pg-byline__right">阅读 {{ views }} 次</span>
         </div>
 
-        <div class="pg-body pg-body--c gg-content" v-html="magazineHtml" />
+        <div
+          class="pg-body pg-body--c gg-content"
+          :class="{ 'pg-body--full': styleOptions.fullWidthMedia }"
+          v-html="magazineHtml"
+        />
       </article>
     </template>
 
@@ -1310,6 +1320,36 @@ async function submitComment() {
   color: var(--gg-inksoft);
   margin: 0;
   max-width: 40em;
+}
+
+/* 居中标题：胶囊、标题、导语整块一起居中。
+   只居中标题的话，左侧那颗胶囊会明显错位，所以按块处理。
+   注意作用范围只到标题块，不能落到整张白卡上，否则署名行与正文也会被居中 */
+.pg-hero.is-center .pg-hero__inner {
+  align-items: center;
+  text-align: center;
+}
+.pg-hero.is-center .pg-hero__chip {
+  align-self: center;
+}
+.pg-sheet.is-center .pg-nocover-head {
+  text-align: center;
+}
+.pg-sheet.is-center .pg-nocover__title,
+.pg-sheet.is-center .pg-nocover__lede {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 图片撑满内容区（可选）：只解除页面这条 720px 的阅读宽度上限，
+   让含图的块能用到白卡的完整宽度；段落仍保持 720px，行宽不至于长到难读。
+   这里刻意不覆盖内容 HTML 里 img 自带的 width 声明——那是内容自己的属性，
+   声明得比内容列窄的图，原样显示即可。
+   放大后的比例由全局规则 img { height: auto }（assets/css/main.css）保证：
+   宽度变了高度会按原始比例重算，不会被拉变形。 */
+.pg-body--full :deep(> figure),
+.pg-body--full :deep(> p:has(img)) {
+  max-width: 100%;
 }
 
 /* ---------- 方案 D：分节卡片 ---------- */

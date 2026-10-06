@@ -34,6 +34,12 @@ export interface PostStyleOptions {
   dropCap: boolean
   /** 杂志大图：是否显示「所属页面」胶囊标注 */
   showLabel: boolean
+  /** 杂志大图：是否显示导语（摘要） */
+  showLede: boolean
+  /** 杂志大图：标题块是否居中（胶囊 / 标题 / 导语整块一起居中） */
+  centerTitle: boolean
+  /** 杂志大图：正文图片是否撑满内容区（解除 720px 阅读宽度上限，段落行宽不变） */
+  fullWidthMedia: boolean
   /** 分节卡片：是否显示顶部迷你导航 */
   miniNav: boolean
   /** 分节卡片：是否显示「第 N 节」小节编号 */
@@ -52,6 +58,9 @@ export const POST_STYLE_OPTION_DEFAULTS: PostStyleOptions = {
   showByline: true,
   dropCap: true,
   showLabel: true,
+  showLede: true,
+  centerTitle: false,
+  fullWidthMedia: false,
   miniNav: true,
   sectionNumbers: true,
   linkUrl: '',
@@ -72,6 +81,9 @@ export function normalizePostStyleOptions(value: unknown): PostStyleOptions {
     showByline: o.showByline !== false,
     dropCap: o.dropCap !== false,
     showLabel: o.showLabel !== false,
+    showLede: o.showLede !== false,
+    centerTitle: o.centerTitle === true,
+    fullWidthMedia: o.fullWidthMedia === true,
     miniNav: o.miniNav !== false,
     sectionNumbers: o.sectionNumbers !== false,
     linkUrl: typeof o.linkUrl === 'string' ? o.linkUrl.trim().slice(0, 500) : '',

@@ -215,6 +215,9 @@ const socials = [
         </a>
       </div>
     </footer>
+
+    <!-- 悬浮播放器：放在布局层，客户端切页时实例保留，音乐不会被路由切换打断 -->
+    <GlobalPlayer />
   </div>
 </template>
 

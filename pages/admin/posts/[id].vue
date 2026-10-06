@@ -532,6 +532,18 @@ async function remove() {
                   <input v-model="form.postStyleOptions.showLabel" type="checkbox" />
                   显示所属页面标签
                 </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.showLede" type="checkbox" />
+                  显示摘要（导语）
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.centerTitle" type="checkbox" />
+                  居中标题
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.fullWidthMedia" type="checkbox" />
+                  正文图片撑满内容区
+                </label>
               </div>
             </template>
 

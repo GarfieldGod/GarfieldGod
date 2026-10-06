@@ -61,6 +61,9 @@ function styleOptionPatch(): Partial<PostStyleOptions> {
         showByline: form.postStyleOptions.showByline,
         dropCap: form.postStyleOptions.dropCap,
         showLabel: form.postStyleOptions.showLabel,
+        showLede: form.postStyleOptions.showLede,
+        centerTitle: form.postStyleOptions.centerTitle,
+        fullWidthMedia: form.postStyleOptions.fullWidthMedia,
       }
     case 'cards':
       return { miniNav: form.postStyleOptions.miniNav, sectionNumbers: form.postStyleOptions.sectionNumbers }
@@ -330,6 +333,18 @@ const previewOptions = computed(() =>
                 <label class="ad-check">
                   <input v-model="form.postStyleOptions.showLabel" type="checkbox" />
                   显示所属页面标签
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.showLede" type="checkbox" />
+                  显示摘要（导语）
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.centerTitle" type="checkbox" />
+                  居中标题
+                </label>
+                <label class="ad-check">
+                  <input v-model="form.postStyleOptions.fullWidthMedia" type="checkbox" />
+                  正文图片撑满内容区
                 </label>
               </div>
               <p class="ad-hint" style="margin: 0">头图沿用各篇文章自己的设置，批量不改图。</p>
