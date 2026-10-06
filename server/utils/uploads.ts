@@ -1,4 +1,4 @@
-import { mkdir, readdir, rename, rm, stat, writeFile } from 'node:fs/promises'
+import { copyFile, mkdir, readdir, rename, rm, stat, writeFile } from 'node:fs/promises'
 import { basename, dirname, join, relative, resolve, sep } from 'node:path'
 
 // 上传文件放在 .data 下（与数据库同处持久化目录），不进构建产物
@@ -256,6 +256,30 @@ export async function postMediaStats(postId: number): Promise<MediaStats> {
   return { count: files.length, bytes: files.reduce((sum, f) => sum + f.size, 0) }
 }
 
+export interface PostMediaItem extends MediaItem {
+  /** 归属文章 ID，前端据此显示「属于哪篇」 */
+  postId: number
+}
+
+// 列出全部文章私有资源（posts/<id>/...）。媒体库的「文章私有资源」视图只读展示这些文件，
+// 便于确认「某张图/某段音频挂在谁名下」。posts/_tmp 是未落库文章的暂存目录，不算文章资源。
+export async function listAllPostMedia(): Promise<PostMediaItem[]> {
+  const root = join(uploadsDir(), 'posts')
+  const out: PostMediaItem[] = []
+
+  for (const entry of await readdir(root, { withFileTypes: true }).catch(() => [])) {
+    if (!entry.isDirectory()) continue
+    const postId = Number(entry.name)
+    if (!Number.isInteger(postId) || postId <= 0) continue
+    const dir = join(root, entry.name)
+    for (const file of await listMedia(dir, `/uploads/posts/${postId}`)) {
+      out.push({ ...file, postId })
+    }
+  }
+
+  return out.sort((a, b) => b.mtime.localeCompare(a.mtime))
+}
+
 // ---------- 媒体库单文件操作（改名 / 删除） ----------
 
 // 拆分扩展名：以点开头的隐藏文件不算扩展名
@@ -327,6 +351,34 @@ export async function renameMediaFile(abs: string, wanted: string): Promise<stri
   await withFsRetry(() => rename(abs, target))
   await renameThumbs(abs, target)
   return target
+}
+
+// 把文章私有资源另存一份进媒体库。用复制而不是移动：原文件仍被文章正文/封面引用，
+// 挪走就会变成坏图。副本按媒体库的「年/月」分层落盘，和直接上传的资源同一种组织方式。
+export async function copyToLibrary(abs: string): Promise<MediaItem | null> {
+  const info = await stat(abs).catch(() => null)
+  if (!info?.isFile()) return null
+
+  const now = new Date()
+  const rel = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}`
+  const dir = join(libraryDir(), rel)
+  await mkdir(dir, { recursive: true })
+
+  // 媒体库里已有同名文件时补序号，不覆盖
+  const target = await uniqueFilePath(dir, basename(abs))
+  await withFsRetry(() => copyFile(abs, target))
+  // 图片顺带生成卡片用的缩略图，跟直接上传保持一致
+  await generateThumbs(target)
+
+  const copied = await stat(target)
+  const name = basename(target)
+  return {
+    url: `/uploads/library/${rel}/${name}`,
+    name,
+    path: `${rel}/${name}`,
+    size: copied.size,
+    mtime: copied.mtime.toISOString(),
+  }
 }
 
 // 删文章时只处理文章私有目录：媒体库与其它文章的图片都不受影响

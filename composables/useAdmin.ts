@@ -65,6 +65,12 @@ export interface LibraryFile extends MediaItem {
   refPages: boolean
 }
 
+/** 「文章私有资源」视图的列表项：多出所属文章，且恒为只读 */
+export interface PostMediaFile extends MediaItem {
+  postId: number
+  postTitle: string | null
+}
+
 export interface AdminStats {
   posts: number
   drafts: number

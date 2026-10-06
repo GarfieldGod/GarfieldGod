@@ -44,6 +44,23 @@ export default defineEventHandler(async (event) => {
       return { files: await listMedia(postMediaDir(postId), `/uploads/posts/${postId}`) }
     }
 
+    // scope=posts：媒体库的「文章私有资源」视图。这些文件归文章所有，只读列出，
+    // 不做改名/删除入口，避免把文章正文里的引用改成坏图。
+    if (String(query.scope ?? '') === 'posts') {
+      const titles = new Map(
+        (useDb().prepare('SELECT id, title FROM posts').all() as { id: number; title: string }[]).map((row) => [
+          row.id,
+          row.title,
+        ]),
+      )
+      return {
+        files: (await listAllPostMedia()).map((f) => ({
+          ...f,
+          postTitle: titles.get(f.postId) ?? null,
+        })),
+      }
+    }
+
     const refs = collectMediaRefs()
     return {
       files: (await listMedia(libraryDir(), '/uploads/library')).map((f) => ({
