@@ -7,10 +7,71 @@ import type { PlayerTrack } from '~/composables/useSiteData'
 const { data: meta } = useSiteMeta()
 const player = useAudioPlayer()
 const route = useRoute()
-const { index, playing, expanded, progress, elapsed, duration, volume, bgmPrompt, current } = player
+const { index, playing, expanded, progress, elapsed, duration, volume, bgmPrompt, loopMode, cycleLoop, current } = player
 
 const audioEl = ref<HTMLAudioElement | null>(null)
 const rootEl = ref<HTMLElement | null>(null)
+
+// ===== 加载 / 缓冲 =====
+// 想播但还没攒够缓冲时为 true：悬浮球和主按钮都换成转圈，让用户知道「在下载」而不是「坏了」
+const buffering = ref(false)
+/** 整首文件已缓冲的比例 0–1，来自 audio.buffered */
+const bufPercent = ref(0)
+/** 地址写错 / 文件缺失 / 格式不支持这类硬失败，亮红字让用户知道为什么没声音 */
+const loadError = ref(false)
+/** 缓冲阈值：从当前位置起攒够这么多秒才开播，避免刚下一点就播一点造成的卡顿 */
+const BUFFER_AHEAD = 8
+let fallbackTimer = 0
+
+const loopLabel = computed(() =>
+  loopMode.value === 'one' ? '单曲循环' : loopMode.value === 'list' ? '列表循环' : '播完暂停',
+)
+
+/** 从当前位置起已连续缓冲的秒数 */
+function bufferedAhead(a: HTMLAudioElement): number {
+  try {
+    for (let i = 0; i < a.buffered.length; i++) {
+      const start = a.buffered.start(i)
+      const end = a.buffered.end(i)
+      if (a.currentTime >= start - 0.1 && a.currentTime <= end) return end - a.currentTime
+    }
+  } catch {
+    /* 个别时点 buffered 会抛 InvalidStateError，按 0 算即可 */
+  }
+  return 0
+}
+
+/** 整首文件已缓冲到的比例（取包含当前位置的那一段的末端） */
+function bufferedFraction(a: HTMLAudioElement): number {
+  if (!a.duration || !Number.isFinite(a.duration)) return 0
+  try {
+    let end = 0
+    for (let i = 0; i < a.buffered.length; i++) {
+      if (a.buffered.start(i) <= a.currentTime + 0.1) end = Math.max(end, a.buffered.end(i))
+    }
+    return Math.min(1, end / a.duration)
+  } catch {
+    return 0
+  }
+}
+
+/** 缓冲够没够：攒够阈值秒数，或者整首只剩结尾不足 1 秒没下完 */
+function enoughBuffer(a: HTMLAudioElement): boolean {
+  if (a.duration && Number.isFinite(a.duration)) {
+    try {
+      const n = a.buffered.length
+      for (let i = n - 1; i >= 0; i--) {
+        if (a.buffered.start(i) <= a.currentTime + 0.1) {
+          if (a.buffered.end(i) >= a.duration - 1) return true
+          break
+        }
+      }
+    } catch {
+      return false
+    }
+  }
+  return bufferedAhead(a) >= BUFFER_AHEAD
+}
 
 const playlist = computed<PlayerTrack[]>(() => {
   const list = meta.value?.playlist
@@ -23,22 +84,59 @@ const visible = computed(() => meta.value?.playerEnabled !== false && playlist.v
 watch(playlist, (list) => player.setTracks(list), { immediate: true })
 
 // 真正调 play() 只在这一处：换曲与播放状态两个入口都收敛到这里。
+// 缓冲不够时先不下播：攒到阈值再 play()，进度条上有「缓冲中 x%」实时反馈。
 // 成功就回报「自动播放完成」，被浏览器拦下就回报「被拦下」——进文章页试放背景音乐时，
 // 后者会触发左侧气泡询问用户；用户手动点播时没有 pending，这两个回报都是空操作。
-async function startPlayback() {
-  const a = audioEl.value
-  if (!a || !playing.value) return
+async function doPlay(a: HTMLAudioElement) {
+  // 上一次播到结尾（播完暂停后重按播放）：从头开始
+  if (a.ended) a.currentTime = 0
   try {
     await a.play()
+    buffering.value = false
+    loadError.value = false
     player.bgmStarted()
   } catch (e: any) {
     playing.value = false
-    // 只有「浏览器不允许自动播放」才值得问用户要不要播。
-    // 地址写错、文件缺失、格式不支持同样会让 play() 失败，那种情况弹气泡也没用，
-    // 只会让人以为点了就能放，所以只在 NotAllowedError 时提示。
-    if (e?.name === 'NotAllowedError') player.bgmBlocked()
-    else if (e?.name) console.warn('[player] 播放失败', e.name, a.currentSrc || a.src)
+    if (e?.name === 'NotAllowedError') {
+      // 只有「浏览器不允许自动播放」才值得问用户要不要播。
+      buffering.value = false
+      player.bgmBlocked()
+    } else {
+      // 地址写错、文件缺失、格式不支持同样会让 play() 失败，那种情况弹气泡没用，
+      // 亮出失败状态并记到控制台，别让用户对着静音的播放器猜原因。
+      buffering.value = false
+      loadError.value = true
+      if (e?.name) console.warn('[player] 播放失败', e.name, a.currentSrc || a.src)
+    }
   }
+}
+
+async function startPlayback() {
+  const a = audioEl.value
+  if (!a || !playing.value) return
+  if (enoughBuffer(a)) {
+    await doPlay(a)
+    return
+  }
+  // 缓冲不够：先静默下载到阈值再播。preload=auto 让浏览器提前拉流，
+  // progress/canplay 事件到来时 onBufferTick 里会补播。
+  buffering.value = true
+  if (!a.buffered.length && a.currentTime < 0.1) {
+    try {
+      a.load()
+    } catch {
+      /* 忽略：个别状态下 load 会抛错，交给兜底逻辑 */
+    }
+  }
+  // 兜底：个别移动端浏览器不理 preload、没有手势就一个字节也不下。
+  // 3 秒后仍毫无数据就放弃阈值，直接交给浏览器原生流式播放——
+  // 至少能响、能弹出自动播放询问气泡，不至于永远停在「缓冲中 0%」。
+  window.clearTimeout(fallbackTimer)
+  fallbackTimer = window.setTimeout(() => {
+    const el = audioEl.value
+    if (!el || !playing.value || !buffering.value) return
+    if (el.buffered.length === 0 || el.readyState < 2) void doPlay(el)
+  }, 3000)
 }
 
 // 离开当前文章后，背景音乐询问气泡就不该继续挂着了。
@@ -47,7 +145,15 @@ watch(() => route.path, () => player.dismissBgm())
 
 // 换曲：src 由模板绑定跟着换，这里只负责「本来在播就接着播」
 // flush post 是必须的——要等 DOM 把新的 src 写上去再调 play()
-watch(current, () => startPlayback(), { flush: 'post' })
+watch(
+  current,
+  () => {
+    bufPercent.value = 0
+    loadError.value = false
+    startPlayback()
+  },
+  { flush: 'post' },
+)
 
 // 播放状态是唯一真源：任何入口只改这个值，真正调 play/pause 只在这一处。
 // 同样 flush post：切曲时先让 DOM 把新 src 写上去，避免误播上一首。
@@ -62,6 +168,7 @@ watch(
       startPlayback()
     } else {
       a.pause()
+      buffering.value = false
     }
   },
   { flush: 'post' },
@@ -94,6 +201,35 @@ function onDocPointerDown(e: PointerEvent) {
 
 onMounted(() => document.addEventListener('pointerdown', onDocPointerDown, true))
 onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocPointerDown, true))
+onBeforeUnmount(() => window.clearTimeout(fallbackTimer))
+
+// 下载过程中持续刷新缓冲比例；正在等缓冲且已攒够阈值就补播
+function onBufferTick() {
+  const a = audioEl.value
+  if (!a) return
+  bufPercent.value = bufferedFraction(a)
+  if (buffering.value && playing.value && enoughBuffer(a)) {
+    window.clearTimeout(fallbackTimer)
+    void doPlay(a)
+  }
+}
+
+// 播着播着网速跟不上、缓冲区见底：亮回缓冲状态，恢复时 playing 事件会清掉
+function onWaiting() {
+  if (playing.value) buffering.value = true
+}
+function onPlaying() {
+  buffering.value = false
+}
+
+// 元素级错误（404、格式不支持等）：亮出失败状态，别让用户对着静音的播放器猜
+function onAudioError() {
+  const a = audioEl.value
+  if (!a || !a.error) return
+  loadError.value = true
+  buffering.value = false
+  playing.value = false
+}
 
 function fmt(s: number) {
   const v = Number.isFinite(s) && s > 0 ? s : 0
@@ -141,29 +277,52 @@ function onVolumeInput(e: Event) {
   volume.value = Number((e.target as HTMLInputElement).value) / 100
 }
 
-// 播放结束时自动下一首；只有一首就停下，避免单曲循环停不下来
+// 播完：按循环模式决定下一步。默认「播完暂停」；单曲循环原地重播；列表循环接下一首（单首歌单等同单曲循环）
 function onEnded() {
-  if (playlist.value.length < 2) {
-    playing.value = false
+  if (loopMode.value === 'one') {
+    replay()
     return
   }
-  step(1)
+  if (loopMode.value === 'list') {
+    if (playlist.value.length < 2) {
+      replay()
+      return
+    }
+    step(1)
+    return
+  }
+  playing.value = false
+}
+
+/** 单曲循环 / 单曲歌单的列表循环：回到开头接着播 */
+function replay() {
+  const a = audioEl.value
+  if (!a) return
+  a.currentTime = 0
+  void doPlay(a)
 }
 </script>
 
 <template>
   <div v-if="visible" ref="rootEl" class="gp" :class="{ 'is-open': expanded }">
-    <!-- 音频元素常驻，切页时不会被卸载，音乐因此可以连续播放 -->
+    <!-- 音频元素常驻，切页时不会被卸载，音乐因此可以连续播放。
+         preload=auto：选中的曲目提前下载，配合缓冲阈值「攒够了再播」，而不是边下边卡 -->
     <audio
       ref="audioEl"
       :src="current?.src"
-      preload="metadata"
+      preload="auto"
       @timeupdate="syncFromAudio"
       @loadedmetadata="syncFromAudio"
       @durationchange="syncFromAudio"
+      @progress="onBufferTick"
+      @canplay="onBufferTick"
+      @canplaythrough="onBufferTick"
+      @waiting="onWaiting"
+      @playing="onPlaying"
       @play="playing = true"
       @pause="playing = false"
       @ended="onEnded"
+      @error="onAudioError"
     />
 
     <!-- 背景音乐询问：从悬浮球左侧展开，点播放或关掉后消失 -->
@@ -200,10 +359,11 @@ function onEnded() {
         <button
           class="gp__btn gp__btn--main"
           type="button"
-          :aria-label="playing ? '暂停' : '播放'"
+          :aria-label="buffering ? '缓冲中' : playing ? '暂停' : '播放'"
           @click="toggle"
         >
-          <svg v-if="playing" viewBox="0 0 16 16" fill="currentColor">
+          <span v-if="buffering" class="gp__spin" aria-hidden="true" />
+          <svg v-else-if="playing" viewBox="0 0 16 16" fill="currentColor">
             <path d="M4 2.5h3.2v11H4zm4.8 0H12v11H8.8z" />
           </svg>
           <svg v-else viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z" /></svg>
@@ -211,11 +371,38 @@ function onEnded() {
         <button class="gp__btn" type="button" aria-label="下一首" @click="step(1)">
           <svg viewBox="0 0 16 16" fill="currentColor"><path d="M10.3 3H12v10h-1.7zM3 3l6.4 5L3 13z" /></svg>
         </button>
+        <button
+          class="gp__btn gp__loop"
+          :class="{ 'is-active': loopMode !== 'off' }"
+          type="button"
+          :aria-label="loopLabel"
+          :title="loopLabel"
+          @click="cycleLoop"
+        >
+          <!-- 单曲循环：循环箭头 + 1 -->
+          <svg v-if="loopMode === 'one'" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 7h10v3l4-4-4-4v3H3v6h4V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-4v4z" />
+            <path d="M11.2 9.6h1.4v4.8h-1.4zM10.2 13.7h3.4v.7h-3.4z" />
+          </svg>
+          <!-- 列表循环：循环箭头 -->
+          <svg v-else-if="loopMode === 'list'" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 7h10v3l4-4-4-4v3H3v6h4V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-4v4z" />
+          </svg>
+          <!-- 播完暂停：循环箭头加斜杠 -->
+          <svg v-else viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 7h10v3l4-4-4-4v3H3v6h4V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-4v4z" />
+            <path d="M4.6 3.2 20.8 19.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
       </div>
 
       <button class="gp__bar" type="button" aria-label="调整播放进度" @click="onSeekClick">
+        <i class="gp__bar-buf" :style="{ width: `${bufPercent * 100}%` }" />
         <i :style="{ width: `${progress * 100}%` }" />
       </button>
+
+      <p v-if="loadError" class="gp__status gp__status--err">加载失败：文件拉不下来或格式不支持，点播放可重试</p>
+      <p v-else-if="buffering" class="gp__status">缓冲中 {{ Math.round(bufPercent * 100) }}%，攒够 {{ BUFFER_AHEAD }} 秒自动播放</p>
 
       <div class="gp__row gp__row--sub">
         <span class="gp__time">{{ elapsedText }} / {{ durationText }}</span>
@@ -257,7 +444,8 @@ function onEnded() {
       :aria-label="expanded ? '收起播放器' : '展开播放器'"
       @click="expanded = !expanded"
     >
-      <svg v-if="playing" viewBox="0 0 16 16" fill="currentColor">
+      <span v-if="buffering" class="gp__spin gp__spin--ball" aria-hidden="true" />
+      <svg v-else-if="playing" viewBox="0 0 16 16" fill="currentColor">
         <path d="M4 2.5h3.2v11H4zm4.8 0H12v11H8.8z" />
       </svg>
       <svg v-else viewBox="0 0 16 16" fill="currentColor">
@@ -493,6 +681,15 @@ function onEnded() {
   width: 17px;
   height: 17px;
 }
+/* 循环模式按钮： transport 行最右；开启循环时反色强调 */
+.gp__loop {
+  margin-left: auto;
+}
+.gp__btn.is-active {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
 .gp__close {
   margin-left: auto;
   width: 30px;
@@ -534,6 +731,10 @@ function onEnded() {
   border-radius: 999px;
   background: #111;
 }
+/* 已缓冲但还没播到的部分：浅灰底，直观看出下载进度 */
+.gp__bar-buf {
+  background: #d9d9d9;
+}
 .gp__bar::after {
   content: '';
   position: absolute;
@@ -549,6 +750,34 @@ function onEnded() {
 }
 .gp__bar:hover::after {
   opacity: 1;
+}
+
+/* ===== 加载 / 缓冲状态 ===== */
+.gp__status {
+  margin: 8px 0 0;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  color: var(--gg-muted);
+}
+.gp__status--err {
+  color: #b3261e;
+}
+.gp__spin {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  animation: gp-spin 0.8s linear infinite;
+}
+.gp__spin--ball {
+  width: 20px;
+  height: 20px;
+}
+@keyframes gp-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .gp__time {
@@ -631,7 +860,7 @@ function onEnded() {
     width: min(200px, calc(100vw - 100px));
   }
 }
-/* 偏好减少动效：不做缩放淡入 */
+/* 偏好减少动效：不做缩放淡入；转圈放慢但保留——它是「正在加载」的关键信号 */
 @media (prefers-reduced-motion: reduce) {
   .gp__panel,
   .gp__ball {
@@ -639,6 +868,9 @@ function onEnded() {
   }
   .gp__prompt {
     animation: none;
+  }
+  .gp__spin {
+    animation-duration: 1.6s;
   }
 }
 </style>

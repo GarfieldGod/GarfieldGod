@@ -203,6 +203,15 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', onScroll)
 })
 
+// 左文右栏方案：当前阅读小节变化时，右侧目录栏自动滚动，让被激活的目录项始终可见
+watch(activeHeading, (id) => {
+  if (!id || postStyle !== 'toc') return
+  const toc = tocCard.value?.querySelector('.pg-toc')
+  if (!toc) return
+  const link = toc.querySelector(`.pg-toc__item[href="#${id}"]`) as HTMLElement | null
+  if (link) link.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+})
+
 // ===== 留言 =====
 // 同样不 await：留言列表比正文晚到没关系，不能拿它拖住切页
 const commentsRes = useFetch<{ comments: Comment[] }>(
@@ -244,6 +253,24 @@ function formatCommentDate(d: string) {
 
 function avatarText(author: string) {
   return (author.trim() || '匿名').slice(0, 1)
+}
+
+// 方案 A 的头像：圆形渐变底 + 首字。同一昵称永远同一配色，不同人尽量错开，
+// 色对从名字的字符码 hash 出来，不需要存库
+const AVATAR_PALETTE: Array<[string, string]> = [
+  ['#2b2b2b', '#5a5a5a'],
+  ['#e79a5f', '#d1722f'],
+  ['#7c8b9d', '#4f5f70'],
+  ['#7d9a78', '#54724e'],
+  ['#a3769a', '#7c5574'],
+]
+function avatarStyle(author: string) {
+  let h = 0
+  for (const ch of author.trim() || '匿名') {
+    h = (h * 31 + (ch.codePointAt(0) ?? 0)) >>> 0
+  }
+  const [g1, g2] = AVATAR_PALETTE[h % AVATAR_PALETTE.length]
+  return { '--g1': g1, '--g2': g2 }
 }
 
 const form = reactive({ author: '', email: '', content: '' })
@@ -529,25 +556,24 @@ async function submitComment() {
       </div>
     </template>
 
-    <!-- 评论区：所有方案共用，位于文章卡片之外、浅灰页面之上；文章可以整体关掉留言 -->
+    <!-- 评论区（方案 A · 经典单卡）：留言与表单各自成卡；文章可以整体关掉留言 -->
     <section v-if="post.allowComments" class="comments">
       <hr class="comments__sep" />
 
-      <h2 class="comments__title">{{ comments.length }} 条回复</h2>
+      <h2 class="comments__title">
+        <span>{{ comments.length }} 条留言</span>
+        <i class="comments__rule" aria-hidden="true" />
+      </h2>
 
       <ol class="comments__list">
-        <li v-for="c in comments" :key="c.id" class="comment">
-          <div class="comment__card">
-            <div class="comment__avatar" aria-hidden="true">{{ avatarText(c.author) }}</div>
-            <div class="comment__body">
-              <div class="comment__head">
-                <span class="comment__author">{{ c.author.trim() || '匿名' }}</span>
-                <time class="comment__date">{{ formatCommentDate(c.date) }}</time>
-              </div>
-              <hr class="comment__sep-inner" />
-              <p class="comment__content">{{ toPlainText(c.content) }}</p>
-              <hr class="comment__sep-inner" />
+        <li v-for="c in comments" :key="c.id" class="comment__card">
+          <div class="comment__avatar" :style="avatarStyle(c.author)" aria-hidden="true">{{ avatarText(c.author) }}</div>
+          <div class="comment__body">
+            <div class="comment__head">
+              <span class="comment__author">{{ c.author.trim() || '匿名' }}</span>
+              <time class="comment__date">{{ formatCommentDate(c.date) }}</time>
             </div>
+            <p class="comment__content">{{ toPlainText(c.content) }}</p>
           </div>
         </li>
       </ol>
@@ -560,25 +586,28 @@ async function submitComment() {
         <div class="comment-form__row">
           <label class="comment-form__field">
             <span class="comment-form__label">昵称 *</span>
-            <input v-model="form.author" type="text" maxlength="40" required />
+            <input v-model="form.author" type="text" maxlength="40" placeholder="怎么称呼你" required />
           </label>
           <label class="comment-form__field">
             <span class="comment-form__label">邮箱（可选，不公开）</span>
-            <input v-model="form.email" type="email" maxlength="120" />
+            <input v-model="form.email" type="email" maxlength="120" placeholder="用于识别头像" />
           </label>
         </div>
 
         <label class="comment-form__field">
           <span class="comment-form__label">内容 *</span>
-          <textarea v-model="form.content" rows="5" maxlength="2000" required />
+          <textarea v-model="form.content" rows="5" maxlength="2000" placeholder="说点什么……" required />
         </label>
 
         <p v-if="formError" class="comment-form__msg is-error">{{ formError }}</p>
         <p v-else-if="formOk" class="comment-form__msg is-ok">留言已提交。</p>
 
-        <button class="comment-form__submit" type="submit" :disabled="submitting">
-          {{ submitting ? '提交中…' : '提交' }}
-        </button>
+        <div class="comment-form__foot">
+          <p class="comment-form__hint">邮箱不会公开，仅用于生成头像。</p>
+          <button class="comment-form__submit" type="submit" :disabled="submitting">
+            {{ submitting ? '发布中…' : '发布留言' }}
+          </button>
+        </div>
       </form>
     </section>
   </article>
@@ -1494,71 +1523,81 @@ async function submitComment() {
   opacity: 0.4;
   margin: 0 0 32px;
 }
+/* 标题行：左对齐「N 条留言」，标题右侧一根延伸到行尾的细线 */
 .comments__title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   font-family: var(--gg-serif);
   font-size: 1.35rem;
   font-weight: 600;
-  text-align: center;
   color: #000000;
   margin: 0 0 24px;
+}
+.comments__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--gg-border);
 }
 .comments__list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 .comments__empty { color: var(--gg-muted); text-align: center; margin: 0 0 24px; }
 
+/* 留言卡片：细边框圆角，悬停时边框加深并浮起，提示「这是一整条留言」 */
 .comment__card {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: 14px;
   background: #ffffff;
-  border-radius: 15px;
-  padding: 20px 24px;
+  border: 1px solid var(--gg-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-/* 原站头像：50×50、1px 实线边框、直角 */
+.comment__card:hover {
+  border-color: #c9c5bd;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+/* 头像：40px 圆形渐变底 + 首字，配色由 avatarStyle 按昵称 hash 决定 */
 .comment__avatar {
   flex: none;
-  width: 50px;
-  height: 50px;
-  border: 1px solid #000000;
-  background: var(--gg-surface-2);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--g1, #2b2b2b), var(--g2, #5a5a5a));
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  color: #000000;
   user-select: none;
 }
 .comment__body { flex: 1 1 auto; min-width: 0; }
-.comment__head { display: grid; gap: 2px; }
-.comment__author { font-size: 0.875rem; font-weight: 600; color: #000000; }
-.comment__date { font-size: 0.875rem; color: var(--gg-muted); }
-.comment__sep-inner {
-  border: none;
-  border-bottom: 2px solid #808080;
-  opacity: 0.4;
-  margin: 10px 0;
-}
+.comment__head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.comment__author { font-size: 0.9rem; font-weight: 600; color: #000000; }
+.comment__date { font-size: 0.75rem; color: var(--gg-muted); }
 .comment__content {
-  margin: 0;
+  margin: 6px 0 0;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font-size: 1.0625rem;
+  font-size: 0.95rem;
   line-height: 1.6;
-  color: #000000;
+  color: #333333;
 }
 
 /* ===== 留言表单 ===== */
 /* 表单比评论列表窄一档并居中，避免输入框被拉得过宽 */
 .comment-form {
   max-width: 650px;
-  margin: 24px auto 0;
+  margin: 26px auto 0;
   background: #ffffff;
+  border: 1px solid var(--gg-border);
   border-radius: 15px;
   padding: 24px;
 }
@@ -1570,8 +1609,8 @@ async function submitComment() {
   color: #000000;
   margin: 0 0 18px;
 }
-/* 昵称 / 邮箱垂直排列；间距交给各字段自身的 margin-bottom，避免叠加出双倍空隙 */
-.comment-form__row { display: block; }
+/* 昵称 / 邮箱两列排布，窄屏回落为单列 */
+.comment-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .comment-form__field { display: grid; gap: 6px; margin-bottom: 16px; }
 .comment-form__label { font-size: 0.875rem; color: var(--gg-inksoft); }
 .comment-form input,
@@ -1579,36 +1618,47 @@ async function submitComment() {
   font: inherit;
   font-size: 1rem;
   color: var(--gg-ink);
-  background: var(--gg-surface);
+  background: var(--gg-surface-2);
   border: 1px solid var(--gg-border);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 10px 12px;
   width: 100%;
   resize: vertical;
+  transition: border-color 0.15s, background 0.15s;
 }
+.comment-form input::placeholder,
+.comment-form textarea::placeholder { color: var(--gg-muted); }
 .comment-form input:focus,
 .comment-form textarea:focus {
   outline: none;
   border-color: var(--gg-ink);
+  background: #ffffff;
 }
 .comment-form__msg { font-size: 0.9rem; margin: 0 0 14px; }
 .comment-form__msg.is-error { color: #c0392b; }
 .comment-form__msg.is-ok { color: #1a7f4b; }
+/* 底部：左边隐私提示，右边发布按钮 */
+.comment-form__foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 2px;
+}
+.comment-form__hint { font-size: 0.75rem; color: var(--gg-muted); margin-right: auto; }
 .comment-form__submit {
-  display: block;
-  margin: 0 auto;
+  flex: none;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: #ffffff;
   background: #000000;
   border: 1px solid #000000;
   border-radius: 999px;
-  padding: 10px 28px;
+  padding: 10px 22px;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: transform 0.15s, opacity 0.15s;
 }
-.comment-form__submit:hover:not(:disabled) { opacity: 0.85; }
+.comment-form__submit:hover:not(:disabled) { transform: translateY(-1px); opacity: 0.92; }
 .comment-form__submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
 @media (max-width: 980px) {
@@ -1631,7 +1681,11 @@ async function submitComment() {
 @media (max-width: 720px) {
   .post-page__title { margin-bottom: 2rem; }
   .post-page__spacer { height: 120px; }
-  .comment__card { padding: 16px; gap: 12px; }
+  .comment__card { padding: 14px 16px; gap: 12px; }
+  .comment-form { padding: 20px 16px; }
+  .comment-form__row { grid-template-columns: 1fr; }
+  .comment-form__field { margin-bottom: 12px; }
+  .comment-form__foot { flex-wrap: wrap; }
   .post-style-classic .pg-card { padding: 28px 20px; }
   .post-style-classic .pg-title { font-size: 2rem; }
   .pg-body--a :deep(h2) { font-size: 1.5rem; }

@@ -19,6 +19,8 @@ export function useAudioPlayer() {
   const elapsed = useState<number>('gg-player-elapsed', () => 0)
   const duration = useState<number>('gg-player-duration', () => 0)
   const volume = useState<number>('gg-player-volume', () => 0.8)
+  /** 循环模式：off 播完暂停（默认）/ one 单曲循环 / list 列表循环 */
+  const loopMode = useState<'off' | 'one' | 'list'>('gg-player-loop', () => 'off')
 
   /**
    * 背景音乐提示气泡：非空时播放器左侧展开一个询问框。
@@ -117,6 +119,11 @@ export function useAudioPlayer() {
     bgmPrompt.value = false
   }
 
+  /** 控制行最右侧的按钮：轮切 播完暂停 → 单曲循环 → 列表循环 */
+  function cycleLoop() {
+    loopMode.value = loopMode.value === 'off' ? 'one' : loopMode.value === 'one' ? 'list' : 'off'
+  }
+
   return {
     tracks,
     index,
@@ -126,6 +133,8 @@ export function useAudioPlayer() {
     elapsed,
     duration,
     volume,
+    loopMode,
+    cycleLoop,
     bgmPrompt,
     current,
     setTracks,
