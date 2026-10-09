@@ -22,6 +22,10 @@
 # =============================================================================
 set -euo pipefail
 
+# npm ci 的 postinstall 会跑 nuxt prepare，Nuxt 首次运行会弹遥测问卷等输入，
+# 无人值守的 SSH 部署会永远卡在这一步；禁用遥测保证构建全程非交互
+export NUXT_TELEMETRY_DISABLED=1
+
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$BASE_DIR"
 
