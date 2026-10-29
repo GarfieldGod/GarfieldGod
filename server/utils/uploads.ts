@@ -73,6 +73,8 @@ export const MIME_BY_EXT: Record<string, string> = {
   '.gif': 'image/gif',
   '.webp': 'image/webp',
   '.avif': 'image/avif',
+  // 自动获取图标时，sharp 解不了的 favicon.ico 会原样保留，需要正确的 MIME 才能被 <img> 渲染
+  '.ico': 'image/x-icon',
   '.mp4': 'video/mp4',
   '.webm': 'video/webm',
   '.mp3': 'audio/mpeg',

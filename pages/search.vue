@@ -19,16 +19,25 @@ interface SearchLink {
   href: string
   icon: string
 }
+type SearchEngine = 'baidu' | 'bing' | 'google'
 interface SearchConfig {
   cover: string
   avatar: string
   name: string
   tagline: string
   link: string
+  engine: SearchEngine
   links: SearchLink[]
   viewerTitle: string
   avatars: string[]
 }
+
+const ENGINE_LABELS: Record<SearchEngine, string> = {
+  baidu: '百度',
+  bing: '必应',
+  google: '谷歌',
+}
+const ENGINE_KEYS: SearchEngine[] = ['baidu', 'bing', 'google']
 
 // 接口取不到时的兜底，保证孤儿页单独打开也成形（与 server/utils/searchPage.ts 的默认值一致）
 const FALLBACK: SearchConfig = {
@@ -37,6 +46,7 @@ const FALLBACK: SearchConfig = {
   name: 'GarfieldGod',
   tagline: "I'm God.",
   link: 'https://garfieldgod.cn',
+  engine: 'baidu',
   viewerTitle: 'The Cutest Person In The World',
   avatars: [
     '/legacy/avatar-1.jpg',
@@ -74,7 +84,8 @@ function normalize(raw: Partial<SearchConfig> | null | undefined): SearchConfig 
     avatar: base.avatar || FALLBACK.avatar,
     name: typeof base.name === 'string' ? base.name : FALLBACK.name,
     tagline: typeof base.tagline === 'string' ? base.tagline : FALLBACK.tagline,
-    link: typeof base.link === 'string' ? base.link : FALLBACK.link,
+    link: base.link || FALLBACK.link,
+    engine: ENGINE_KEYS.includes(base.engine) ? base.engine : FALLBACK.engine,
     viewerTitle: typeof base.viewerTitle === 'string' && base.viewerTitle ? base.viewerTitle : FALLBACK.viewerTitle,
     avatars: avatars.length ? avatars : [...FALLBACK.avatars],
     links: Array.isArray(base.links)
@@ -212,7 +223,16 @@ async function saveEdit() {
 }
 
 // ===== 右侧入口的编辑 / 新增弹窗 =====
-const linkEditor = reactive({ open: false, index: -1, label: '', href: '', icon: '', error: '' })
+const linkEditor = reactive({
+  open: false,
+  index: -1,
+  label: '',
+  href: '',
+  icon: '',
+  error: '',
+  /** 自动获取图标进行中 */
+  fetching: false,
+})
 
 function openLinkEditor(index: number) {
   const src = index >= 0 ? draft.links[index] : null
@@ -221,6 +241,7 @@ function openLinkEditor(index: number) {
   linkEditor.href = src?.href ?? ''
   linkEditor.icon = src?.icon ?? ''
   linkEditor.error = ''
+  linkEditor.fetching = false
   linkEditor.open = true
 }
 
@@ -267,6 +288,64 @@ function removeLink() {
   if (linkEditor.index < 0) return
   draft.links.splice(linkEditor.index, 1)
   linkEditor.open = false
+}
+
+// 自动获取图标：链接没写协议时补成 https，再交给服务端抓取并转存到媒体库
+function normalizeSiteUrl(value: string) {
+  const raw = value.trim()
+  if (!raw) return ''
+  return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`
+}
+
+async function autoFetchIcon() {
+  if (linkEditor.fetching) return
+  const target = normalizeSiteUrl(linkEditor.href)
+  if (!target || !isSafeUrl(target)) {
+    linkEditor.error = '请先填写正确的网站链接（http/https）。'
+    return
+  }
+  linkEditor.fetching = true
+  linkEditor.error = ''
+  try {
+    const res = await $fetch<{ icon: string }>('/api/admin/link-icon', {
+      method: 'POST',
+      body: { url: target },
+    })
+    linkEditor.icon = res.icon
+  } catch (e) {
+    linkEditor.error = adminError(e, '自动获取图标失败，可手动上传或填写地址')
+  } finally {
+    linkEditor.fetching = false
+  }
+}
+
+// 图标也支持本地图片上传，复用后台的媒体上传接口
+const linkIconInput = ref<HTMLInputElement | null>(null)
+const linkIconBusy = ref(false)
+
+function pickLinkIcon() {
+  if (linkIconBusy.value || linkEditor.fetching) return
+  linkIconInput.value?.click()
+}
+
+async function onLinkIconPick(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+  if (!file) return
+  if (!file.type.startsWith('image/')) {
+    linkEditor.error = '请选择图片文件。'
+    return
+  }
+  linkIconBusy.value = true
+  linkEditor.error = ''
+  try {
+    linkEditor.icon = await uploadMedia(file)
+  } catch (e) {
+    linkEditor.error = adminError(e, '上传失败')
+  } finally {
+    linkIconBusy.value = false
+  }
 }
 
 // ===== 查看器设置弹窗：改标题 + 增删图片列表 =====
@@ -429,9 +508,15 @@ onBeforeUnmount(() => {
   }
 })
 
-// 原站行为：回车 / 点击圆钮都跳百度搜索
+// 回车 / 点击圆钮跳转到当前选定的搜索引擎；非编辑模式下不显示选择器，沿用已保存的引擎
+const SEARCH_URL: Record<SearchEngine, (q: string) => string> = {
+  baidu: (q) => `https://www.baidu.com/s?wd=${q}`,
+  bing: (q) => `https://www.bing.com/search?q=${q}`,
+  google: (q) => `https://www.google.com/search?q=${q}`,
+}
 function submitSearch() {
-  window.location.href = `https://www.baidu.com/s?wd=${encodeURIComponent(keyword.value.trim())}`
+  const q = encodeURIComponent(keyword.value.trim())
+  window.location.href = (SEARCH_URL[draft.engine] ?? SEARCH_URL.baidu)(q)
 }
 
 // 个人信息里显示的站点名（去掉协议与末尾斜杠），与原站「garfieldgod.cn」的写法一致
@@ -524,6 +609,16 @@ const menuHeight = computed(() => {
           <div class="mp-searchout">
             <div class="mp-searchclip" :class="{ 'is-collapsed': viewing }">
               <form class="mp-search" @submit.prevent="submitSearch">
+                <select
+                  v-if="editMode"
+                  v-model="draft.engine"
+                  class="mp-search__engine"
+                  aria-label="搜索引擎"
+                >
+                  <option v-for="key in ENGINE_KEYS" :key="key" :value="key">
+                    {{ ENGINE_LABELS[key] }}
+                  </option>
+                </select>
                 <input
                   v-model="keyword"
                   class="mp-search__input"
@@ -611,7 +706,7 @@ const menuHeight = computed(() => {
           <input v-model="linkEditor.label" class="mp-field__input" type="text" maxlength="40" placeholder="例如：哔哩哔哩">
         </label>
 
-        <label class="mp-field">
+        <div class="mp-field">
           <span class="mp-field__label">图标</span>
           <span class="mp-field__row">
             <input v-model="linkEditor.icon" class="mp-field__input" type="text" placeholder="/uploads/… 或 https://…">
@@ -619,7 +714,21 @@ const menuHeight = computed(() => {
               <img v-if="linkEditor.icon" :src="linkEditor.icon" alt="">
             </span>
           </span>
-        </label>
+          <div class="mp-field__actions">
+            <button
+              class="mp-field__action"
+              type="button"
+              :disabled="linkEditor.fetching || linkIconBusy"
+              @click="autoFetchIcon"
+            >{{ linkEditor.fetching ? '获取中…' : '自动获取' }}</button>
+            <button
+              class="mp-field__action"
+              type="button"
+              :disabled="linkIconBusy || linkEditor.fetching"
+              @click="pickLinkIcon"
+            >{{ linkIconBusy ? '上传中…' : '上传图标' }}</button>
+          </div>
+        </div>
 
         <label class="mp-field">
           <span class="mp-field__label">链接</span>
@@ -695,6 +804,7 @@ const menuHeight = computed(() => {
 
     <input ref="mediaInput" type="file" accept="image/*" hidden @change="onMediaPick">
     <input ref="viewerInput" type="file" accept="image/*" multiple hidden @change="onViewerPick">
+    <input ref="linkIconInput" type="file" accept="image/*" hidden @change="onLinkIconPick">
 
     <ImageCropper
       v-if="cropOpen"
@@ -982,6 +1092,22 @@ const menuHeight = computed(() => {
   box-shadow: inset 0 0 0 1px #e0e0e0;
   border-radius: 5px;
 }
+.mp-search__engine {
+  flex: none;
+  width: 108px;
+  height: 50px;
+  margin-right: 5px;
+  padding: 0 8px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  background: #fff;
+  color: #000;
+  font-family: var(--gg-font);
+  font-size: 17px;
+  outline: none;
+  cursor: pointer;
+}
+.mp-search__engine:focus { border-color: #a9fff9; }
 .mp-search__input {
   flex: 1;
   min-width: 0;
@@ -1244,6 +1370,29 @@ const menuHeight = computed(() => {
   background: var(--gg-surface-2);
 }
 .mp-field__preview img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 图标行的辅助操作：自动获取 / 上传，失败时仍可手填或上传 */
+.mp-field__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.mp-field__action {
+  padding: 5px 12px;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: var(--gg-surface-2);
+  color: var(--gg-ink);
+  font-family: var(--gg-font);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.mp-field__action:hover:not(:disabled) {
+  border-color: var(--gg-ink);
+  background: var(--gg-surface);
+}
+.mp-field__action:disabled { opacity: 0.6; cursor: default; }
 
 .mp-modal__error { margin: 12px 0 0; color: #c0392b; font-size: 0.84rem; }
 

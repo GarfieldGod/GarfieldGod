@@ -8,6 +8,11 @@ export interface SearchLink {
   icon: string
 }
 
+/** 搜索框使用的搜索引擎，默认百度（与原 MainPage 行为一致） */
+export type SearchEngine = 'baidu' | 'bing' | 'google'
+
+export const SEARCH_ENGINES: readonly SearchEngine[] = ['baidu', 'bing', 'google']
+
 export interface SearchPageConfig {
   cover: string
   avatar: string
@@ -15,6 +20,8 @@ export interface SearchPageConfig {
   tagline: string
   /** 个人信息里的站点链接 */
   link: string
+  /** 搜索框使用的搜索引擎 */
+  engine: SearchEngine
   links: SearchLink[]
   /** 头像查看器顶部标题（两侧的 ❮--- ---❯ 装饰由前端补） */
   viewerTitle: string
@@ -30,6 +37,7 @@ export const SEARCH_PAGE_DEFAULTS: SearchPageConfig = {
   name: 'GarfieldGod',
   tagline: "I'm God.",
   link: 'https://garfieldgod.cn',
+  engine: 'baidu',
   viewerTitle: 'The Cutest Person In The World',
   avatars: [
     '/legacy/avatar-1.jpg',
@@ -64,6 +72,10 @@ function safeText(value: unknown, max: number): string {
   return typeof value === 'string' ? value.trim().slice(0, max) : ''
 }
 
+function safeEngine(value: unknown): SearchEngine {
+  return SEARCH_ENGINES.includes(value as SearchEngine) ? (value as SearchEngine) : SEARCH_PAGE_DEFAULTS.engine
+}
+
 function normalize(input: unknown): SearchPageConfig {
   const raw = (input && typeof input === 'object' ? input : {}) as Record<string, unknown>
   const links = Array.isArray(raw.links) ? raw.links : []
@@ -79,6 +91,7 @@ function normalize(input: unknown): SearchPageConfig {
     name: safeText(raw.name, 60),
     tagline: safeText(raw.tagline, 120),
     link: safeUrl(raw.link),
+    engine: safeEngine(raw.engine),
     viewerTitle: safeText(raw.viewerTitle, 120) || SEARCH_PAGE_DEFAULTS.viewerTitle,
     // 查看器至少要有一张图，全删光时回落默认，避免打开后空白
     avatars: cleanAvatars.length ? cleanAvatars : [...SEARCH_PAGE_DEFAULTS.avatars],
